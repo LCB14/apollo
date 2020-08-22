@@ -37,15 +37,15 @@ public class RetryableRestTemplateTest extends AbstractUnitTest {
   @InjectMocks
   private RetryableRestTemplate retryableRestTemplate;
 
-  private String path = "app";
-  private String serviceOne = "http://10.0.0.1";
-  private String serviceTwo = "http://10.0.0.2";
-  private String serviceThree = "http://10.0.0.3";
-  private ResourceAccessException socketTimeoutException = new ResourceAccessException("");
-  private ResourceAccessException httpHostConnectException = new ResourceAccessException("");
-  private ResourceAccessException connectTimeoutException = new ResourceAccessException("");
-  private Object request = new Object();
-  private ResponseEntity<Object> entity = new ResponseEntity<>(HttpStatus.OK);
+  private final String path = "app";
+  private final String serviceOne = "http://10.0.0.1";
+  private final String serviceTwo = "http://10.0.0.2";
+  private final String serviceThree = "http://10.0.0.3";
+  private final ResourceAccessException socketTimeoutException = new ResourceAccessException("");
+  private final ResourceAccessException httpHostConnectException = new ResourceAccessException("");
+  private final ResourceAccessException connectTimeoutException = new ResourceAccessException("");
+  private final Object request = new Object();
+  private final ResponseEntity<Object> entity = new ResponseEntity<>(HttpStatus.OK);
 
 
   @Before

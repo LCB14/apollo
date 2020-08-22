@@ -17,7 +17,7 @@ public class ServiceController {
 
   private final DiscoveryService discoveryService;
 
-  private static Function<InstanceInfo, ServiceDTO> instanceInfoToServiceDTOFunc = instance -> {
+  private static final Function<InstanceInfo, ServiceDTO> instanceInfoToServiceDTOFunc = instance -> {
     ServiceDTO service = new ServiceDTO();
     service.setAppName(instance.getAppName());
     service.setInstanceId(instance.getInstanceId());

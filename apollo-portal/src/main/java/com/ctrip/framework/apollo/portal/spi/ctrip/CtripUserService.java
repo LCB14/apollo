@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class CtripUserService implements UserService {
-  private RestTemplate restTemplate;
-  private List<String> searchUserMatchFields;
-  private ParameterizedTypeReference<Map<String, List<UserServiceResponse>>> responseType;
-  private PortalConfig portalConfig;
+  private final RestTemplate restTemplate;
+  private final List<String> searchUserMatchFields;
+  private final ParameterizedTypeReference<Map<String, List<UserServiceResponse>>> responseType;
+  private final PortalConfig portalConfig;
 
   public CtripUserService(PortalConfig portalConfig) {
     this.portalConfig = portalConfig;

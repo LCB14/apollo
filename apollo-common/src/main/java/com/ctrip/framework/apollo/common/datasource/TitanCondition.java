@@ -14,10 +14,7 @@ public class TitanCondition implements Condition {
       return true;
     } else if (!StringUtils.isEmpty(context.getEnvironment().getProperty("uat.titan.url"))) {
       return true;
-    } else if (!StringUtils.isEmpty(context.getEnvironment().getProperty("pro.titan.url"))) {
-      return true;
-    }
-    return false;
+    } else return !StringUtils.isEmpty(context.getEnvironment().getProperty("pro.titan.url"));
   }
 
 }

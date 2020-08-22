@@ -43,7 +43,7 @@ public class GrayReleaseRulesHolderTest {
   private BizConfig bizConfig;
   @Mock
   private GrayReleaseRuleRepository grayReleaseRuleRepository;
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
   private AtomicLong idCounter;
 
   @Before

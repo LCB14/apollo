@@ -21,7 +21,7 @@ import com.google.inject.Singleton;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class DefaultInjector implements Injector {
-  private com.google.inject.Injector m_injector;
+  private final com.google.inject.Injector m_injector;
 
   public DefaultInjector() {
     try {

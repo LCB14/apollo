@@ -44,9 +44,9 @@ public class ConfigFileControllerIntegrationTest extends AbstractBaseIntegration
   private String someDefaultCluster;
   private String grayClientIp;
   private String nonGrayClientIp;
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
   private ExecutorService executorService;
-  private Type mapResponseType = new TypeToken<Map<String, String>>(){}.getType();
+  private final Type mapResponseType = new TypeToken<Map<String, String>>(){}.getType();
 
   @Autowired
   private AppNamespaceServiceWithCache appNamespaceServiceWithCache;

@@ -16,9 +16,9 @@ public class ConfigChangeContentBuilder {
 
   private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
-  private List<Item> createItems = new LinkedList<>();
-  private List<ItemPair> updateItems = new LinkedList<>();
-  private List<Item> deleteItems = new LinkedList<>();
+  private final List<Item> createItems = new LinkedList<>();
+  private final List<ItemPair> updateItems = new LinkedList<>();
+  private final List<Item> deleteItems = new LinkedList<>();
 
 
   public ConfigChangeContentBuilder createItem(Item item) {

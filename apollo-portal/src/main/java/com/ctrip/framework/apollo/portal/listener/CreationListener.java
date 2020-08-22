@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class CreationListener {
 
-  private static Logger logger = LoggerFactory.getLogger(CreationListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(CreationListener.class);
 
   private final PortalSettings portalSettings;
   private final AdminServiceAPI.AppAPI appAPI;

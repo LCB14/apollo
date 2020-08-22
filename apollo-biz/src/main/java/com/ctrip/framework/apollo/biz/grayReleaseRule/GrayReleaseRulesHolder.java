@@ -51,13 +51,13 @@ public class GrayReleaseRulesHolder implements ReleaseMessageListener, Initializ
   private BizConfig bizConfig;
 
   private int databaseScanInterval;
-  private ScheduledExecutorService executorService;
+  private final ScheduledExecutorService executorService;
   //store configAppId+configCluster+configNamespace -> GrayReleaseRuleCache map
-  private Multimap<String, GrayReleaseRuleCache> grayReleaseRuleCache;
+  private final Multimap<String, GrayReleaseRuleCache> grayReleaseRuleCache;
   //store clientAppId+clientNamespace+ip -> ruleId map
-  private Multimap<String, Long> reversedGrayReleaseRuleCache;
+  private final Multimap<String, Long> reversedGrayReleaseRuleCache;
   //an auto increment version to indicate the age of rules
-  private AtomicLong loadVersion;
+  private final AtomicLong loadVersion;
 
   public GrayReleaseRulesHolder() {
     loadVersion = new AtomicLong();

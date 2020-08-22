@@ -33,7 +33,7 @@ public class NamespaceServiceTest extends AbstractUnitTest {
   @InjectMocks
   private NamespaceService namespaceService;
 
-  private String testPublicAppNamespace = "publicAppNamespace";
+  private final String testPublicAppNamespace = "publicAppNamespace";
 
 
   @Test(expected = BadRequestException.class)

@@ -41,11 +41,11 @@ public class ReleaseServiceTest extends AbstractUnitTest {
   @InjectMocks
   private ReleaseService releaseService;
 
-  private String appId = "appId-test";
-  private String clusterName = "cluster-test";
-  private String namespaceName = "namespace-test";
-  private String user = "user-test";
-  private long releaseId = 1;
+  private final String appId = "appId-test";
+  private final String clusterName = "cluster-test";
+  private final String namespaceName = "namespace-test";
+  private final String user = "user-test";
+  private final long releaseId = 1;
   private Release firstRelease;
   private Release secondRelease;
   private PageRequest pageRequest;

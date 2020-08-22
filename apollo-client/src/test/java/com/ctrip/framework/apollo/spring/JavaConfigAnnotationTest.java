@@ -483,7 +483,7 @@ public class JavaConfigAnnotationTest extends AbstractSpringIntegrationTest {
 
   static class TestApolloConfigChangeListenerWithYamlFile {
 
-    private SettableFuture<ConfigChangeEvent> configChangeEventFuture = SettableFuture.create();
+    private final SettableFuture<ConfigChangeEvent> configChangeEventFuture = SettableFuture.create();
 
     @ApolloConfig(APPLICATION_YAML_NAMESPACE)
     private Config yamlConfig;

@@ -58,7 +58,7 @@ public class ConfigFileController implements ReleaseMessageListener {
   private final HttpHeaders propertiesResponseHeaders;
   private final HttpHeaders jsonResponseHeaders;
   private final ResponseEntity<String> NOT_FOUND_RESPONSE;
-  private Cache<String, String> localCache;
+  private final Cache<String, String> localCache;
   private final Multimap<String, String>
       watchedKeys2CacheKey = Multimaps.synchronizedSetMultimap(HashMultimap.create());
   private final Multimap<String, String>
@@ -274,7 +274,7 @@ public class ConfigFileController implements ReleaseMessageListener {
   enum ConfigFileOutputFormat {
     PROPERTIES("properties"), JSON("json");
 
-    private String value;
+    private final String value;
 
     ConfigFileOutputFormat(String value) {
       this.value = value;

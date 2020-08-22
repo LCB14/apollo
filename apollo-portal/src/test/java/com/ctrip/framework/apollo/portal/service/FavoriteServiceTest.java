@@ -21,7 +21,7 @@ public class FavoriteServiceTest extends AbstractIntegrationTest {
   @Autowired
   private FavoriteRepository favoriteRepository;
 
-  private String testUser = "apollo";
+  private final String testUser = "apollo";
 
   @Before
   public void before() {

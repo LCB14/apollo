@@ -103,7 +103,7 @@ public class App extends BaseEntity {
     public Builder() {
     }
 
-    private App app = new App();
+    private final App app = new App();
 
     public Builder name(String name) {
       app.setName(name);

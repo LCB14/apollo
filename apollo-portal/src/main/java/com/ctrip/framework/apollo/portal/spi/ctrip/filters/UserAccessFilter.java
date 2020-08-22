@@ -16,7 +16,7 @@ public class UserAccessFilter implements Filter {
 
   private static final String STATIC_RESOURCE_REGEX = ".*\\.(js|html|htm|png|css|woff2)$";
 
-  private UserInfoHolder userInfoHolder;
+  private final UserInfoHolder userInfoHolder;
 
   public UserAccessFilter(UserInfoHolder userInfoHolder) {
     this.userInfoHolder = userInfoHolder;

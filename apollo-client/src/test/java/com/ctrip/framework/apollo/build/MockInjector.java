@@ -12,8 +12,8 @@ import com.google.common.collect.Table;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class MockInjector implements Injector {
-  private static Map<Class, Object> classMap = Maps.newHashMap();
-  private static Table<Class, String, Object> classTable = HashBasedTable.create();
+  private static final Map<Class, Object> classMap = Maps.newHashMap();
+  private static final Table<Class, String, Object> classTable = HashBasedTable.create();
   private static Injector delegate = new DefaultInjector();
 
   @Override

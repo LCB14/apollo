@@ -21,7 +21,7 @@ public class DeferredResultWrapper {
       NOT_MODIFIED_RESPONSE_LIST = new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 
   private Map<String, String> normalizedNamespaceNameToOriginalNamespaceName;
-  private DeferredResult<ResponseEntity<List<ApolloConfigNotification>>> result;
+  private final DeferredResult<ResponseEntity<List<ApolloConfigNotification>>> result;
 
 
   public DeferredResultWrapper() {

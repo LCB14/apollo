@@ -60,10 +60,10 @@ public class ConsumerServiceTest extends AbstractUnitTest {
   private ConsumerService consumerService;
 
 
-  private String someTokenSalt = "someTokenSalt";
-  private String testAppId = "testAppId";
-  private String testConsumerName = "testConsumerName";
-  private String testOwner = "testOwner";
+  private final String someTokenSalt = "someTokenSalt";
+  private final String testAppId = "testAppId";
+  private final String testConsumerName = "testConsumerName";
+  private final String testOwner = "testOwner";
 
   @Before
   public void setUp() throws Exception {

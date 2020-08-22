@@ -37,7 +37,7 @@ import java.util.Map;
 @Component
 public class NamespaceUnlockAspect {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   private final NamespaceLockService namespaceLockService;
   private final NamespaceService namespaceService;

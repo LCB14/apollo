@@ -20,8 +20,8 @@ import java.io.InputStreamReader;
  */
 public class SimpleApolloConfigDemo {
     private static final Logger logger = LoggerFactory.getLogger(SimpleApolloConfigDemo.class);
-    private String DEFAULT_VALUE = "undefined";
-    private Config config;
+    private final String DEFAULT_VALUE = "undefined";
+    private final Config config;
 
     public SimpleApolloConfigDemo() {
         ConfigChangeListener changeListener = new ConfigChangeListener() {

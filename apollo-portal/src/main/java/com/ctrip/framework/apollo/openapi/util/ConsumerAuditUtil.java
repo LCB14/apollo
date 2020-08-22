@@ -25,12 +25,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 public class ConsumerAuditUtil implements InitializingBean {
   private static final int CONSUMER_AUDIT_MAX_SIZE = 10000;
-  private BlockingQueue<ConsumerAudit> audits = Queues.newLinkedBlockingQueue(CONSUMER_AUDIT_MAX_SIZE);
+  private final BlockingQueue<ConsumerAudit> audits = Queues.newLinkedBlockingQueue(CONSUMER_AUDIT_MAX_SIZE);
   private final ExecutorService auditExecutorService;
   private final AtomicBoolean auditStopped;
-  private int BATCH_SIZE = 100;
-  private long BATCH_TIMEOUT = 5;
-  private TimeUnit BATCH_TIMEUNIT = TimeUnit.SECONDS;
+  private final int BATCH_SIZE = 100;
+  private final long BATCH_TIMEOUT = 5;
+  private final TimeUnit BATCH_TIMEUNIT = TimeUnit.SECONDS;
 
   private final ConsumerService consumerService;
 

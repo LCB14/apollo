@@ -68,7 +68,7 @@ public class AdminServiceAPI {
   @Service
   public static class NamespaceAPI extends API {
 
-    private ParameterizedTypeReference<Map<String, Boolean>>
+    private final ParameterizedTypeReference<Map<String, Boolean>>
         typeReference = new ParameterizedTypeReference<Map<String, Boolean>>() {
     };
 
@@ -352,8 +352,8 @@ public class AdminServiceAPI {
   @Service
   public static class InstanceAPI extends API {
 
-    private Joiner joiner = Joiner.on(",");
-    private ParameterizedTypeReference<PageDTO<InstanceDTO>>
+    private final Joiner joiner = Joiner.on(",");
+    private final ParameterizedTypeReference<PageDTO<InstanceDTO>>
         pageInstanceDtoType =
         new ParameterizedTypeReference<PageDTO<InstanceDTO>>() {
         };
@@ -449,7 +449,7 @@ public class AdminServiceAPI {
   @Service
   public static class ReleaseHistoryAPI extends API {
 
-    private ParameterizedTypeReference<PageDTO<ReleaseHistoryDTO>> type =
+    private final ParameterizedTypeReference<PageDTO<ReleaseHistoryDTO>> type =
         new ParameterizedTypeReference<PageDTO<ReleaseHistoryDTO>>() {
         };
 

@@ -22,7 +22,7 @@ public abstract class LoggingCustomizer implements InitializingBean {
   private static final Logger logger = LoggerFactory.getLogger(LoggingCustomizer.class);
   private static final String cLoggingAppenderClass =
       "com.ctrip.framework.clogging.agent.appender.CLoggingAppender";
-  private static boolean cLoggingAppenderPresent =
+  private static final boolean cLoggingAppenderPresent =
       ClassUtils.isPresent(cLoggingAppenderClass, LoggingCustomizer.class.getClassLoader());
 
   @Override

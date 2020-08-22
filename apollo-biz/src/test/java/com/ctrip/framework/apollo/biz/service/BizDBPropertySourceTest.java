@@ -30,12 +30,12 @@ public class BizDBPropertySourceTest extends AbstractUnitTest {
   private ServerConfigRepository serverConfigRepository;
   private BizDBPropertySource propertySource;
 
-  private String clusterConfigKey = "clusterKey";
-  private String clusterConfigValue = "clusterValue";
-  private String dcConfigKey = "dcKey";
-  private String dcConfigValue = "dcValue";
-  private String defaultKey = "defaultKey";
-  private String defaultValue = "defaultValue";
+  private final String clusterConfigKey = "clusterKey";
+  private final String clusterConfigValue = "clusterValue";
+  private final String dcConfigKey = "dcKey";
+  private final String dcConfigValue = "dcValue";
+  private final String defaultKey = "defaultKey";
+  private final String defaultValue = "defaultValue";
 
   @Before
   public void initTestData() {

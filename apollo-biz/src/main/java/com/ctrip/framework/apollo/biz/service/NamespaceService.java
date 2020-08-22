@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 public class NamespaceService {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   private final NamespaceRepository namespaceRepository;
   private final AuditService auditService;

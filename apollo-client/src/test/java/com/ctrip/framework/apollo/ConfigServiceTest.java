@@ -110,8 +110,8 @@ public class ConfigServiceTest {
   }
 
   private static class MockConfigFile implements ConfigFile {
-    private ConfigFileFormat m_configFileFormat;
-    private String m_namespace;
+    private final ConfigFileFormat m_configFileFormat;
+    private final String m_namespace;
 
     public MockConfigFile(String namespace,
                           ConfigFileFormat configFileFormat) {

@@ -36,7 +36,7 @@ public class AppNamespaceServiceWithCacheTest {
 
   private int scanInterval;
   private TimeUnit scanIntervalTimeUnit;
-  private Comparator<AppNamespace> appNamespaceComparator = (o1, o2) -> (int) (o1.getId() -
+  private final Comparator<AppNamespace> appNamespaceComparator = (o1, o2) -> (int) (o1.getId() -
       o2.getId());
 
   @Before

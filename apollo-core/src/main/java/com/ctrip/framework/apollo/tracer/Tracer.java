@@ -17,7 +17,7 @@ public abstract class Tracer {
   private static final MessageProducerManager NULL_MESSAGE_PRODUCER_MANAGER =
       new NullMessageProducerManager();
   private static volatile MessageProducerManager producerManager;
-  private static Object lock = new Object();
+  private static final Object lock = new Object();
 
   static {
     getProducer();

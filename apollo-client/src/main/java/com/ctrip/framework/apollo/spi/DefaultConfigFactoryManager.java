@@ -9,9 +9,9 @@ import com.google.common.collect.Maps;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class DefaultConfigFactoryManager implements ConfigFactoryManager {
-  private ConfigRegistry m_registry;
+  private final ConfigRegistry m_registry;
 
-  private Map<String, ConfigFactory> m_factories = Maps.newConcurrentMap();
+  private final Map<String, ConfigFactory> m_factories = Maps.newConcurrentMap();
 
   public DefaultConfigFactoryManager() {
     m_registry = ApolloInjector.getInstance(ConfigRegistry.class);

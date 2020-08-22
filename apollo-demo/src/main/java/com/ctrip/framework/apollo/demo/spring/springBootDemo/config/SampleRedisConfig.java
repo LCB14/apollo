@@ -63,8 +63,8 @@ public class SampleRedisConfig {
     private String clusterNodes;
     private int commandTimeout;
 
-    private Map<String, String> someMap = Maps.newLinkedHashMap();
-    private List<String> someList = Lists.newLinkedList();
+    private final Map<String, String> someMap = Maps.newLinkedHashMap();
+    private final List<String> someList = Lists.newLinkedList();
 
     @PostConstruct
     private void initialize() {

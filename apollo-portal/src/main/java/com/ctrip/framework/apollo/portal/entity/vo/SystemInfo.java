@@ -7,7 +7,7 @@ public class SystemInfo {
 
   private String version;
 
-  private List<EnvironmentInfo> environments = Lists.newLinkedList();
+  private final List<EnvironmentInfo> environments = Lists.newLinkedList();
 
   public String getVersion() {
     return version;

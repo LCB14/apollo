@@ -8,13 +8,13 @@ import java.util.Set;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class GrayReleaseRuleCache {
-  private long ruleId;
-  private String branchName;
-  private String namespaceName;
-  private long releaseId;
+  private final long ruleId;
+  private final String branchName;
+  private final String namespaceName;
+  private final long releaseId;
   private long loadVersion;
-  private int branchStatus;
-  private Set<GrayReleaseRuleItemDTO> ruleItems;
+  private final int branchStatus;
+  private final Set<GrayReleaseRuleItemDTO> ruleItems;
 
   public GrayReleaseRuleCache(long ruleId, String branchName, String namespaceName, long
       releaseId, int branchStatus, long loadVersion, Set<GrayReleaseRuleItemDTO> ruleItems) {

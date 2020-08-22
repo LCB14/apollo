@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class MultiResponseEntity<T> {
 
-  private int code;
+  private final int code;
 
-  private List<RichResponseEntity<T>> entities = new LinkedList<>();
+  private final List<RichResponseEntity<T>> entities = new LinkedList<>();
 
   private MultiResponseEntity(HttpStatus httpCode) {
     this.code = httpCode.value();

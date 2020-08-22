@@ -30,7 +30,7 @@ import javax.annotation.PostConstruct;
  */
 public class SpringSecurityUserService implements UserService {
 
-  private PasswordEncoder encoder = new BCryptPasswordEncoder();
+  private final PasswordEncoder encoder = new BCryptPasswordEncoder();
   private List<GrantedAuthority> authorities;
 
   @Autowired

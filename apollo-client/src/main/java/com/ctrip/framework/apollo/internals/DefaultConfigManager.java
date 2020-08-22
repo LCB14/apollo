@@ -14,10 +14,10 @@ import com.google.common.collect.Maps;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class DefaultConfigManager implements ConfigManager {
-  private ConfigFactoryManager m_factoryManager;
+  private final ConfigFactoryManager m_factoryManager;
 
-  private Map<String, Config> m_configs = Maps.newConcurrentMap();
-  private Map<String, ConfigFile> m_configFiles = Maps.newConcurrentMap();
+  private final Map<String, Config> m_configs = Maps.newConcurrentMap();
+  private final Map<String, ConfigFile> m_configFiles = Maps.newConcurrentMap();
 
   public DefaultConfigManager() {
     m_factoryManager = ApolloInjector.getInstance(ConfigFactoryManager.class);

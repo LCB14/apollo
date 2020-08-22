@@ -19,8 +19,8 @@ import java.nio.charset.StandardCharsets;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class HttpUtil {
-  private ConfigUtil m_configUtil;
-  private Gson gson;
+  private final ConfigUtil m_configUtil;
+  private final Gson gson;
 
   /**
    * Constructor.

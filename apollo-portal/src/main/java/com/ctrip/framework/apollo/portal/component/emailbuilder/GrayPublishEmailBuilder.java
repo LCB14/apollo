@@ -21,8 +21,8 @@ public class GrayPublishEmailBuilder extends ConfigPublishEmailBuilder {
 
   private static final String EMAIL_SUBJECT = "[Apollo] 灰度发布";
 
-  private Gson gson = new Gson();
-  private Joiner IP_JOINER = Joiner.on(", ");
+  private final Gson gson = new Gson();
+  private final Joiner IP_JOINER = Joiner.on(", ");
 
   @Override
   protected String subject() {

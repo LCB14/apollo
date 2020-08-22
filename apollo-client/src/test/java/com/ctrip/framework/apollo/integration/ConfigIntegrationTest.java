@@ -211,7 +211,7 @@ public class ConfigIntegrationTest extends BaseIntegrationTest {
 
     final SettableFuture<Boolean> refreshFinished = SettableFuture.create();
     config.addChangeListener(new ConfigChangeListener() {
-      AtomicInteger counter = new AtomicInteger(0);
+      final AtomicInteger counter = new AtomicInteger(0);
 
       @Override
       public void onChange(ConfigChangeEvent changeEvent) {
@@ -380,7 +380,7 @@ public class ConfigIntegrationTest extends BaseIntegrationTest {
                                                      final boolean failedAtFirstTime) {
     ContextHandler context = new ContextHandler("/notifications/v2");
     context.setHandler(new AbstractHandler() {
-      AtomicInteger counter = new AtomicInteger(0);
+      final AtomicInteger counter = new AtomicInteger(0);
 
       @Override
       public void handle(String target, Request baseRequest, HttpServletRequest request,
@@ -410,7 +410,7 @@ public class ConfigIntegrationTest extends BaseIntegrationTest {
                                                  final boolean failedAtFirstTime) {
     ContextHandler context = new ContextHandler("/configs/*");
     context.setHandler(new AbstractHandler() {
-      AtomicInteger counter = new AtomicInteger(0);
+      final AtomicInteger counter = new AtomicInteger(0);
 
       @Override
       public void handle(String target, Request baseRequest, HttpServletRequest request,

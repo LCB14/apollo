@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class ReleaseCreationTest extends AbstractIntegrationTest {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   @Autowired
   private ReleaseService releaseService;
@@ -33,10 +33,10 @@ public class ReleaseCreationTest extends AbstractIntegrationTest {
   @Autowired
   private ReleaseHistoryService releaseHistoryService;
 
-  private String testApp = "test";
-  private String testNamespace = "application";
-  private String operator = "apollo";
-  private Pageable pageable = PageRequest.of(0, 10);
+  private final String testApp = "test";
+  private final String testNamespace = "application";
+  private final String operator = "apollo";
+  private final Pageable pageable = PageRequest.of(0, 10);
 
   @Test
   @Sql(scripts = "/sql/release-creation-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)

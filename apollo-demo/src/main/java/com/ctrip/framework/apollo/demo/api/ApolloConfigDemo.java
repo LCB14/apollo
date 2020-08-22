@@ -26,13 +26,13 @@ import java.io.InputStreamReader;
  */
 public class ApolloConfigDemo {
     private static final Logger logger = LoggerFactory.getLogger(ApolloConfigDemo.class);
-    private String DEFAULT_VALUE = "undefined";
-    private Config config;
-    private Config yamlConfig;
-    private Config publicConfig;
-    private ConfigFile applicationConfigFile;
-    private ConfigFile xmlConfigFile;
-    private YamlConfigFile yamlConfigFile;
+    private final String DEFAULT_VALUE = "undefined";
+    private final Config config;
+    private final Config yamlConfig;
+    private final Config publicConfig;
+    private final ConfigFile applicationConfigFile;
+    private final ConfigFile xmlConfigFile;
+    private final YamlConfigFile yamlConfigFile;
 
     public ApolloConfigDemo() {
         ConfigChangeListener changeListener = new ConfigChangeListener() {

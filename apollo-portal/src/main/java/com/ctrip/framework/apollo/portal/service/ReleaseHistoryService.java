@@ -24,7 +24,7 @@ import java.util.Set;
 @Service
 public class ReleaseHistoryService {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
 
   private final AdminServiceAPI.ReleaseHistoryAPI releaseHistoryAPI;

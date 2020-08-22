@@ -108,7 +108,7 @@ public class ApolloMockServerSpringIntegrationTest {
     @Value("${key2:default}")
     private String key2;
 
-    private SettableFuture<ConfigChangeEvent> futureData = SettableFuture.create();
+    private final SettableFuture<ConfigChangeEvent> futureData = SettableFuture.create();
 
     @ApolloConfigChangeListener(otherNamespace)
     private void onChange(ConfigChangeEvent changeEvent) {
@@ -117,7 +117,7 @@ public class ApolloMockServerSpringIntegrationTest {
   }
 
   private static class TestInterestedKeyPrefixesBean {
-    private SettableFuture<ConfigChangeEvent> futureData = SettableFuture.create();
+    private final SettableFuture<ConfigChangeEvent> futureData = SettableFuture.create();
 
     @ApolloConfigChangeListener(value = otherNamespace, interestedKeyPrefixes = "server.")
     private void onChange(ConfigChangeEvent changeEvent) {

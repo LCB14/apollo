@@ -57,17 +57,17 @@ public class RemoteConfigLongPollService {
   private static final int LONG_POLLING_READ_TIMEOUT = 90 * 1000;
   private final ExecutorService m_longPollingService;
   private final AtomicBoolean m_longPollingStopped;
-  private SchedulePolicy m_longPollFailSchedulePolicyInSecond;
-  private RateLimiter m_longPollRateLimiter;
+  private final SchedulePolicy m_longPollFailSchedulePolicyInSecond;
+  private final RateLimiter m_longPollRateLimiter;
   private final AtomicBoolean m_longPollStarted;
   private final Multimap<String, RemoteConfigRepository> m_longPollNamespaces;
   private final ConcurrentMap<String, Long> m_notifications;
   private final Map<String, ApolloNotificationMessages> m_remoteNotificationMessages;//namespaceName -> watchedKey -> notificationId
-  private Type m_responseType;
-  private Gson gson;
-  private ConfigUtil m_configUtil;
-  private HttpUtil m_httpUtil;
-  private ConfigServiceLocator m_serviceLocator;
+  private final Type m_responseType;
+  private final Gson gson;
+  private final ConfigUtil m_configUtil;
+  private final HttpUtil m_httpUtil;
+  private final ConfigServiceLocator m_serviceLocator;
 
   /**
    * Constructor.

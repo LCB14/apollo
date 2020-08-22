@@ -35,7 +35,7 @@ public class PortalSettings {
   private List<Env> allEnvs = new ArrayList<>();
 
   //mark env up or down
-  private Map<Env, Boolean> envStatusMark = new ConcurrentHashMap<>();
+  private final Map<Env, Boolean> envStatusMark = new ConcurrentHashMap<>();
 
   public PortalSettings(final ApplicationContext applicationContext, final PortalConfig portalConfig) {
     this.applicationContext = applicationContext;
@@ -77,16 +77,16 @@ public class PortalSettings {
 
   public boolean isEnvActive(Env env) {
     Boolean mark = envStatusMark.get(env);
-    return mark == null ? false : mark;
+    return mark != null && mark;
   }
 
   private class HealthCheckTask implements Runnable {
 
     private static final int ENV_DOWN_THRESHOLD = 2;
 
-    private Map<Env, Integer> healthCheckFailedCounter = new HashMap<>();
+    private final Map<Env, Integer> healthCheckFailedCounter = new HashMap<>();
 
-    private AdminServiceAPI.HealthAPI healthAPI;
+    private final AdminServiceAPI.HealthAPI healthAPI;
 
     public HealthCheckTask(ApplicationContext context) {
       healthAPI = context.getBean(AdminServiceAPI.HealthAPI.class);

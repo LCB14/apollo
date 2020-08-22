@@ -15,7 +15,7 @@ import com.google.common.collect.Lists;
  */
 public abstract class AbstractConfigRepository implements ConfigRepository {
   private static final Logger logger = LoggerFactory.getLogger(AbstractConfigRepository.class);
-  private List<RepositoryChangeListener> m_listeners = Lists.newCopyOnWriteArrayList();
+  private final List<RepositoryChangeListener> m_listeners = Lists.newCopyOnWriteArrayList();
 
   protected boolean trySync() {
     try {

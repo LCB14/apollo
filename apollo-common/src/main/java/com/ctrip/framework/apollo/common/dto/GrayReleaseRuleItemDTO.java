@@ -12,8 +12,8 @@ import static com.google.common.base.MoreObjects.toStringHelper;
 public class GrayReleaseRuleItemDTO {
   public static final String ALL_IP = "*";
 
-  private String clientAppId;
-  private Set<String> clientIpList;
+  private final String clientAppId;
+  private final Set<String> clientIpList;
 
   public GrayReleaseRuleItemDTO(String clientAppId) {
     this(clientAppId, Sets.newHashSet());

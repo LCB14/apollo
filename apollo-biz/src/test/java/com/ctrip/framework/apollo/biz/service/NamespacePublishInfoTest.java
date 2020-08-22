@@ -35,7 +35,7 @@ public class NamespacePublishInfoTest extends AbstractUnitTest {
   @InjectMocks
   private NamespaceService namespaceService;
 
-  private String testApp = "testApp";
+  private final String testApp = "testApp";
 
   @Test
   public void testNamespaceNotEverPublishedButHasItems() {

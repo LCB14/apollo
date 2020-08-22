@@ -32,9 +32,9 @@ import java.util.List;
 @Component
 public class RetryableRestTemplate {
 
-  private Logger logger = LoggerFactory.getLogger(RetryableRestTemplate.class);
+  private final Logger logger = LoggerFactory.getLogger(RetryableRestTemplate.class);
 
-  private UriTemplateHandler uriTemplateHandler = new DefaultUriBuilderFactory();
+  private final UriTemplateHandler uriTemplateHandler = new DefaultUriBuilderFactory();
 
   private RestTemplate restTemplate;
 
@@ -83,7 +83,7 @@ public class RetryableRestTemplate {
                         Object... uriVariables) {
 
     if (path.startsWith("/")) {
-      path = path.substring(1, path.length());
+      path = path.substring(1);
     }
 
     String uri = uriTemplateHandler.expand(path, uriVariables).getPath();
@@ -125,7 +125,7 @@ public class RetryableRestTemplate {
   private <T> ResponseEntity<T> exchangeGet(Env env, String path, ParameterizedTypeReference<T> reference,
                                             Object... uriVariables) {
     if (path.startsWith("/")) {
-      path = path.substring(1, path.length());
+      path = path.substring(1);
     }
 
     String uri = uriTemplateHandler.expand(path, uriVariables).getPath();

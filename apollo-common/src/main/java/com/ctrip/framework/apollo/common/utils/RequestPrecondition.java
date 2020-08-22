@@ -7,9 +7,9 @@ import com.ctrip.framework.apollo.core.utils.StringUtils;
 
 public class RequestPrecondition {
 
-  private static String CONTAIN_EMPTY_ARGUMENT = "request payload should not be contain empty.";
+  private static final String CONTAIN_EMPTY_ARGUMENT = "request payload should not be contain empty.";
 
-  private static String ILLEGAL_MODEL = "request model is invalid";
+  private static final String ILLEGAL_MODEL = "request model is invalid";
 
   public static void checkArgumentsNotEmpty(String... args) {
     checkArguments(!StringUtils.isContainEmpty(args), CONTAIN_EMPTY_ARGUMENT);

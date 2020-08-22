@@ -19,7 +19,7 @@ public enum NetworkInterfaceManager {
 
   private InetAddress m_localHost;
 
-  private NetworkInterfaceManager() {
+  NetworkInterfaceManager() {
     load();
   }
 

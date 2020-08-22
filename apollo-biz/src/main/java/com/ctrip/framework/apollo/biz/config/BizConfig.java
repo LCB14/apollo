@@ -28,7 +28,7 @@ public class BizConfig extends RefreshableConfig {
   private static final int DEFAULT_RELEASE_MESSAGE_NOTIFICATION_BATCH = 100;
   private static final int DEFAULT_RELEASE_MESSAGE_NOTIFICATION_BATCH_INTERVAL_IN_MILLI = 100;//100ms
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
   private static final Type namespaceValueLengthOverrideTypeReference =
       new TypeToken<Map<Long, Integer>>() {
       }.getType();

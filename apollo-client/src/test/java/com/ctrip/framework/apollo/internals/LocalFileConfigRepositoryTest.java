@@ -35,8 +35,8 @@ public class LocalFileConfigRepositoryTest {
   private String someNamespace;
   private ConfigRepository upstreamRepo;
   private Properties someProperties;
-  private static String someAppId = "someApp";
-  private static String someCluster = "someCluster";
+  private static final String someAppId = "someApp";
+  private static final String someCluster = "someCluster";
   private String defaultKey;
   private String defaultValue;
   private ConfigSourceType someSourceType;

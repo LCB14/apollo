@@ -44,7 +44,7 @@ public abstract class AbstractBaseIntegrationTest {
   @Autowired
   private ReleaseRepository releaseRepository;
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
 
@@ -93,7 +93,7 @@ public abstract class AbstractBaseIntegrationTest {
   }
 
   protected void periodicSendMessage(ExecutorService executorService, String message, AtomicBoolean stop) {
-    executorService.submit((Runnable) () -> {
+    executorService.submit(() -> {
       //wait for the request connected to server
       while (!stop.get() && !Thread.currentThread().isInterrupted()) {
         try {

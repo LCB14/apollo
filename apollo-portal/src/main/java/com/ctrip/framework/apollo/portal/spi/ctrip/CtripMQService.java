@@ -31,7 +31,7 @@ public class CtripMQService implements MQService {
       TIMESTAMP_FORMAT = org.apache.commons.lang.time.FastDateFormat.getInstance("yyyy-MM-dd hh:mm:ss");
   private static final String CONFIG_PUBLISH_NOTIFY_TO_NOC_TOPIC = "ops.noc.record.created";
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   @Autowired
   private AppService appService;

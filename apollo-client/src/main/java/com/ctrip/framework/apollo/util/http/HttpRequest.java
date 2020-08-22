@@ -4,7 +4,7 @@ package com.ctrip.framework.apollo.util.http;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class HttpRequest {
-  private String m_url;
+  private final String m_url;
   private int m_connectTimeout;
   private int m_readTimeout;
 

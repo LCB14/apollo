@@ -8,7 +8,7 @@ import com.ctrip.framework.apollo.core.utils.StringUtils;
 public enum ConfigFileFormat {
   Properties("properties"), XML("xml"), JSON("json"), YML("yml"), YAML("yaml"), TXT("txt");
 
-  private String value;
+  private final String value;
 
   ConfigFileFormat(String value) {
     this.value = value;

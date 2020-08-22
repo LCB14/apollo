@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class ConfigPublishEvent extends ApplicationEvent {
 
-  private ConfigPublishInfo configPublishInfo;
+  private final ConfigPublishInfo configPublishInfo;
 
   public ConfigPublishEvent(Object source) {
     super(source);

@@ -7,13 +7,13 @@ import java.util.Set;
 
 public class GrayReleaseRuleDTO extends BaseDTO {
 
-  private String appId;
+  private final String appId;
 
-  private String clusterName;
+  private final String clusterName;
 
-  private String namespaceName;
+  private final String namespaceName;
 
-  private String branchName;
+  private final String branchName;
 
   private Set<GrayReleaseRuleItemDTO> ruleItems;
 

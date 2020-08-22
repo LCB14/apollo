@@ -37,8 +37,8 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @ControllerAdvice
 public class GlobalDefaultExceptionHandler {
-  private Gson gson = new Gson();
-  private static Type mapType = new TypeToken<Map<String, Object>>() {
+  private final Gson gson = new Gson();
+  private static final Type mapType = new TypeToken<Map<String, Object>>() {
   }.getType();
 
   private static final Logger logger = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);

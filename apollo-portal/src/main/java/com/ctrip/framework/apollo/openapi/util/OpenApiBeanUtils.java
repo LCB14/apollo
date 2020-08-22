@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 
 public class OpenApiBeanUtils {
 
-  private static Gson gson = new Gson();
-  private static Type type = new TypeToken<Map<String, String>>() {
+  private static final Gson gson = new Gson();
+  private static final Type type = new TypeToken<Map<String, String>>() {
   }.getType();
 
   public static OpenItemDTO transformFromItemDTO(ItemDTO item) {

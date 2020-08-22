@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ApolloThreadFactory implements ThreadFactory {
-  private static Logger log = LoggerFactory.getLogger(ApolloThreadFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(ApolloThreadFactory.class);
 
   private final AtomicLong threadNumber = new AtomicLong(1);
 
@@ -61,7 +61,7 @@ public class ApolloThreadFactory implements ThreadFactory {
     return false;
   }
 
-  private static interface ClassifyStandard<T> {
+  private interface ClassifyStandard<T> {
     boolean satisfy(T thread);
   }
 

@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Service
 public class ReleaseHistoryService {
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   private final ReleaseHistoryRepository releaseHistoryRepository;
   private final AuditService auditService;

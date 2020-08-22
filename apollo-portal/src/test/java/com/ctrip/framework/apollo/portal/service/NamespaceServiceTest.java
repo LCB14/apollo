@@ -51,10 +51,10 @@ public class NamespaceServiceTest extends AbstractUnitTest {
   @InjectMocks
   private NamespaceService namespaceService;
 
-  private String testAppId = "6666";
-  private String testClusterName = "default";
-  private String testNamespaceName = "application";
-  private Env testEnv = Env.DEV;
+  private final String testAppId = "6666";
+  private final String testClusterName = "default";
+  private final String testNamespaceName = "application";
+  private final Env testEnv = Env.DEV;
 
   @Before
   public void setup() {

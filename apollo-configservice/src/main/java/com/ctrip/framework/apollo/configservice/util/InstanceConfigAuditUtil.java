@@ -40,10 +40,10 @@ public class InstanceConfigAuditUtil implements InitializingBean {
   private static final Joiner STRING_JOINER = Joiner.on(ConfigConsts.CLUSTER_NAMESPACE_SEPARATOR);
   private final ExecutorService auditExecutorService;
   private final AtomicBoolean auditStopped;
-  private BlockingQueue<InstanceConfigAuditModel> audits = Queues.newLinkedBlockingQueue
+  private final BlockingQueue<InstanceConfigAuditModel> audits = Queues.newLinkedBlockingQueue
       (INSTANCE_CONFIG_AUDIT_MAX_SIZE);
-  private Cache<String, Long> instanceCache;
-  private Cache<String, String> instanceConfigReleaseKeyCache;
+  private final Cache<String, Long> instanceCache;
+  private final Cache<String, String> instanceConfigReleaseKeyCache;
 
   private final InstanceService instanceService;
 
@@ -180,15 +180,15 @@ public class InstanceConfigAuditUtil implements InitializingBean {
   }
 
   public static class InstanceConfigAuditModel {
-    private String appId;
-    private String clusterName;
-    private String dataCenter;
-    private String ip;
-    private String configAppId;
-    private String configClusterName;
-    private String configNamespace;
-    private String releaseKey;
-    private Date offerTime;
+    private final String appId;
+    private final String clusterName;
+    private final String dataCenter;
+    private final String ip;
+    private final String configAppId;
+    private final String configClusterName;
+    private final String configNamespace;
+    private final String releaseKey;
+    private final Date offerTime;
 
     public InstanceConfigAuditModel(String appId, String clusterName, String dataCenter, String
         clientIp, String configAppId, String configClusterName, String configNamespace, String

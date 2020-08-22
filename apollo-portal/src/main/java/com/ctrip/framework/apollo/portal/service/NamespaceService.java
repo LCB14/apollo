@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class NamespaceService {
 
-  private Logger logger = LoggerFactory.getLogger(NamespaceService.class);
-  private Gson gson = new Gson();
+  private final Logger logger = LoggerFactory.getLogger(NamespaceService.class);
+  private final Gson gson = new Gson();
 
   private final PortalConfig portalConfig;
   private final PortalSettings portalSettings;

@@ -55,7 +55,7 @@ public class RemoteConfigRepository extends AbstractConfigRepository {
   private final HttpUtil m_httpUtil;
   private final ConfigUtil m_configUtil;
   private final RemoteConfigLongPollService remoteConfigLongPollService;
-  private volatile AtomicReference<ApolloConfig> m_configCache;
+  private final AtomicReference<ApolloConfig> m_configCache;
   private final String m_namespace;
   private final static ScheduledExecutorService m_executorService;
   private final AtomicReference<ServiceDTO> m_longPollServiceDto;

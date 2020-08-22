@@ -25,8 +25,8 @@ import java.util.Map;
 @RestController
 public class ReleaseHistoryController {
 
-  private Gson gson = new Gson();
-  private Type configurationTypeReference = new TypeToken<Map<String, Object>>() {
+  private final Gson gson = new Gson();
+  private final Type configurationTypeReference = new TypeToken<Map<String, Object>>() {
   }.getType();
 
   private final ReleaseHistoryService releaseHistoryService;

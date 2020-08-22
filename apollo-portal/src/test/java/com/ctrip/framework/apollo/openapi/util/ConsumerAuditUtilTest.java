@@ -32,8 +32,8 @@ public class ConsumerAuditUtilTest {
   private ConsumerService consumerService;
   @Mock
   private HttpServletRequest request;
-  private long batchTimeout = 50;
-  private TimeUnit batchTimeUnit = TimeUnit.MILLISECONDS;
+  private final long batchTimeout = 50;
+  private final TimeUnit batchTimeUnit = TimeUnit.MILLISECONDS;
 
   @Before
   public void setUp() throws Exception {

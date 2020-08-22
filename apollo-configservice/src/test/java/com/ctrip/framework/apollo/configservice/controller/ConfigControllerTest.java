@@ -60,7 +60,7 @@ public class ConfigControllerTest {
   private InstanceConfigAuditUtil instanceConfigAuditUtil;
   @Mock
   private HttpServletRequest someRequest;
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   @Before
   public void setUp() throws Exception {
@@ -195,8 +195,7 @@ public class ConfigControllerTest {
     when(someRelease.getReleaseKey()).thenReturn(someServerSideReleaseKey);
 
     ApolloConfig result =
-        configController.queryConfig(someAppId, someClusterName, defaultNamespaceName, someDataCenter, String.valueOf
-            (someClientSideReleaseKey), someClientIp, someMessagesAsString, someRequest, someResponse);
+        configController.queryConfig(someAppId, someClusterName, defaultNamespaceName, someDataCenter, someClientSideReleaseKey, someClientIp, someMessagesAsString, someRequest, someResponse);
 
     assertNull(result);
     verify(someResponse, times(1)).setStatus(HttpServletResponse.SC_NOT_MODIFIED);

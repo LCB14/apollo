@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DatabaseMessageSender implements MessageSender {
   private static final Logger logger = LoggerFactory.getLogger(DatabaseMessageSender.class);
   private static final int CLEAN_QUEUE_MAX_SIZE = 100;
-  private BlockingQueue<Long> toClean = Queues.newLinkedBlockingQueue(CLEAN_QUEUE_MAX_SIZE);
+  private final BlockingQueue<Long> toClean = Queues.newLinkedBlockingQueue(CLEAN_QUEUE_MAX_SIZE);
   private final ExecutorService cleanExecutorService;
   private final AtomicBoolean cleanStopped;
 

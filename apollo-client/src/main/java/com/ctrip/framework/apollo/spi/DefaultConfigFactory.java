@@ -27,7 +27,7 @@ import com.ctrip.framework.apollo.util.ConfigUtil;
  */
 public class DefaultConfigFactory implements ConfigFactory {
   private static final Logger logger = LoggerFactory.getLogger(DefaultConfigFactory.class);
-  private ConfigUtil m_configUtil;
+  private final ConfigUtil m_configUtil;
 
   public DefaultConfigFactory() {
     m_configUtil = ApolloInjector.getInstance(ConfigUtil.class);

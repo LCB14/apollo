@@ -23,7 +23,7 @@ import java.util.Set;
 @Component
 public class PortalConfig extends RefreshableConfig {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
   private static final Type ORGANIZATION = new TypeToken<List<Organization>>() {
   }.getType();
 

@@ -15,7 +15,7 @@ import com.google.common.io.Files;
 
 public class YamlParserTest {
 
-  private YamlParser parser = new YamlParser();
+  private final YamlParser parser = new YamlParser();
 
   @Test
   public void testValidCases() throws Exception {

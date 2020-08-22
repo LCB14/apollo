@@ -33,11 +33,11 @@ import com.google.gson.reflect.TypeToken;
 
 public class ConfigServiceLocator {
   private static final Logger logger = LoggerFactory.getLogger(ConfigServiceLocator.class);
-  private HttpUtil m_httpUtil;
-  private ConfigUtil m_configUtil;
-  private AtomicReference<List<ServiceDTO>> m_configServices;
-  private Type m_responseType;
-  private ScheduledExecutorService m_executorService;
+  private final HttpUtil m_httpUtil;
+  private final ConfigUtil m_configUtil;
+  private final AtomicReference<List<ServiceDTO>> m_configServices;
+  private final Type m_responseType;
+  private final ScheduledExecutorService m_executorService;
   private static final Joiner.MapJoiner MAP_JOINER = Joiner.on("&").withKeyValueSeparator("=");
   private static final Escaper queryParamEscaper = UrlEscapers.urlFormParameterEscaper();
 

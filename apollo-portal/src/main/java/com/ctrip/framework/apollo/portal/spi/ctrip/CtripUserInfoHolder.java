@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
  */
 public class CtripUserInfoHolder implements UserInfoHolder {
 
-  private Object assertionHolder;
+  private final Object assertionHolder;
 
-  private Method getAssertion;
+  private final Method getAssertion;
 
 
   public CtripUserInfoHolder() {

@@ -16,7 +16,7 @@ import com.ctrip.framework.foundation.spi.provider.Provider;
 public class DefaultApplicationProvider implements ApplicationProvider {
   private static final Logger logger = LoggerFactory.getLogger(DefaultApplicationProvider.class);
   public static final String APP_PROPERTIES_CLASSPATH = "/META-INF/app.properties";
-  private Properties m_appProperties = new Properties();
+  private final Properties m_appProperties = new Properties();
 
   private String m_appId;
 

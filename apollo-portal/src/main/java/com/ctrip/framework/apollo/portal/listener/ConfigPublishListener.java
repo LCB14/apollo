@@ -67,7 +67,7 @@ public class ConfigPublishListener {
 
   private class ConfigPublishNotifyTask implements Runnable {
 
-    private ConfigPublishEvent.ConfigPublishInfo publishInfo;
+    private final ConfigPublishEvent.ConfigPublishInfo publishInfo;
 
     ConfigPublishNotifyTask(ConfigPublishEvent.ConfigPublishInfo publishInfo) {
       this.publishInfo = publishInfo;

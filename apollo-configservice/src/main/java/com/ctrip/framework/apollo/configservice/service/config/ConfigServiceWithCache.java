@@ -55,7 +55,7 @@ public class ConfigServiceWithCache extends AbstractConfigService {
 
   private LoadingCache<Long, Optional<Release>> configIdCache;
 
-  private ConfigCacheEntry nullConfigCacheEntry;
+  private final ConfigCacheEntry nullConfigCacheEntry;
 
   public ConfigServiceWithCache() {
     nullConfigCacheEntry = new ConfigCacheEntry(ConfigConsts.NOTIFICATION_ID_PLACEHOLDER, null);

@@ -22,7 +22,7 @@ public class DefaultServerProvider implements ServerProvider {
   private String m_env;
   private String m_dc;
 
-  private Properties m_serverProperties = new Properties();
+  private final Properties m_serverProperties = new Properties();
 
   @Override
   public void initialize() {

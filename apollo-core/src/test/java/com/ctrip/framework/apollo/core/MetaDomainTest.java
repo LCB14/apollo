@@ -58,7 +58,7 @@ public class MetaDomainTest extends BaseIntegrationTest {
 
   public static class MockMetaServerProvider implements MetaServerProvider {
 
-    private static Map<Env, String> mockMetaServerAddress = Maps.newHashMap();
+    private static final Map<Env, String> mockMetaServerAddress = Maps.newHashMap();
 
     private static void mock(Env env, String metaServerAddress) {
       mockMetaServerAddress.put(env, metaServerAddress);

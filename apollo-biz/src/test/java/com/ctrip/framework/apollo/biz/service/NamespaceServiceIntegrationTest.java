@@ -44,11 +44,11 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private InstanceConfigRepository instanceConfigRepository;
 
-  private String testApp = "testApp";
-  private String testCluster = "default";
-  private String testChildCluster = "child-cluster";
-  private String testPrivateNamespace = "application";
-  private String testUser = "apollo";
+  private final String testApp = "testApp";
+  private final String testCluster = "default";
+  private final String testChildCluster = "child-cluster";
+  private final String testPrivateNamespace = "application";
+  private final String testUser = "apollo";
 
   @Test
   @Sql(scripts = "/sql/namespace-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)

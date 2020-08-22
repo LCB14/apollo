@@ -117,7 +117,7 @@ public class LdapUserService implements UserService {
   /**
    * 用户信息Mapper
    */
-  private ContextMapper<UserInfo> ldapUserInfoMapper = (ctx) -> {
+  private final ContextMapper<UserInfo> ldapUserInfoMapper = (ctx) -> {
     DirContextAdapter contextAdapter = (DirContextAdapter) ctx;
     UserInfo userInfo = new UserInfo();
     userInfo.setUserId(contextAdapter.getStringAttribute(loginIdAttrName));

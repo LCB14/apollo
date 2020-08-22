@@ -26,7 +26,7 @@ public class StringUtilsTest {
 
   @Test
   public void testIsBlank() {
-    Assert.assertFalse(StringUtils.isBlank("\'"));
+    Assert.assertFalse(StringUtils.isBlank("'"));
     Assert.assertTrue(StringUtils.isBlank(""));
     Assert.assertTrue(StringUtils.isBlank(null));
   }
@@ -34,8 +34,8 @@ public class StringUtilsTest {
   @Test
   public void testIsContainEmpty() {
     Assert.assertFalse(StringUtils.isContainEmpty(null));
-    Assert.assertFalse(StringUtils.isContainEmpty(new String[] {}));
-    Assert.assertFalse(StringUtils.isContainEmpty(new String[] {"1"}));
+    Assert.assertFalse(StringUtils.isContainEmpty());
+    Assert.assertFalse(StringUtils.isContainEmpty("1"));
     Assert.assertTrue(StringUtils.isContainEmpty(new String[] {null}));
   }
 
@@ -49,7 +49,7 @@ public class StringUtilsTest {
   @Test
   public void testIsNumeric() {
     Assert.assertFalse(StringUtils.isNumeric(null));
-    Assert.assertFalse(StringUtils.isNumeric("\'"));
+    Assert.assertFalse(StringUtils.isNumeric("'"));
     Assert.assertTrue(StringUtils.isNumeric("1"));
   }
 

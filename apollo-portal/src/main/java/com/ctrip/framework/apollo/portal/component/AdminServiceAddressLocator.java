@@ -35,7 +35,7 @@ public class AdminServiceAddressLocator {
   private ScheduledExecutorService refreshServiceAddressService;
   private RestTemplate restTemplate;
   private List<Env> allEnvs;
-  private Map<Env, List<ServiceDTO>> cache = new ConcurrentHashMap<>();
+  private final Map<Env, List<ServiceDTO>> cache = new ConcurrentHashMap<>();
 
   private final PortalSettings portalSettings;
   private final RestTemplateFactory restTemplateFactory;

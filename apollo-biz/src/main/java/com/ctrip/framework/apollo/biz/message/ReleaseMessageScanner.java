@@ -29,8 +29,8 @@ public class ReleaseMessageScanner implements InitializingBean {
   @Autowired
   private ReleaseMessageRepository releaseMessageRepository;
   private int databaseScanInterval;
-  private List<ReleaseMessageListener> listeners;
-  private ScheduledExecutorService executorService;
+  private final List<ReleaseMessageListener> listeners;
+  private final ScheduledExecutorService executorService;
   private long maxIdScanned;
 
   public ReleaseMessageScanner() {
@@ -43,7 +43,7 @@ public class ReleaseMessageScanner implements InitializingBean {
   public void afterPropertiesSet() throws Exception {
     databaseScanInterval = bizConfig.releaseMessageScanIntervalInMilli();
     maxIdScanned = loadLargestMessageId();
-    executorService.scheduleWithFixedDelay((Runnable) () -> {
+    executorService.scheduleWithFixedDelay(() -> {
       Transaction transaction = Tracer.newTransaction("Apollo.ReleaseMessageScanner", "scanMessage");
       try {
         scanMessages();
