@@ -16,23 +16,23 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty("redis.cache.enabled")
 @Component
 public class SpringBootApolloRefreshConfig {
-  private static final Logger logger = LoggerFactory.getLogger(SpringBootApolloRefreshConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringBootApolloRefreshConfig.class);
 
-  private final SampleRedisConfig sampleRedisConfig;
-  private final RefreshScope refreshScope;
+    private final SampleRedisConfig sampleRedisConfig;
+    private final RefreshScope refreshScope;
 
-  public SpringBootApolloRefreshConfig(
-      final SampleRedisConfig sampleRedisConfig,
-      final RefreshScope refreshScope) {
-    this.sampleRedisConfig = sampleRedisConfig;
-    this.refreshScope = refreshScope;
-  }
+    public SpringBootApolloRefreshConfig(
+            final SampleRedisConfig sampleRedisConfig,
+            final RefreshScope refreshScope) {
+        this.sampleRedisConfig = sampleRedisConfig;
+        this.refreshScope = refreshScope;
+    }
 
-  @ApolloConfigChangeListener(value = {ConfigConsts.NAMESPACE_APPLICATION, "TEST1.apollo", "application.yaml"},
-      interestedKeyPrefixes = {"redis.cache."})
-  public void onChange(ConfigChangeEvent changeEvent) {
-    logger.info("before refresh {}", sampleRedisConfig.toString());
-    refreshScope.refresh("sampleRedisConfig");
-    logger.info("after refresh {}", sampleRedisConfig.toString());
-  }
+    @ApolloConfigChangeListener(value = {ConfigConsts.NAMESPACE_APPLICATION, "TEST1.apollo", "application.yaml"},
+            interestedKeyPrefixes = {"redis.cache."})
+    public void onChange(ConfigChangeEvent changeEvent) {
+        logger.info("before refresh {}", sampleRedisConfig.toString());
+        refreshScope.refresh("sampleRedisConfig");
+        logger.info("after refresh {}", sampleRedisConfig.toString());
+    }
 }
