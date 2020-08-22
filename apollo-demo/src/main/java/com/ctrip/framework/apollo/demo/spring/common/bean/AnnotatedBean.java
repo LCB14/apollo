@@ -20,6 +20,8 @@ public class AnnotatedBean {
     private int batch;
     private List<JsonBean> jsonBeans;
 
+    private String commonStr;
+
     /**
      * ApolloJsonValue annotated on fields example, the default value is specified as empty list - []
      * <br />
@@ -51,9 +53,15 @@ public class AnnotatedBean {
         this.jsonBeans = jsonBeans;
     }
 
+    @Value("${commonStr}")
+    public void setCommonStr(String commonStr) {
+        logger.info("updating commonStr, old value: {}, new value: {}", this.commonStr, commonStr);
+        this.commonStr = commonStr;
+    }
+
     @Override
     public String toString() {
-        return String.format("[AnnotatedBean] timeout: %d, batch: %d, jsonBeans: %s", timeout, batch, jsonBeans);
+        return String.format("[AnnotatedBean] timeout: %d, batch: %d, commonStr: %s, jsonBeans: %s", timeout, batch, commonStr, jsonBeans);
     }
 
     private static class JsonBean {
