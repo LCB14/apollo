@@ -14,41 +14,41 @@ import java.util.Collections;
 
 public class FileTextResolverTest extends AbstractUnitTest {
 
-  @InjectMocks
-  private FileTextResolver resolver;
+    @InjectMocks
+    private FileTextResolver resolver;
 
-  private final String CONFIG_TEXT = "config_text";
-  private final long NAMESPACE = 1000;
+    private final String CONFIG_TEXT = "config_text";
+    private final long NAMESPACE = 1000;
 
-  @Test
-  public void testCreateItem(){
-    ItemChangeSets changeSets = resolver.resolve(NAMESPACE, CONFIG_TEXT, Collections.emptyList());
+    @Test
+    public void testCreateItem() {
+        ItemChangeSets changeSets = resolver.resolve(NAMESPACE, CONFIG_TEXT, Collections.emptyList());
 
-    Assert.assertEquals(1, changeSets.getCreateItems().size());
-    Assert.assertEquals(0, changeSets.getUpdateItems().size());
-    Assert.assertEquals(0, changeSets.getDeleteItems().size());
+        Assert.assertEquals(1, changeSets.getCreateItems().size());
+        Assert.assertEquals(0, changeSets.getUpdateItems().size());
+        Assert.assertEquals(0, changeSets.getDeleteItems().size());
 
-    ItemDTO createdItem = changeSets.getCreateItems().get(0);
-    Assert.assertEquals(CONFIG_TEXT, createdItem.getValue());
+        ItemDTO createdItem = changeSets.getCreateItems().get(0);
+        Assert.assertEquals(CONFIG_TEXT, createdItem.getValue());
 
-  }
+    }
 
-  @Test
-  public void testUpdateItem(){
-    ItemDTO existedItem = new ItemDTO();
-    existedItem.setId(1000);
-    existedItem.setKey(ConfigConsts.CONFIG_FILE_CONTENT_KEY);
-    existedItem.setValue("before");
+    @Test
+    public void testUpdateItem() {
+        ItemDTO existedItem = new ItemDTO();
+        existedItem.setId(1000);
+        existedItem.setKey(ConfigConsts.CONFIG_FILE_CONTENT_KEY);
+        existedItem.setValue("before");
 
-    ItemChangeSets changeSets = resolver.resolve(NAMESPACE, CONFIG_TEXT, Arrays.asList(existedItem));
+        ItemChangeSets changeSets = resolver.resolve(NAMESPACE, CONFIG_TEXT, Arrays.asList(existedItem));
 
-    Assert.assertEquals(0, changeSets.getCreateItems().size());
-    Assert.assertEquals(1, changeSets.getUpdateItems().size());
-    Assert.assertEquals(0, changeSets.getDeleteItems().size());
+        Assert.assertEquals(0, changeSets.getCreateItems().size());
+        Assert.assertEquals(1, changeSets.getUpdateItems().size());
+        Assert.assertEquals(0, changeSets.getDeleteItems().size());
 
-    ItemDTO updatedItem = changeSets.getUpdateItems().get(0);
-    Assert.assertEquals(CONFIG_TEXT, updatedItem.getValue());
+        ItemDTO updatedItem = changeSets.getUpdateItems().get(0);
+        Assert.assertEquals(CONFIG_TEXT, updatedItem.getValue());
 
-  }
+    }
 
 }

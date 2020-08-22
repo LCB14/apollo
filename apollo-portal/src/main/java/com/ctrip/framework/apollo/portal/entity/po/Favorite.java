@@ -15,36 +15,36 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class Favorite extends BaseEntity {
 
-  @Column(name = "AppId", nullable = false)
-  private String appId;
+    @Column(name = "AppId", nullable = false)
+    private String appId;
 
-  @Column(name = "UserId", nullable = false)
-  private String userId;
+    @Column(name = "UserId", nullable = false)
+    private String userId;
 
-  @Column(name = "Position")
-  private long position;
+    @Column(name = "Position")
+    private long position;
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getUserId() {
-    return userId;
-  }
+    public String getUserId() {
+        return userId;
+    }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-  public long getPosition() {
-    return position;
-  }
+    public long getPosition() {
+        return position;
+    }
 
-  public void setPosition(long position) {
-    this.position = position;
-  }
+    public void setPosition(long position) {
+        this.position = position;
+    }
 }

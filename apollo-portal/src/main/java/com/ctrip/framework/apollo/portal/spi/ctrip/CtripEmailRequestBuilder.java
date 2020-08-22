@@ -18,83 +18,83 @@ import javax.annotation.PostConstruct;
 
 public class CtripEmailRequestBuilder {
 
-  private static final Logger logger = LoggerFactory.getLogger(CtripEmailRequestBuilder.class);
+    private static final Logger logger = LoggerFactory.getLogger(CtripEmailRequestBuilder.class);
 
-  private static Class sendEmailRequestClazz;
-  private static Method setBodyContent;
-  private static Method setRecipient;
-  private static Method setSendCode;
-  private static Method setBodyTemplateID;
-  private static Method setSender;
-  private static Method setSubject;
-  private static Method setIsBodyHtml;
-  private static Method setCharset;
-  private static Method setExpiredTime;
-  private static Method setAppID;
+    private static Class sendEmailRequestClazz;
+    private static Method setBodyContent;
+    private static Method setRecipient;
+    private static Method setSendCode;
+    private static Method setBodyTemplateID;
+    private static Method setSender;
+    private static Method setSubject;
+    private static Method setIsBodyHtml;
+    private static Method setCharset;
+    private static Method setExpiredTime;
+    private static Method setAppID;
 
-  @Autowired
-  private PortalConfig portalConfig;
+    @Autowired
+    private PortalConfig portalConfig;
 
 
-  @PostConstruct
-  public void init() {
-    try {
-      sendEmailRequestClazz = Class.forName("com.ctrip.framework.apolloctripservice.emailservice.SendEmailRequest");
+    @PostConstruct
+    public void init() {
+        try {
+            sendEmailRequestClazz = Class.forName("com.ctrip.framework.apolloctripservice.emailservice.SendEmailRequest");
 
-      setSendCode = sendEmailRequestClazz.getMethod("setSendCode", String.class);
-      setBodyTemplateID = sendEmailRequestClazz.getMethod("setBodyTemplateID", Integer.class);
-      setSender = sendEmailRequestClazz.getMethod("setSender", String.class);
-      setBodyContent = sendEmailRequestClazz.getMethod("setBodyContent", String.class);
-      setRecipient = sendEmailRequestClazz.getMethod("setRecipient", List.class);
-      setSubject = sendEmailRequestClazz.getMethod("setSubject", String.class);
-      setIsBodyHtml = sendEmailRequestClazz.getMethod("setIsBodyHtml", Boolean.class);
-      setCharset = sendEmailRequestClazz.getMethod("setCharset", String.class);
-      setExpiredTime = sendEmailRequestClazz.getMethod("setExpiredTime", Calendar.class);
-      setAppID = sendEmailRequestClazz.getMethod("setAppID", Integer.class);
+            setSendCode = sendEmailRequestClazz.getMethod("setSendCode", String.class);
+            setBodyTemplateID = sendEmailRequestClazz.getMethod("setBodyTemplateID", Integer.class);
+            setSender = sendEmailRequestClazz.getMethod("setSender", String.class);
+            setBodyContent = sendEmailRequestClazz.getMethod("setBodyContent", String.class);
+            setRecipient = sendEmailRequestClazz.getMethod("setRecipient", List.class);
+            setSubject = sendEmailRequestClazz.getMethod("setSubject", String.class);
+            setIsBodyHtml = sendEmailRequestClazz.getMethod("setIsBodyHtml", Boolean.class);
+            setCharset = sendEmailRequestClazz.getMethod("setCharset", String.class);
+            setExpiredTime = sendEmailRequestClazz.getMethod("setExpiredTime", Calendar.class);
+            setAppID = sendEmailRequestClazz.getMethod("setAppID", Integer.class);
 
-    } catch (Throwable e) {
-      logger.error("init email request build failed", e);
-      Tracer.logError("init email request build failed", e);
+        } catch (Throwable e) {
+            logger.error("init email request build failed", e);
+            Tracer.logError("init email request build failed", e);
+        }
     }
-  }
 
 
-  public Object buildEmailRequest(Email email) throws Exception {
+    public Object buildEmailRequest(Email email) throws Exception {
 
-    Object emailRequest = createBasicEmailRequest();
+        Object emailRequest = createBasicEmailRequest();
 
-    setSender.invoke(emailRequest, email.getSenderEmailAddress());
-    setSubject.invoke(emailRequest, email.getSubject());
-    String emailBodyBuilder = "<entry><content><![CDATA[<!DOCTYPE html>" +
-            email.getBody() +
-            "]]></content></entry>";
-    setBodyContent.invoke(emailRequest, emailBodyBuilder);
-    setRecipient.invoke(emailRequest, email.getRecipients());
+        setSender.invoke(emailRequest, email.getSenderEmailAddress());
+        setSubject.invoke(emailRequest, email.getSubject());
+        String emailBodyBuilder = "<entry><content><![CDATA[<!DOCTYPE html>" +
+                email.getBody() +
+                "]]></content></entry>";
+        setBodyContent.invoke(emailRequest, emailBodyBuilder);
+        setRecipient.invoke(emailRequest, email.getRecipients());
 
-    return emailRequest;
-  }
+        return emailRequest;
+    }
 
-  private Object createBasicEmailRequest() throws Exception {
-    Object request = sendEmailRequestClazz.newInstance();
+    private Object createBasicEmailRequest() throws Exception {
+        Object request = sendEmailRequestClazz.newInstance();
 
-    setSendCode.invoke(request, portalConfig.sendCode());
-    setBodyTemplateID.invoke(request, portalConfig.templateId());
-    setIsBodyHtml.invoke(request, true);
-    setCharset.invoke(request, "UTF-8");
-    setExpiredTime.invoke(request, calExpiredTime());
-    setAppID.invoke(request, portalConfig.appId());
+        setSendCode.invoke(request, portalConfig.sendCode());
+        setBodyTemplateID.invoke(request, portalConfig.templateId());
+        setIsBodyHtml.invoke(request, true);
+        setCharset.invoke(request, "UTF-8");
+        setExpiredTime.invoke(request, calExpiredTime());
+        setAppID.invoke(request, portalConfig.appId());
 
-    return request;
-  }
+        return request;
+    }
 
 
-  private Calendar calExpiredTime() {
+    private Calendar calExpiredTime() {
 
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(DateUtils.addHours(new Date(), portalConfig.survivalDuration()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtils.addHours(new Date(), portalConfig.survivalDuration()));
 
-    return calendar;
-  }
+        return calendar;
+    }
 
 
 }

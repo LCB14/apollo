@@ -16,96 +16,96 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class NamespaceUtilTest {
-  private NamespaceUtil namespaceUtil;
+    private NamespaceUtil namespaceUtil;
 
-  @Mock
-  private AppNamespaceServiceWithCache appNamespaceServiceWithCache;
+    @Mock
+    private AppNamespaceServiceWithCache appNamespaceServiceWithCache;
 
-  @Before
-  public void setUp() throws Exception {
-    namespaceUtil = new NamespaceUtil(appNamespaceServiceWithCache);
-  }
+    @Before
+    public void setUp() throws Exception {
+        namespaceUtil = new NamespaceUtil(appNamespaceServiceWithCache);
+    }
 
-  @Test
-  public void testFilterNamespaceName() throws Exception {
-    String someName = "a.properties";
+    @Test
+    public void testFilterNamespaceName() throws Exception {
+        String someName = "a.properties";
 
-    assertEquals("a", namespaceUtil.filterNamespaceName(someName));
-  }
+        assertEquals("a", namespaceUtil.filterNamespaceName(someName));
+    }
 
-  @Test
-  public void testFilterNamespaceNameUnchanged() throws Exception {
-    String someName = "a.xml";
+    @Test
+    public void testFilterNamespaceNameUnchanged() throws Exception {
+        String someName = "a.xml";
 
-    assertEquals(someName, namespaceUtil.filterNamespaceName(someName));
-  }
+        assertEquals(someName, namespaceUtil.filterNamespaceName(someName));
+    }
 
-  @Test
-  public void testFilterNamespaceNameWithMultiplePropertiesSuffix() throws Exception {
-    String someName = "a.properties.properties";
+    @Test
+    public void testFilterNamespaceNameWithMultiplePropertiesSuffix() throws Exception {
+        String someName = "a.properties.properties";
 
-    assertEquals("a.properties", namespaceUtil.filterNamespaceName(someName));
-  }
+        assertEquals("a.properties", namespaceUtil.filterNamespaceName(someName));
+    }
 
-  @Test
-  public void testFilterNamespaceNameWithRandomCase() throws Exception {
-    String someName = "AbC.ProPErties";
+    @Test
+    public void testFilterNamespaceNameWithRandomCase() throws Exception {
+        String someName = "AbC.ProPErties";
 
-    assertEquals("AbC", namespaceUtil.filterNamespaceName(someName));
-  }
+        assertEquals("AbC", namespaceUtil.filterNamespaceName(someName));
+    }
 
-  @Test
-  public void testFilterNamespaceNameWithRandomCaseUnchanged() throws Exception {
-    String someName = "AbCD.xMl";
+    @Test
+    public void testFilterNamespaceNameWithRandomCaseUnchanged() throws Exception {
+        String someName = "AbCD.xMl";
 
-    assertEquals(someName, namespaceUtil.filterNamespaceName(someName));
-  }
+        assertEquals(someName, namespaceUtil.filterNamespaceName(someName));
+    }
 
-  @Test
-  public void testNormalizeNamespaceWithPrivateNamespace() throws Exception {
-    String someAppId = "someAppId";
-    String someNamespaceName = "someNamespaceName";
-    String someNormalizedNamespaceName = "someNormalizedNamespaceName";
-    AppNamespace someAppNamespace = mock(AppNamespace.class);
+    @Test
+    public void testNormalizeNamespaceWithPrivateNamespace() throws Exception {
+        String someAppId = "someAppId";
+        String someNamespaceName = "someNamespaceName";
+        String someNormalizedNamespaceName = "someNormalizedNamespaceName";
+        AppNamespace someAppNamespace = mock(AppNamespace.class);
 
-    when(someAppNamespace.getName()).thenReturn(someNormalizedNamespaceName);
-    when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn
-        (someAppNamespace);
+        when(someAppNamespace.getName()).thenReturn(someNormalizedNamespaceName);
+        when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn
+                (someAppNamespace);
 
-    assertEquals(someNormalizedNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
+        assertEquals(someNormalizedNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
 
-    verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
-    verify(appNamespaceServiceWithCache, never()).findPublicNamespaceByName(someNamespaceName);
-  }
+        verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
+        verify(appNamespaceServiceWithCache, never()).findPublicNamespaceByName(someNamespaceName);
+    }
 
-  @Test
-  public void testNormalizeNamespaceWithPublicNamespace() throws Exception {
-    String someAppId = "someAppId";
-    String someNamespaceName = "someNamespaceName";
-    String someNormalizedNamespaceName = "someNormalizedNamespaceName";
-    AppNamespace someAppNamespace = mock(AppNamespace.class);
+    @Test
+    public void testNormalizeNamespaceWithPublicNamespace() throws Exception {
+        String someAppId = "someAppId";
+        String someNamespaceName = "someNamespaceName";
+        String someNormalizedNamespaceName = "someNormalizedNamespaceName";
+        AppNamespace someAppNamespace = mock(AppNamespace.class);
 
-    when(someAppNamespace.getName()).thenReturn(someNormalizedNamespaceName);
-    when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn(null);
-    when(appNamespaceServiceWithCache.findPublicNamespaceByName(someNamespaceName)).thenReturn(someAppNamespace);
+        when(someAppNamespace.getName()).thenReturn(someNormalizedNamespaceName);
+        when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn(null);
+        when(appNamespaceServiceWithCache.findPublicNamespaceByName(someNamespaceName)).thenReturn(someAppNamespace);
 
-    assertEquals(someNormalizedNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
+        assertEquals(someNormalizedNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
 
-    verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
-    verify(appNamespaceServiceWithCache, times(1)).findPublicNamespaceByName(someNamespaceName);
-  }
+        verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
+        verify(appNamespaceServiceWithCache, times(1)).findPublicNamespaceByName(someNamespaceName);
+    }
 
-  @Test
-  public void testNormalizeNamespaceFailed() throws Exception {
-    String someAppId = "someAppId";
-    String someNamespaceName = "someNamespaceName";
+    @Test
+    public void testNormalizeNamespaceFailed() throws Exception {
+        String someAppId = "someAppId";
+        String someNamespaceName = "someNamespaceName";
 
-    when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn(null);
-    when(appNamespaceServiceWithCache.findPublicNamespaceByName(someNamespaceName)).thenReturn(null);
+        when(appNamespaceServiceWithCache.findByAppIdAndNamespace(someAppId, someNamespaceName)).thenReturn(null);
+        when(appNamespaceServiceWithCache.findPublicNamespaceByName(someNamespaceName)).thenReturn(null);
 
-    assertEquals(someNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
+        assertEquals(someNamespaceName, namespaceUtil.normalizeNamespace(someAppId, someNamespaceName));
 
-    verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
-    verify(appNamespaceServiceWithCache, times(1)).findPublicNamespaceByName(someNamespaceName);
-  }
+        verify(appNamespaceServiceWithCache, times(1)).findByAppIdAndNamespace(someAppId, someNamespaceName);
+        verify(appNamespaceServiceWithCache, times(1)).findPublicNamespaceByName(someNamespaceName);
+    }
 }

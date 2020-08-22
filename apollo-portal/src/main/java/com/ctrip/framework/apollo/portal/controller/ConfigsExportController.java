@@ -34,88 +34,88 @@ import java.util.stream.Collectors;
 @RestController
 public class ConfigsExportController {
 
-  private final ItemService configService;
+    private final ItemService configService;
 
-  private final NamespaceService namespaceService;
+    private final NamespaceService namespaceService;
 
-  public ConfigsExportController(
-      final ItemService configService,
-      final @Lazy NamespaceService namespaceService) {
-    this.configService = configService;
-    this.namespaceService = namespaceService;
-  }
-
-  @PostMapping("/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items/import")
-  public void importConfigFile(@PathVariable String appId, @PathVariable String env,
-      @PathVariable String clusterName, @PathVariable String namespaceName,
-      @RequestParam("file") MultipartFile file) {
-    if (file.isEmpty()) {
-      throw new BadRequestException("The file is empty.");
+    public ConfigsExportController(
+            final ItemService configService,
+            final @Lazy NamespaceService namespaceService) {
+        this.configService = configService;
+        this.namespaceService = namespaceService;
     }
 
-    NamespaceDTO namespaceDTO = namespaceService
-        .loadNamespaceBaseInfo(appId, Env.fromString(env), clusterName, namespaceName);
+    @PostMapping("/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items/import")
+    public void importConfigFile(@PathVariable String appId, @PathVariable String env,
+                                 @PathVariable String clusterName, @PathVariable String namespaceName,
+                                 @RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new BadRequestException("The file is empty.");
+        }
 
-    if (Objects.isNull(namespaceDTO)) {
-      throw new BadRequestException(String.format("Namespace: {} not exist.", namespaceName));
+        NamespaceDTO namespaceDTO = namespaceService
+                .loadNamespaceBaseInfo(appId, Env.fromString(env), clusterName, namespaceName);
+
+        if (Objects.isNull(namespaceDTO)) {
+            throw new BadRequestException(String.format("Namespace: {} not exist.", namespaceName));
+        }
+
+        NamespaceTextModel model = new NamespaceTextModel();
+        List<String> fileNameSplit = Splitter.on(".").splitToList(file.getOriginalFilename());
+        if (fileNameSplit.size() <= 1) {
+            throw new BadRequestException("The file format is invalid.");
+        }
+
+        String format = fileNameSplit.get(fileNameSplit.size() - 1);
+        model.setFormat(format);
+        model.setAppId(appId);
+        model.setEnv(env);
+        model.setClusterName(clusterName);
+        model.setNamespaceName(namespaceName);
+        model.setNamespaceId(namespaceDTO.getId());
+        String configText;
+        try (InputStream in = file.getInputStream()) {
+            configText = ConfigToFileUtils.fileToString(in);
+        } catch (IOException e) {
+            throw new ServiceException("Read config file errors:{}", e);
+        }
+        model.setConfigText(configText);
+
+        configService.updateConfigItemByText(model);
     }
 
-    NamespaceTextModel model = new NamespaceTextModel();
-    List<String> fileNameSplit = Splitter.on(".").splitToList(file.getOriginalFilename());
-    if (fileNameSplit.size() <= 1) {
-      throw new BadRequestException("The file format is invalid.");
+    @GetMapping("/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items/export")
+    public void exportItems(@PathVariable String appId, @PathVariable String env,
+                            @PathVariable String clusterName, @PathVariable String namespaceName,
+                            HttpServletResponse res) {
+        List<String> fileNameSplit = Splitter.on(".").splitToList(namespaceName);
+
+        String fileName = fileNameSplit.size() <= 1 ? Joiner.on(".")
+                .join(namespaceName, ConfigFileFormat.Properties.getValue()) : namespaceName;
+        NamespaceBO namespaceBO = namespaceService.loadNamespaceBO(appId, Env.fromString
+                (env), clusterName, namespaceName);
+
+        //generate a file.
+        res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+        List<String> fileItems = namespaceBO.getItems().stream().map(itemBO -> {
+            String key = itemBO.getItem().getKey();
+            String value = itemBO.getItem().getValue();
+            if (ConfigConsts.CONFIG_FILE_CONTENT_KEY.equals(key)) {
+                return value;
+            }
+
+            if ("".equals(key)) {
+                return Joiner.on("").join(itemBO.getItem().getKey(), itemBO.getItem().getValue());
+            }
+
+            return Joiner.on(" = ").join(itemBO.getItem().getKey(), itemBO.getItem().getValue());
+        }).collect(Collectors.toList());
+
+        try {
+            ConfigToFileUtils.itemsToFile(res.getOutputStream(), fileItems);
+        } catch (Exception e) {
+            throw new ServiceException("export items failed:{}", e);
+        }
     }
-
-    String format = fileNameSplit.get(fileNameSplit.size() - 1);
-    model.setFormat(format);
-    model.setAppId(appId);
-    model.setEnv(env);
-    model.setClusterName(clusterName);
-    model.setNamespaceName(namespaceName);
-    model.setNamespaceId(namespaceDTO.getId());
-    String configText;
-    try(InputStream in = file.getInputStream()){
-      configText = ConfigToFileUtils.fileToString(in);
-    }catch (IOException e) {
-      throw new ServiceException("Read config file errors:{}", e);
-    }
-    model.setConfigText(configText);
-
-    configService.updateConfigItemByText(model);
-  }
-
-  @GetMapping("/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/items/export")
-  public void exportItems(@PathVariable String appId, @PathVariable String env,
-      @PathVariable String clusterName, @PathVariable String namespaceName,
-      HttpServletResponse res) {
-    List<String> fileNameSplit = Splitter.on(".").splitToList(namespaceName);
-
-    String fileName = fileNameSplit.size() <= 1 ? Joiner.on(".")
-        .join(namespaceName, ConfigFileFormat.Properties.getValue()) : namespaceName;
-    NamespaceBO namespaceBO = namespaceService.loadNamespaceBO(appId, Env.fromString
-        (env), clusterName, namespaceName);
-
-    //generate a file.
-    res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-
-    List<String> fileItems = namespaceBO.getItems().stream().map(itemBO -> {
-      String key = itemBO.getItem().getKey();
-      String value = itemBO.getItem().getValue();
-      if (ConfigConsts.CONFIG_FILE_CONTENT_KEY.equals(key)) {
-        return value;
-      }
-
-      if ("".equals(key)) {
-        return Joiner.on("").join(itemBO.getItem().getKey(), itemBO.getItem().getValue());
-      }
-
-      return Joiner.on(" = ").join(itemBO.getItem().getKey(), itemBO.getItem().getValue());
-    }).collect(Collectors.toList());
-
-    try {
-      ConfigToFileUtils.itemsToFile(res.getOutputStream(), fileItems);
-    } catch (Exception e) {
-      throw new ServiceException("export items failed:{}", e);
-    }
-  }
 }

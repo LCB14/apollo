@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @ComponentScan(basePackageClasses = {ApolloCommonConfig.class,
-    PortalApplication.class, PortalOpenApiConfig.class})
+        PortalApplication.class, PortalOpenApiConfig.class})
 public class PortalApplication {
 
-  public static void main(String[] args) throws Exception {
-    SpringApplication.run(PortalApplication.class, args);
-  }
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(PortalApplication.class, args);
+    }
 }

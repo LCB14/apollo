@@ -3,6 +3,7 @@ package com.ctrip.framework.apollo.util;
 import com.ctrip.framework.apollo.core.ConfigConsts;
 
 import java.io.File;
+
 import org.junit.After;
 import org.junit.Test;
 
@@ -15,210 +16,210 @@ import static org.mockito.Mockito.when;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ConfigUtilTest {
-  @After
-  public void tearDown() throws Exception {
-    System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
-    System.clearProperty("apollo.connectTimeout");
-    System.clearProperty("apollo.readTimeout");
-    System.clearProperty("apollo.refreshInterval");
-    System.clearProperty("apollo.loadConfigQPS");
-    System.clearProperty("apollo.longPollQPS");
-    System.clearProperty("apollo.configCacheSize");
-    System.clearProperty("apollo.longPollingInitialDelayInMills");
-    System.clearProperty("apollo.autoUpdateInjectedSpringProperties");
-    System.clearProperty("apollo.cacheDir");
-  }
+    @After
+    public void tearDown() throws Exception {
+        System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
+        System.clearProperty("apollo.connectTimeout");
+        System.clearProperty("apollo.readTimeout");
+        System.clearProperty("apollo.refreshInterval");
+        System.clearProperty("apollo.loadConfigQPS");
+        System.clearProperty("apollo.longPollQPS");
+        System.clearProperty("apollo.configCacheSize");
+        System.clearProperty("apollo.longPollingInitialDelayInMills");
+        System.clearProperty("apollo.autoUpdateInjectedSpringProperties");
+        System.clearProperty("apollo.cacheDir");
+    }
 
-  @Test
-  public void testApolloCluster() throws Exception {
-    String someCluster = "someCluster";
-    System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, someCluster);
+    @Test
+    public void testApolloCluster() throws Exception {
+        String someCluster = "someCluster";
+        System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, someCluster);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someCluster, configUtil.getCluster());
-  }
+        assertEquals(someCluster, configUtil.getCluster());
+    }
 
-  @Test
-  public void testCustomizeConnectTimeout() throws Exception {
-    int someConnectTimeout = 1;
-    System.setProperty("apollo.connectTimeout", String.valueOf(someConnectTimeout));
+    @Test
+    public void testCustomizeConnectTimeout() throws Exception {
+        int someConnectTimeout = 1;
+        System.setProperty("apollo.connectTimeout", String.valueOf(someConnectTimeout));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someConnectTimeout, configUtil.getConnectTimeout());
-  }
+        assertEquals(someConnectTimeout, configUtil.getConnectTimeout());
+    }
 
-  @Test
-  public void testCustomizeInvalidConnectTimeout() throws Exception {
-    String someInvalidConnectTimeout = "a";
-    System.setProperty("apollo.connectTimeout", someInvalidConnectTimeout);
+    @Test
+    public void testCustomizeInvalidConnectTimeout() throws Exception {
+        String someInvalidConnectTimeout = "a";
+        System.setProperty("apollo.connectTimeout", someInvalidConnectTimeout);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getConnectTimeout() > 0);
-  }
+        assertTrue(configUtil.getConnectTimeout() > 0);
+    }
 
-  @Test
-  public void testCustomizeReadTimeout() throws Exception {
-    int someReadTimeout = 1;
-    System.setProperty("apollo.readTimeout", String.valueOf(someReadTimeout));
+    @Test
+    public void testCustomizeReadTimeout() throws Exception {
+        int someReadTimeout = 1;
+        System.setProperty("apollo.readTimeout", String.valueOf(someReadTimeout));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someReadTimeout, configUtil.getReadTimeout());
-  }
+        assertEquals(someReadTimeout, configUtil.getReadTimeout());
+    }
 
-  @Test
-  public void testCustomizeInvalidReadTimeout() throws Exception {
-    String someInvalidReadTimeout = "a";
-    System.setProperty("apollo.readTimeout", someInvalidReadTimeout);
+    @Test
+    public void testCustomizeInvalidReadTimeout() throws Exception {
+        String someInvalidReadTimeout = "a";
+        System.setProperty("apollo.readTimeout", someInvalidReadTimeout);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getReadTimeout() > 0);
-  }
+        assertTrue(configUtil.getReadTimeout() > 0);
+    }
 
-  @Test
-  public void testCustomizeRefreshInterval() throws Exception {
-    int someRefreshInterval = 1;
-    System.setProperty("apollo.refreshInterval", String.valueOf(someRefreshInterval));
+    @Test
+    public void testCustomizeRefreshInterval() throws Exception {
+        int someRefreshInterval = 1;
+        System.setProperty("apollo.refreshInterval", String.valueOf(someRefreshInterval));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someRefreshInterval, configUtil.getRefreshInterval());
-  }
+        assertEquals(someRefreshInterval, configUtil.getRefreshInterval());
+    }
 
-  @Test
-  public void testCustomizeInvalidRefreshInterval() throws Exception {
-    String someInvalidRefreshInterval = "a";
-    System.setProperty("apollo.refreshInterval", someInvalidRefreshInterval);
+    @Test
+    public void testCustomizeInvalidRefreshInterval() throws Exception {
+        String someInvalidRefreshInterval = "a";
+        System.setProperty("apollo.refreshInterval", someInvalidRefreshInterval);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getRefreshInterval() > 0);
-  }
+        assertTrue(configUtil.getRefreshInterval() > 0);
+    }
 
-  @Test
-  public void testCustomizeLoadConfigQPS() throws Exception {
-    int someQPS = 1;
-    System.setProperty("apollo.loadConfigQPS", String.valueOf(someQPS));
+    @Test
+    public void testCustomizeLoadConfigQPS() throws Exception {
+        int someQPS = 1;
+        System.setProperty("apollo.loadConfigQPS", String.valueOf(someQPS));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someQPS, configUtil.getLoadConfigQPS());
-  }
+        assertEquals(someQPS, configUtil.getLoadConfigQPS());
+    }
 
-  @Test
-  public void testCustomizeInvalidLoadConfigQPS() throws Exception {
-    String someInvalidQPS = "a";
-    System.setProperty("apollo.loadConfigQPS", someInvalidQPS);
+    @Test
+    public void testCustomizeInvalidLoadConfigQPS() throws Exception {
+        String someInvalidQPS = "a";
+        System.setProperty("apollo.loadConfigQPS", someInvalidQPS);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getLoadConfigQPS() > 0);
-  }
+        assertTrue(configUtil.getLoadConfigQPS() > 0);
+    }
 
-  @Test
-  public void testCustomizeLongPollQPS() throws Exception {
-    int someQPS = 1;
-    System.setProperty("apollo.longPollQPS", String.valueOf(someQPS));
+    @Test
+    public void testCustomizeLongPollQPS() throws Exception {
+        int someQPS = 1;
+        System.setProperty("apollo.longPollQPS", String.valueOf(someQPS));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someQPS, configUtil.getLongPollQPS());
-  }
+        assertEquals(someQPS, configUtil.getLongPollQPS());
+    }
 
-  @Test
-  public void testCustomizeInvalidLongPollQPS() throws Exception {
-    String someInvalidQPS = "a";
-    System.setProperty("apollo.longPollQPS", someInvalidQPS);
+    @Test
+    public void testCustomizeInvalidLongPollQPS() throws Exception {
+        String someInvalidQPS = "a";
+        System.setProperty("apollo.longPollQPS", someInvalidQPS);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getLongPollQPS() > 0);
-  }
+        assertTrue(configUtil.getLongPollQPS() > 0);
+    }
 
-  @Test
-  public void testCustomizeMaxConfigCacheSize() throws Exception {
-    long someCacheSize = 1;
-    System.setProperty("apollo.configCacheSize", String.valueOf(someCacheSize));
+    @Test
+    public void testCustomizeMaxConfigCacheSize() throws Exception {
+        long someCacheSize = 1;
+        System.setProperty("apollo.configCacheSize", String.valueOf(someCacheSize));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someCacheSize, configUtil.getMaxConfigCacheSize());
-  }
+        assertEquals(someCacheSize, configUtil.getMaxConfigCacheSize());
+    }
 
-  @Test
-  public void testCustomizeInvalidMaxConfigCacheSize() throws Exception {
-    String someInvalidCacheSize = "a";
-    System.setProperty("apollo.configCacheSize", someInvalidCacheSize);
+    @Test
+    public void testCustomizeInvalidMaxConfigCacheSize() throws Exception {
+        String someInvalidCacheSize = "a";
+        System.setProperty("apollo.configCacheSize", someInvalidCacheSize);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getMaxConfigCacheSize() > 0);
-  }
+        assertTrue(configUtil.getMaxConfigCacheSize() > 0);
+    }
 
-  @Test
-  public void testCustomizeLongPollingInitialDelayInMills() throws Exception {
-    long someLongPollingDelayInMills = 1;
-    System.setProperty("apollo.longPollingInitialDelayInMills", String.valueOf(someLongPollingDelayInMills));
+    @Test
+    public void testCustomizeLongPollingInitialDelayInMills() throws Exception {
+        long someLongPollingDelayInMills = 1;
+        System.setProperty("apollo.longPollingInitialDelayInMills", String.valueOf(someLongPollingDelayInMills));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someLongPollingDelayInMills, configUtil.getLongPollingInitialDelayInMills());
-  }
+        assertEquals(someLongPollingDelayInMills, configUtil.getLongPollingInitialDelayInMills());
+    }
 
-  @Test
-  public void testCustomizeInvalidLongPollingInitialDelayInMills() throws Exception {
-    String someInvalidLongPollingDelayInMills = "a";
-    System.setProperty("apollo.longPollingInitialDelayInMills", someInvalidLongPollingDelayInMills);
+    @Test
+    public void testCustomizeInvalidLongPollingInitialDelayInMills() throws Exception {
+        String someInvalidLongPollingDelayInMills = "a";
+        System.setProperty("apollo.longPollingInitialDelayInMills", someInvalidLongPollingDelayInMills);
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertTrue(configUtil.getLongPollingInitialDelayInMills() > 0);
-  }
+        assertTrue(configUtil.getLongPollingInitialDelayInMills() > 0);
+    }
 
-  @Test
-  public void testCustomizeAutoUpdateInjectedSpringProperties() throws Exception {
-    boolean someAutoUpdateInjectedSpringProperties = false;
-    System.setProperty("apollo.autoUpdateInjectedSpringProperties",
-        String.valueOf(someAutoUpdateInjectedSpringProperties));
+    @Test
+    public void testCustomizeAutoUpdateInjectedSpringProperties() throws Exception {
+        boolean someAutoUpdateInjectedSpringProperties = false;
+        System.setProperty("apollo.autoUpdateInjectedSpringProperties",
+                String.valueOf(someAutoUpdateInjectedSpringProperties));
 
-    ConfigUtil configUtil = new ConfigUtil();
+        ConfigUtil configUtil = new ConfigUtil();
 
-    assertEquals(someAutoUpdateInjectedSpringProperties,
-        configUtil.isAutoUpdateInjectedSpringPropertiesEnabled());
-  }
+        assertEquals(someAutoUpdateInjectedSpringProperties,
+                configUtil.isAutoUpdateInjectedSpringPropertiesEnabled());
+    }
 
-  @Test
-  public void testLocalCacheDirWithSystemProperty() throws Exception {
-    String someCacheDir = "someCacheDir";
-    String someAppId = "someAppId";
+    @Test
+    public void testLocalCacheDirWithSystemProperty() throws Exception {
+        String someCacheDir = "someCacheDir";
+        String someAppId = "someAppId";
 
-    System.setProperty("apollo.cacheDir", someCacheDir);
+        System.setProperty("apollo.cacheDir", someCacheDir);
 
-    ConfigUtil configUtil = spy(new ConfigUtil());
+        ConfigUtil configUtil = spy(new ConfigUtil());
 
-    doReturn(someAppId).when(configUtil).getAppId();
+        doReturn(someAppId).when(configUtil).getAppId();
 
-    assertEquals(someCacheDir + File.separator + someAppId, configUtil.getDefaultLocalCacheDir());
-  }
+        assertEquals(someCacheDir + File.separator + someAppId, configUtil.getDefaultLocalCacheDir());
+    }
 
-  @Test
-  public void testDefaultLocalCacheDir() throws Exception {
-    String someAppId = "someAppId";
+    @Test
+    public void testDefaultLocalCacheDir() throws Exception {
+        String someAppId = "someAppId";
 
-    ConfigUtil configUtil = spy(new ConfigUtil());
+        ConfigUtil configUtil = spy(new ConfigUtil());
 
-    doReturn(someAppId).when(configUtil).getAppId();
+        doReturn(someAppId).when(configUtil).getAppId();
 
-    doReturn(true).when(configUtil).isOSWindows();
+        doReturn(true).when(configUtil).isOSWindows();
 
-    assertEquals("C:\\opt\\data\\" + someAppId, configUtil.getDefaultLocalCacheDir());
+        assertEquals("C:\\opt\\data\\" + someAppId, configUtil.getDefaultLocalCacheDir());
 
-    doReturn(false).when(configUtil).isOSWindows();
+        doReturn(false).when(configUtil).isOSWindows();
 
-    assertEquals("/opt/data/" + someAppId, configUtil.getDefaultLocalCacheDir());
-  }
+        assertEquals("/opt/data/" + someAppId, configUtil.getDefaultLocalCacheDir());
+    }
 }

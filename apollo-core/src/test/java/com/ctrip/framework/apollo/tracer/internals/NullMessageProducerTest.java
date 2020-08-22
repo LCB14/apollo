@@ -11,18 +11,18 @@ import static org.junit.Assert.*;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class NullMessageProducerTest {
-  private MessageProducer messageProducer;
+    private MessageProducer messageProducer;
 
-  @Before
-  public void setUp() throws Exception {
-    messageProducer = new NullMessageProducer();
-  }
+    @Before
+    public void setUp() throws Exception {
+        messageProducer = new NullMessageProducer();
+    }
 
-  @Test
-  public void testNewTransaction() throws Exception {
-    String someType = "someType";
-    String someName = "someName";
-    assertTrue(messageProducer.newTransaction(someType, someName) instanceof NullTransaction);
-  }
+    @Test
+    public void testNewTransaction() throws Exception {
+        String someType = "someType";
+        String someName = "someName";
+        assertTrue(messageProducer.newTransaction(someType, someName) instanceof NullTransaction);
+    }
 
 }

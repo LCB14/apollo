@@ -10,21 +10,21 @@ import org.junit.Test;
 
 public class DefaultMetaServerProviderTest {
 
-  @After
-  public void tearDown() throws Exception {
-    System.clearProperty(ConfigConsts.APOLLO_META_KEY);
-  }
+    @After
+    public void tearDown() throws Exception {
+        System.clearProperty(ConfigConsts.APOLLO_META_KEY);
+    }
 
-  @Test
-  public void testWithSystemProperty() throws Exception {
-    String someMetaAddress = "someMetaAddress";
-    Env someEnv = Env.DEV;
+    @Test
+    public void testWithSystemProperty() throws Exception {
+        String someMetaAddress = "someMetaAddress";
+        Env someEnv = Env.DEV;
 
-    System.setProperty(ConfigConsts.APOLLO_META_KEY, " " + someMetaAddress + " ");
+        System.setProperty(ConfigConsts.APOLLO_META_KEY, " " + someMetaAddress + " ");
 
-    DefaultMetaServerProvider defaultMetaServerProvider = new DefaultMetaServerProvider();
+        DefaultMetaServerProvider defaultMetaServerProvider = new DefaultMetaServerProvider();
 
-    assertEquals(someMetaAddress, defaultMetaServerProvider.getMetaServerAddress(someEnv));
-  }
+        assertEquals(someMetaAddress, defaultMetaServerProvider.getMetaServerAddress(someEnv));
+    }
 
 }

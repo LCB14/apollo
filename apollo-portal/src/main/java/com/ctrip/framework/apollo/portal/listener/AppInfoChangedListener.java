@@ -15,29 +15,29 @@ import java.util.List;
 
 @Component
 public class AppInfoChangedListener {
-  private static final Logger logger = LoggerFactory.getLogger(AppInfoChangedListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppInfoChangedListener.class);
 
-  private final AdminServiceAPI.AppAPI appAPI;
-  private final PortalSettings portalSettings;
+    private final AdminServiceAPI.AppAPI appAPI;
+    private final PortalSettings portalSettings;
 
-  public AppInfoChangedListener(final AdminServiceAPI.AppAPI appAPI, final PortalSettings portalSettings) {
-    this.appAPI = appAPI;
-    this.portalSettings = portalSettings;
-  }
-
-  @EventListener
-  public void onAppInfoChange(AppInfoChangedEvent event) {
-    AppDTO appDTO = BeanUtils.transform(AppDTO.class, event.getApp());
-    String appId = appDTO.getAppId();
-
-    List<Env> envs = portalSettings.getActiveEnvs();
-    for (Env env : envs) {
-      try {
-        appAPI.updateApp(env, appDTO);
-      } catch (Throwable e) {
-        logger.error("Update app's info failed. Env = {}, AppId = {}", env, appId, e);
-        Tracer.logError(String.format("Update app's info failed. Env = %s, AppId = %s", env, appId), e);
-      }
+    public AppInfoChangedListener(final AdminServiceAPI.AppAPI appAPI, final PortalSettings portalSettings) {
+        this.appAPI = appAPI;
+        this.portalSettings = portalSettings;
     }
-  }
+
+    @EventListener
+    public void onAppInfoChange(AppInfoChangedEvent event) {
+        AppDTO appDTO = BeanUtils.transform(AppDTO.class, event.getApp());
+        String appId = appDTO.getAppId();
+
+        List<Env> envs = portalSettings.getActiveEnvs();
+        for (Env env : envs) {
+            try {
+                appAPI.updateApp(env, appDTO);
+            } catch (Throwable e) {
+                logger.error("Update app's info failed. Env = {}, AppId = {}", env, appId, e);
+                Tracer.logError(String.format("Update app's info failed. Env = %s, AppId = %s", env, appId), e);
+            }
+        }
+    }
 }

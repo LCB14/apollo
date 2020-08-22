@@ -12,9 +12,11 @@ import com.ctrip.framework.apollo.portal.entity.model.NamespaceReleaseModel;
 import com.ctrip.framework.apollo.portal.entity.vo.ReleaseCompareResult;
 import com.ctrip.framework.apollo.portal.listener.ConfigPublishEvent;
 import com.ctrip.framework.apollo.portal.service.ReleaseService;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,143 +39,143 @@ import static com.ctrip.framework.apollo.common.utils.RequestPrecondition.checkM
 @RestController
 public class ReleaseController {
 
-  private final ReleaseService releaseService;
-  private final ApplicationEventPublisher publisher;
-  private final PortalConfig portalConfig;
-  private final PermissionValidator permissionValidator;
+    private final ReleaseService releaseService;
+    private final ApplicationEventPublisher publisher;
+    private final PortalConfig portalConfig;
+    private final PermissionValidator permissionValidator;
 
-  public ReleaseController(
-      final ReleaseService releaseService,
-      final ApplicationEventPublisher publisher,
-      final PortalConfig portalConfig,
-      final PermissionValidator permissionValidator) {
-    this.releaseService = releaseService;
-    this.publisher = publisher;
-    this.portalConfig = portalConfig;
-    this.permissionValidator = permissionValidator;
-  }
-
-  @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
-  @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases")
-  public ReleaseDTO createRelease(@PathVariable String appId,
-                                  @PathVariable String env, @PathVariable String clusterName,
-                                  @PathVariable String namespaceName, @RequestBody NamespaceReleaseModel model) {
-    model.setAppId(appId);
-    model.setEnv(env);
-    model.setClusterName(clusterName);
-    model.setNamespaceName(namespaceName);
-
-    if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.valueOf(env))) {
-      throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
+    public ReleaseController(
+            final ReleaseService releaseService,
+            final ApplicationEventPublisher publisher,
+            final PortalConfig portalConfig,
+            final PermissionValidator permissionValidator) {
+        this.releaseService = releaseService;
+        this.publisher = publisher;
+        this.portalConfig = portalConfig;
+        this.permissionValidator = permissionValidator;
     }
 
-    ReleaseDTO createdRelease = releaseService.publish(model);
+    @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
+    @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases")
+    public ReleaseDTO createRelease(@PathVariable String appId,
+                                    @PathVariable String env, @PathVariable String clusterName,
+                                    @PathVariable String namespaceName, @RequestBody NamespaceReleaseModel model) {
+        model.setAppId(appId);
+        model.setEnv(env);
+        model.setClusterName(clusterName);
+        model.setNamespaceName(namespaceName);
 
-    ConfigPublishEvent event = ConfigPublishEvent.instance();
-    event.withAppId(appId)
-        .withCluster(clusterName)
-        .withNamespace(namespaceName)
-        .withReleaseId(createdRelease.getId())
-        .setNormalPublishEvent(true)
-        .setEnv(Env.valueOf(env));
+        if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.valueOf(env))) {
+            throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
+        }
 
-    publisher.publishEvent(event);
+        ReleaseDTO createdRelease = releaseService.publish(model);
 
-    return createdRelease;
-  }
+        ConfigPublishEvent event = ConfigPublishEvent.instance();
+        event.withAppId(appId)
+                .withCluster(clusterName)
+                .withNamespace(namespaceName)
+                .withReleaseId(createdRelease.getId())
+                .setNormalPublishEvent(true)
+                .setEnv(Env.valueOf(env));
 
-  @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
-  @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/releases")
-  public ReleaseDTO createGrayRelease(@PathVariable String appId,
-                                      @PathVariable String env, @PathVariable String clusterName,
-                                      @PathVariable String namespaceName, @PathVariable String branchName,
-                                      @RequestBody NamespaceReleaseModel model) {
-    model.setAppId(appId);
-    model.setEnv(env);
-    model.setClusterName(branchName);
-    model.setNamespaceName(namespaceName);
+        publisher.publishEvent(event);
 
-    if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.valueOf(env))) {
-      throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
+        return createdRelease;
     }
 
-    ReleaseDTO createdRelease = releaseService.publish(model);
+    @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
+    @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/releases")
+    public ReleaseDTO createGrayRelease(@PathVariable String appId,
+                                        @PathVariable String env, @PathVariable String clusterName,
+                                        @PathVariable String namespaceName, @PathVariable String branchName,
+                                        @RequestBody NamespaceReleaseModel model) {
+        model.setAppId(appId);
+        model.setEnv(env);
+        model.setClusterName(branchName);
+        model.setNamespaceName(namespaceName);
 
-    ConfigPublishEvent event = ConfigPublishEvent.instance();
-    event.withAppId(appId)
-        .withCluster(clusterName)
-        .withNamespace(namespaceName)
-        .withReleaseId(createdRelease.getId())
-        .setGrayPublishEvent(true)
-        .setEnv(Env.valueOf(env));
+        if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.valueOf(env))) {
+            throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
+        }
 
-    publisher.publishEvent(event);
+        ReleaseDTO createdRelease = releaseService.publish(model);
 
-    return createdRelease;
-  }
+        ConfigPublishEvent event = ConfigPublishEvent.instance();
+        event.withAppId(appId)
+                .withCluster(clusterName)
+                .withNamespace(namespaceName)
+                .withReleaseId(createdRelease.getId())
+                .setGrayPublishEvent(true)
+                .setEnv(Env.valueOf(env));
 
+        publisher.publishEvent(event);
 
-  @GetMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases/all")
-  public List<ReleaseBO> findAllReleases(@PathVariable String appId,
-                                         @PathVariable String env,
-                                         @PathVariable String clusterName,
-                                         @PathVariable String namespaceName,
-                                         @Valid @PositiveOrZero(message = "page should be positive or 0") @RequestParam(defaultValue = "0") int page,
-                                         @Valid @Positive(message = "size should be positive number") @RequestParam(defaultValue = "5") int size) {
-    if (permissionValidator.shouldHideConfigToCurrentUser(appId, env, namespaceName)) {
-      return Collections.emptyList();
+        return createdRelease;
     }
 
-    return releaseService.findAllReleases(appId, Env.valueOf(env), clusterName, namespaceName, page, size);
-  }
 
-  @GetMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases/active")
-  public List<ReleaseDTO> findActiveReleases(@PathVariable String appId,
-                                             @PathVariable String env,
-                                             @PathVariable String clusterName,
-                                             @PathVariable String namespaceName,
-                                             @Valid @PositiveOrZero(message = "page should be positive or 0") @RequestParam(defaultValue = "0") int page,
-                                             @Valid @Positive(message = "size should be positive number") @RequestParam(defaultValue = "5") int size) {
+    @GetMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases/all")
+    public List<ReleaseBO> findAllReleases(@PathVariable String appId,
+                                           @PathVariable String env,
+                                           @PathVariable String clusterName,
+                                           @PathVariable String namespaceName,
+                                           @Valid @PositiveOrZero(message = "page should be positive or 0") @RequestParam(defaultValue = "0") int page,
+                                           @Valid @Positive(message = "size should be positive number") @RequestParam(defaultValue = "5") int size) {
+        if (permissionValidator.shouldHideConfigToCurrentUser(appId, env, namespaceName)) {
+            return Collections.emptyList();
+        }
 
-    if (permissionValidator.shouldHideConfigToCurrentUser(appId, env, namespaceName)) {
-      return Collections.emptyList();
+        return releaseService.findAllReleases(appId, Env.valueOf(env), clusterName, namespaceName, page, size);
     }
 
-    return releaseService.findActiveReleases(appId, Env.valueOf(env), clusterName, namespaceName, page, size);
-  }
+    @GetMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases/active")
+    public List<ReleaseDTO> findActiveReleases(@PathVariable String appId,
+                                               @PathVariable String env,
+                                               @PathVariable String clusterName,
+                                               @PathVariable String namespaceName,
+                                               @Valid @PositiveOrZero(message = "page should be positive or 0") @RequestParam(defaultValue = "0") int page,
+                                               @Valid @Positive(message = "size should be positive number") @RequestParam(defaultValue = "5") int size) {
 
-  @GetMapping(value = "/envs/{env}/releases/compare")
-  public ReleaseCompareResult compareRelease(@PathVariable String env,
-                                             @RequestParam long baseReleaseId,
-                                             @RequestParam long toCompareReleaseId) {
+        if (permissionValidator.shouldHideConfigToCurrentUser(appId, env, namespaceName)) {
+            return Collections.emptyList();
+        }
 
-    return releaseService.compare(Env.valueOf(env), baseReleaseId, toCompareReleaseId);
-  }
-
-
-  @PutMapping(path = "/envs/{env}/releases/{releaseId}/rollback")
-  public void rollback(@PathVariable String env,
-                       @PathVariable long releaseId) {
-    ReleaseDTO release = releaseService.findReleaseById(Env.valueOf(env), releaseId);
-
-    if (release == null) {
-      throw new NotFoundException("release not found");
+        return releaseService.findActiveReleases(appId, Env.valueOf(env), clusterName, namespaceName, page, size);
     }
 
-    if (!permissionValidator.hasReleaseNamespacePermission(release.getAppId(), release.getNamespaceName(), env)) {
-      throw new AccessDeniedException("Access is denied");
+    @GetMapping(value = "/envs/{env}/releases/compare")
+    public ReleaseCompareResult compareRelease(@PathVariable String env,
+                                               @RequestParam long baseReleaseId,
+                                               @RequestParam long toCompareReleaseId) {
+
+        return releaseService.compare(Env.valueOf(env), baseReleaseId, toCompareReleaseId);
     }
 
-    releaseService.rollback(Env.valueOf(env), releaseId);
 
-    ConfigPublishEvent event = ConfigPublishEvent.instance();
-    event.withAppId(release.getAppId())
-        .withCluster(release.getClusterName())
-        .withNamespace(release.getNamespaceName())
-        .withPreviousReleaseId(releaseId)
-        .setRollbackEvent(true)
-        .setEnv(Env.valueOf(env));
+    @PutMapping(path = "/envs/{env}/releases/{releaseId}/rollback")
+    public void rollback(@PathVariable String env,
+                         @PathVariable long releaseId) {
+        ReleaseDTO release = releaseService.findReleaseById(Env.valueOf(env), releaseId);
 
-    publisher.publishEvent(event);
-  }
+        if (release == null) {
+            throw new NotFoundException("release not found");
+        }
+
+        if (!permissionValidator.hasReleaseNamespacePermission(release.getAppId(), release.getNamespaceName(), env)) {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+        releaseService.rollback(Env.valueOf(env), releaseId);
+
+        ConfigPublishEvent event = ConfigPublishEvent.instance();
+        event.withAppId(release.getAppId())
+                .withCluster(release.getClusterName())
+                .withNamespace(release.getNamespaceName())
+                .withPreviousReleaseId(releaseId)
+                .setRollbackEvent(true)
+                .setEnv(Env.valueOf(env));
+
+        publisher.publishEvent(event);
+    }
 }

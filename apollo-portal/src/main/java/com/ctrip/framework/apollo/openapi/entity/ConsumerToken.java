@@ -19,42 +19,42 @@ import javax.persistence.Table;
 @SQLDelete(sql = "Update ConsumerToken set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
 public class ConsumerToken extends BaseEntity {
-  @Column(name = "ConsumerId", nullable = false)
-  private long consumerId;
+    @Column(name = "ConsumerId", nullable = false)
+    private long consumerId;
 
-  @Column(name = "token", nullable = false)
-  private String token;
+    @Column(name = "token", nullable = false)
+    private String token;
 
-  @Column(name = "Expires", nullable = false)
-  private Date expires;
+    @Column(name = "Expires", nullable = false)
+    private Date expires;
 
-  public long getConsumerId() {
-    return consumerId;
-  }
+    public long getConsumerId() {
+        return consumerId;
+    }
 
-  public void setConsumerId(long consumerId) {
-    this.consumerId = consumerId;
-  }
+    public void setConsumerId(long consumerId) {
+        this.consumerId = consumerId;
+    }
 
-  public String getToken() {
-    return token;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public void setToken(String token) {
-    this.token = token;
-  }
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-  public Date getExpires() {
-    return expires;
-  }
+    public Date getExpires() {
+        return expires;
+    }
 
-  public void setExpires(Date expires) {
-    this.expires = expires;
-  }
+    public void setExpires(Date expires) {
+        this.expires = expires;
+    }
 
-  @Override
-  public String toString() {
-    return toStringHelper().add("consumerId", consumerId).add("token", token)
-        .add("expires", expires).toString();
-  }
+    @Override
+    public String toString() {
+        return toStringHelper().add("consumerId", consumerId).add("token", token)
+                .add("expires", expires).toString();
+    }
 }

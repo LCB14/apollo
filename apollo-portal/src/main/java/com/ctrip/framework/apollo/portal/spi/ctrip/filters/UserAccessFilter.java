@@ -14,50 +14,50 @@ import java.io.IOException;
 
 public class UserAccessFilter implements Filter {
 
-  private static final String STATIC_RESOURCE_REGEX = ".*\\.(js|html|htm|png|css|woff2)$";
+    private static final String STATIC_RESOURCE_REGEX = ".*\\.(js|html|htm|png|css|woff2)$";
 
-  private final UserInfoHolder userInfoHolder;
+    private final UserInfoHolder userInfoHolder;
 
-  public UserAccessFilter(UserInfoHolder userInfoHolder) {
-    this.userInfoHolder = userInfoHolder;
-  }
-
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
-
-    String requestUri = ((HttpServletRequest) request).getRequestURI();
-
-    try {
-      if (!isOpenAPIRequest(requestUri) && !isStaticResource(requestUri)) {
-        UserInfo userInfo = userInfoHolder.getUser();
-        if (userInfo != null) {
-          Tracer.logEvent(TracerEventType.USER_ACCESS, userInfo.getUserId());
-        }
-      }
-    } catch (Throwable e) {
-      Tracer.logError("Record user access info error.", e);
+    public UserAccessFilter(UserInfoHolder userInfoHolder) {
+        this.userInfoHolder = userInfoHolder;
     }
 
-    chain.doFilter(request, response);
-  }
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
 
-  @Override
-  public void destroy() {
+    }
 
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
-  private boolean isOpenAPIRequest(String uri) {
-    return !Strings.isNullOrEmpty(uri) && uri.startsWith("/openapi");
-  }
+        String requestUri = ((HttpServletRequest) request).getRequestURI();
 
-  private boolean isStaticResource(String uri) {
-    return !Strings.isNullOrEmpty(uri) && uri.matches(STATIC_RESOURCE_REGEX);
-  }
+        try {
+            if (!isOpenAPIRequest(requestUri) && !isStaticResource(requestUri)) {
+                UserInfo userInfo = userInfoHolder.getUser();
+                if (userInfo != null) {
+                    Tracer.logEvent(TracerEventType.USER_ACCESS, userInfo.getUserId());
+                }
+            }
+        } catch (Throwable e) {
+            Tracer.logError("Record user access info error.", e);
+        }
+
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    private boolean isOpenAPIRequest(String uri) {
+        return !Strings.isNullOrEmpty(uri) && uri.startsWith("/openapi");
+    }
+
+    private boolean isStaticResource(String uri) {
+        return !Strings.isNullOrEmpty(uri) && uri.matches(STATIC_RESOURCE_REGEX);
+    }
 
 }

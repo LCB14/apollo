@@ -35,86 +35,85 @@ import java.util.Objects;
 @RestController
 public class ConsumerController {
 
-  private static final Date DEFAULT_EXPIRES = new GregorianCalendar(2099, Calendar.JANUARY, 1).getTime();
+    private static final Date DEFAULT_EXPIRES = new GregorianCalendar(2099, Calendar.JANUARY, 1).getTime();
 
-  private final ConsumerService consumerService;
+    private final ConsumerService consumerService;
 
-  public ConsumerController(final ConsumerService consumerService) {
-    this.consumerService = consumerService;
-  }
-
-
-  @Transactional
-  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
-  @PostMapping(value = "/consumers")
-  public ConsumerToken createConsumer(@RequestBody Consumer consumer,
-                                      @RequestParam(value = "expires", required = false)
-                                      @DateTimeFormat(pattern = "yyyyMMddHHmmss") Date
-                                          expires) {
-
-    if (StringUtils.isContainEmpty(consumer.getAppId(), consumer.getName(),
-                                   consumer.getOwnerName(), consumer.getOrgId())) {
-      throw new BadRequestException("Params(appId、name、ownerName、orgId) can not be empty.");
+    public ConsumerController(final ConsumerService consumerService) {
+        this.consumerService = consumerService;
     }
 
-    Consumer createdConsumer = consumerService.createConsumer(consumer);
 
-    if (Objects.isNull(expires)) {
-      expires = DEFAULT_EXPIRES;
-    }
+    @Transactional
+    @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+    @PostMapping(value = "/consumers")
+    public ConsumerToken createConsumer(@RequestBody Consumer consumer,
+                                        @RequestParam(value = "expires", required = false)
+                                        @DateTimeFormat(pattern = "yyyyMMddHHmmss") Date
+                                                expires) {
 
-    return consumerService.generateAndSaveConsumerToken(createdConsumer, expires);
-  }
-
-  @GetMapping(value = "/consumers/by-appId")
-  public ConsumerToken getConsumerTokenByAppId(@RequestParam String appId) {
-    return consumerService.getConsumerTokenByAppId(appId);
-  }
-
-  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
-  @PostMapping(value = "/consumers/{token}/assign-role")
-  public List<ConsumerRole> assignNamespaceRoleToConsumer(@PathVariable String token,
-                                                          @RequestParam String type,
-                                                          @RequestParam(required = false) String envs,
-                                                          @RequestBody NamespaceDTO namespace) {
-
-    String appId = namespace.getAppId();
-    String namespaceName = namespace.getNamespaceName();
-
-    if (StringUtils.isEmpty(appId)) {
-      throw new BadRequestException("Params(AppId) can not be empty.");
-    }
-    if (Objects.equals("AppRole", type)) {
-      return Collections.singletonList(consumerService.assignAppRoleToConsumer(token, appId));
-    } else {
-      if (StringUtils.isEmpty(namespaceName)) {
-        throw new BadRequestException("Params(NamespaceName) can not be empty.");
-      }
-      if (null != envs){
-        String[] envArray = envs.split(",");
-        List<String> envList = Lists.newArrayList();
-        // validate env parameter
-        for (String env : envArray) {
-          if (Strings.isNullOrEmpty(env)) {
-            continue;
-          }
-          if (Env.UNKNOWN == EnvUtils.transformEnv(env)) {
-            throw new BadRequestException(String.format("env: %s is illegal", env));
-          }
-          envList.add(env);
+        if (StringUtils.isContainEmpty(consumer.getAppId(), consumer.getName(),
+                consumer.getOwnerName(), consumer.getOrgId())) {
+            throw new BadRequestException("Params(appId、name、ownerName、orgId) can not be empty.");
         }
 
-        List<ConsumerRole> consumeRoles = new ArrayList<>();
-        for (String env : envList) {
-          consumeRoles.addAll(consumerService.assignNamespaceRoleToConsumer(token, appId, namespaceName, env));
+        Consumer createdConsumer = consumerService.createConsumer(consumer);
+
+        if (Objects.isNull(expires)) {
+            expires = DEFAULT_EXPIRES;
         }
-        return consumeRoles;
-      }
 
-      return consumerService.assignNamespaceRoleToConsumer(token, appId, namespaceName);
+        return consumerService.generateAndSaveConsumerToken(createdConsumer, expires);
     }
-  }
 
+    @GetMapping(value = "/consumers/by-appId")
+    public ConsumerToken getConsumerTokenByAppId(@RequestParam String appId) {
+        return consumerService.getConsumerTokenByAppId(appId);
+    }
+
+    @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+    @PostMapping(value = "/consumers/{token}/assign-role")
+    public List<ConsumerRole> assignNamespaceRoleToConsumer(@PathVariable String token,
+                                                            @RequestParam String type,
+                                                            @RequestParam(required = false) String envs,
+                                                            @RequestBody NamespaceDTO namespace) {
+
+        String appId = namespace.getAppId();
+        String namespaceName = namespace.getNamespaceName();
+
+        if (StringUtils.isEmpty(appId)) {
+            throw new BadRequestException("Params(AppId) can not be empty.");
+        }
+        if (Objects.equals("AppRole", type)) {
+            return Collections.singletonList(consumerService.assignAppRoleToConsumer(token, appId));
+        } else {
+            if (StringUtils.isEmpty(namespaceName)) {
+                throw new BadRequestException("Params(NamespaceName) can not be empty.");
+            }
+            if (null != envs) {
+                String[] envArray = envs.split(",");
+                List<String> envList = Lists.newArrayList();
+                // validate env parameter
+                for (String env : envArray) {
+                    if (Strings.isNullOrEmpty(env)) {
+                        continue;
+                    }
+                    if (Env.UNKNOWN == EnvUtils.transformEnv(env)) {
+                        throw new BadRequestException(String.format("env: %s is illegal", env));
+                    }
+                    envList.add(env);
+                }
+
+                List<ConsumerRole> consumeRoles = new ArrayList<>();
+                for (String env : envList) {
+                    consumeRoles.addAll(consumerService.assignNamespaceRoleToConsumer(token, appId, namespaceName, env));
+                }
+                return consumeRoles;
+            }
+
+            return consumerService.assignNamespaceRoleToConsumer(token, appId, namespaceName);
+        }
+    }
 
 
 }

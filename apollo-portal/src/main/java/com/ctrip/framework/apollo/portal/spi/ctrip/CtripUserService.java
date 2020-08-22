@@ -26,207 +26,207 @@ import java.util.stream.Collectors;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class CtripUserService implements UserService {
-  private final RestTemplate restTemplate;
-  private final List<String> searchUserMatchFields;
-  private final ParameterizedTypeReference<Map<String, List<UserServiceResponse>>> responseType;
-  private final PortalConfig portalConfig;
+    private final RestTemplate restTemplate;
+    private final List<String> searchUserMatchFields;
+    private final ParameterizedTypeReference<Map<String, List<UserServiceResponse>>> responseType;
+    private final PortalConfig portalConfig;
 
-  public CtripUserService(PortalConfig portalConfig) {
-    this.portalConfig = portalConfig;
-    this.restTemplate = new RestTemplate(clientHttpRequestFactory());
-    this.searchUserMatchFields =
-        Lists.newArrayList("empcode", "empaccount", "displayname", "c_name", "pinyin");
-    this.responseType = new ParameterizedTypeReference<Map<String, List<UserServiceResponse>>>() {
-    };
-  }
-
-  private ClientHttpRequestFactory clientHttpRequestFactory() {
-    SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-    factory.setConnectTimeout(portalConfig.connectTimeout());
-    factory.setReadTimeout(portalConfig.readTimeout());
-
-    return factory;
-  }
-
-  @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
-    UserServiceRequest request = assembleSearchUserRequest(keyword, offset, limit);
-
-    HttpEntity<UserServiceRequest> entity = new HttpEntity<>(request);
-    ResponseEntity<Map<String, List<UserServiceResponse>>> response =
-        restTemplate.exchange(portalConfig.userServiceUrl(), HttpMethod.POST, entity, responseType);
-
-    if (!response.getBody().containsKey("result")) {
-      return Collections.emptyList();
+    public CtripUserService(PortalConfig portalConfig) {
+        this.portalConfig = portalConfig;
+        this.restTemplate = new RestTemplate(clientHttpRequestFactory());
+        this.searchUserMatchFields =
+                Lists.newArrayList("empcode", "empaccount", "displayname", "c_name", "pinyin");
+        this.responseType = new ParameterizedTypeReference<Map<String, List<UserServiceResponse>>>() {
+        };
     }
 
-    List<UserInfo> result = Lists.newArrayList();
-    result.addAll(
-        response.getBody().get("result").stream().map(this::transformUserServiceResponseToUserInfo)
-            .collect(Collectors.toList()));
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(portalConfig.connectTimeout());
+        factory.setReadTimeout(portalConfig.readTimeout());
 
-    return result;
-  }
-
-  @Override
-  public UserInfo findByUserId(String userId) {
-    List<UserInfo> userInfoList = this.findByUserIds(Lists.newArrayList(userId));
-    if (CollectionUtils.isEmpty(userInfoList)) {
-      return null;
-    }
-    return userInfoList.get(0);
-  }
-
-  public List<UserInfo> findByUserIds(List<String> userIds) {
-    UserServiceRequest request = assembleFindUserRequest(Lists.newArrayList(userIds));
-
-    HttpEntity<UserServiceRequest> entity = new HttpEntity<>(request);
-    ResponseEntity<Map<String, List<UserServiceResponse>>> response =
-        restTemplate.exchange(portalConfig.userServiceUrl(), HttpMethod.POST, entity, responseType);
-
-    if (!response.getBody().containsKey("result")) {
-      return Collections.emptyList();
+        return factory;
     }
 
-    List<UserInfo> result = Lists.newArrayList();
-    result.addAll(
-        response.getBody().get("result").stream().map(this::transformUserServiceResponseToUserInfo)
-            .collect(Collectors.toList()));
+    @Override
+    public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+        UserServiceRequest request = assembleSearchUserRequest(keyword, offset, limit);
 
-    return result;
-  }
+        HttpEntity<UserServiceRequest> entity = new HttpEntity<>(request);
+        ResponseEntity<Map<String, List<UserServiceResponse>>> response =
+                restTemplate.exchange(portalConfig.userServiceUrl(), HttpMethod.POST, entity, responseType);
 
-  private UserInfo transformUserServiceResponseToUserInfo(UserServiceResponse userServiceResponse) {
-    UserInfo userInfo = new UserInfo();
-    userInfo.setUserId(userServiceResponse.getEmpaccount());
-    userInfo.setName(userServiceResponse.getDisplayname());
-    userInfo.setEmail(userServiceResponse.getEmail());
-    return userInfo;
-  }
+        if (!response.getBody().containsKey("result")) {
+            return Collections.emptyList();
+        }
 
-  UserServiceRequest assembleSearchUserRequest(String keyword, int offset, int limit) {
-    Map<String, Object> query = Maps.newHashMap();
-    Map<String, Object> multiMatchMap = Maps.newHashMap();
-    multiMatchMap.put("fields", searchUserMatchFields);
-    multiMatchMap.put("operator", "and");
-    multiMatchMap.put("query", keyword);
-    multiMatchMap.put("type", "best_fields");
-    query.put("multi_match", multiMatchMap);
+        List<UserInfo> result = Lists.newArrayList();
+        result.addAll(
+                response.getBody().get("result").stream().map(this::transformUserServiceResponseToUserInfo)
+                        .collect(Collectors.toList()));
 
-    return assembleUserServiceRequest(query, offset, limit);
-  }
-
-  UserServiceRequest assembleFindUserRequest(List<String> userIds) {
-    Map<String, Object>
-        query =
-        ImmutableMap.of("filtered", ImmutableMap
-            .of("filter", ImmutableMap.of("terms", ImmutableMap.of("empaccount", userIds))));
-
-    return assembleUserServiceRequest(query, 0, userIds.size());
-  }
-
-  private UserServiceRequest assembleUserServiceRequest(Map<String, Object> query, int offset,
-                                                        int limit) {
-    UserServiceRequest request = new UserServiceRequest();
-    request.setAccess_token(portalConfig.userServiceAccessToken());
-
-    UserServiceRequestBody requestBody = new UserServiceRequestBody();
-    requestBody.setIndexAlias("itdb_emloyee");
-    requestBody.setType("emloyee");
-    request.setRequest_body(requestBody);
-
-    Map<String, Object> queryJson = Maps.newHashMap();
-    requestBody.setQueryJson(queryJson);
-
-    queryJson.put("query", query);
-
-    queryJson.put("from", offset);
-    queryJson.put("size", limit);
-
-    return request;
-  }
-
-
-  static class UserServiceRequest {
-    private String access_token;
-    private UserServiceRequestBody request_body;
-
-    public String getAccess_token() {
-      return access_token;
+        return result;
     }
 
-    public void setAccess_token(String access_token) {
-      this.access_token = access_token;
+    @Override
+    public UserInfo findByUserId(String userId) {
+        List<UserInfo> userInfoList = this.findByUserIds(Lists.newArrayList(userId));
+        if (CollectionUtils.isEmpty(userInfoList)) {
+            return null;
+        }
+        return userInfoList.get(0);
     }
 
-    public UserServiceRequestBody getRequest_body() {
-      return request_body;
+    public List<UserInfo> findByUserIds(List<String> userIds) {
+        UserServiceRequest request = assembleFindUserRequest(Lists.newArrayList(userIds));
+
+        HttpEntity<UserServiceRequest> entity = new HttpEntity<>(request);
+        ResponseEntity<Map<String, List<UserServiceResponse>>> response =
+                restTemplate.exchange(portalConfig.userServiceUrl(), HttpMethod.POST, entity, responseType);
+
+        if (!response.getBody().containsKey("result")) {
+            return Collections.emptyList();
+        }
+
+        List<UserInfo> result = Lists.newArrayList();
+        result.addAll(
+                response.getBody().get("result").stream().map(this::transformUserServiceResponseToUserInfo)
+                        .collect(Collectors.toList()));
+
+        return result;
     }
 
-    public void setRequest_body(
-        UserServiceRequestBody request_body) {
-      this.request_body = request_body;
-    }
-  }
-
-  static class UserServiceRequestBody {
-    private String indexAlias;
-    private String type;
-    private Map<String, Object> queryJson;
-
-    public String getType() {
-      return type;
+    private UserInfo transformUserServiceResponseToUserInfo(UserServiceResponse userServiceResponse) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userServiceResponse.getEmpaccount());
+        userInfo.setName(userServiceResponse.getDisplayname());
+        userInfo.setEmail(userServiceResponse.getEmail());
+        return userInfo;
     }
 
-    public void setType(String type) {
-      this.type = type;
+    UserServiceRequest assembleSearchUserRequest(String keyword, int offset, int limit) {
+        Map<String, Object> query = Maps.newHashMap();
+        Map<String, Object> multiMatchMap = Maps.newHashMap();
+        multiMatchMap.put("fields", searchUserMatchFields);
+        multiMatchMap.put("operator", "and");
+        multiMatchMap.put("query", keyword);
+        multiMatchMap.put("type", "best_fields");
+        query.put("multi_match", multiMatchMap);
+
+        return assembleUserServiceRequest(query, offset, limit);
     }
 
-    public String getIndexAlias() {
-      return indexAlias;
+    UserServiceRequest assembleFindUserRequest(List<String> userIds) {
+        Map<String, Object>
+                query =
+                ImmutableMap.of("filtered", ImmutableMap
+                        .of("filter", ImmutableMap.of("terms", ImmutableMap.of("empaccount", userIds))));
+
+        return assembleUserServiceRequest(query, 0, userIds.size());
     }
 
-    public void setIndexAlias(String indexAlias) {
-      this.indexAlias = indexAlias;
+    private UserServiceRequest assembleUserServiceRequest(Map<String, Object> query, int offset,
+                                                          int limit) {
+        UserServiceRequest request = new UserServiceRequest();
+        request.setAccess_token(portalConfig.userServiceAccessToken());
+
+        UserServiceRequestBody requestBody = new UserServiceRequestBody();
+        requestBody.setIndexAlias("itdb_emloyee");
+        requestBody.setType("emloyee");
+        request.setRequest_body(requestBody);
+
+        Map<String, Object> queryJson = Maps.newHashMap();
+        requestBody.setQueryJson(queryJson);
+
+        queryJson.put("query", query);
+
+        queryJson.put("from", offset);
+        queryJson.put("size", limit);
+
+        return request;
     }
 
-    public Map<String, Object> getQueryJson() {
-      return queryJson;
+
+    static class UserServiceRequest {
+        private String access_token;
+        private UserServiceRequestBody request_body;
+
+        public String getAccess_token() {
+            return access_token;
+        }
+
+        public void setAccess_token(String access_token) {
+            this.access_token = access_token;
+        }
+
+        public UserServiceRequestBody getRequest_body() {
+            return request_body;
+        }
+
+        public void setRequest_body(
+                UserServiceRequestBody request_body) {
+            this.request_body = request_body;
+        }
     }
 
-    public void setQueryJson(Map<String, Object> queryJson) {
-      this.queryJson = queryJson;
-    }
-  }
+    static class UserServiceRequestBody {
+        private String indexAlias;
+        private String type;
+        private Map<String, Object> queryJson;
 
-  static class UserServiceResponse {
-    private String empaccount;
-    private String displayname;
-    private String email;
+        public String getType() {
+            return type;
+        }
 
-    public String getEmpaccount() {
-      return empaccount;
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getIndexAlias() {
+            return indexAlias;
+        }
+
+        public void setIndexAlias(String indexAlias) {
+            this.indexAlias = indexAlias;
+        }
+
+        public Map<String, Object> getQueryJson() {
+            return queryJson;
+        }
+
+        public void setQueryJson(Map<String, Object> queryJson) {
+            this.queryJson = queryJson;
+        }
     }
 
-    public void setEmpaccount(String empaccount) {
-      this.empaccount = empaccount;
-    }
+    static class UserServiceResponse {
+        private String empaccount;
+        private String displayname;
+        private String email;
 
-    public String getDisplayname() {
-      return displayname;
-    }
+        public String getEmpaccount() {
+            return empaccount;
+        }
 
-    public void setDisplayname(String displayname) {
-      this.displayname = displayname;
-    }
+        public void setEmpaccount(String empaccount) {
+            this.empaccount = empaccount;
+        }
 
-    public String getEmail() {
-      return email;
-    }
+        public String getDisplayname() {
+            return displayname;
+        }
 
-    public void setEmail(String email) {
-      this.email = email;
+        public void setDisplayname(String displayname) {
+            this.displayname = displayname;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
     }
-  }
 
 }

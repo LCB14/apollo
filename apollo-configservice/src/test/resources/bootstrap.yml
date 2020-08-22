@@ -9,7 +9,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:8080/eureka/
     healthcheck:
       enabled: true
-      
+
 management:
   health:
     status:

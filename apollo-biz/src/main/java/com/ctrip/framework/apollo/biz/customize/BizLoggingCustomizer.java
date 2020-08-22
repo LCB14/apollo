@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("ctrip")
-public class BizLoggingCustomizer extends LoggingCustomizer{
+public class BizLoggingCustomizer extends LoggingCustomizer {
 
-  private final BizConfig bizConfig;
+    private final BizConfig bizConfig;
 
-  public BizLoggingCustomizer(final BizConfig bizConfig) {
-    this.bizConfig = bizConfig;
-  }
+    public BizLoggingCustomizer(final BizConfig bizConfig) {
+        this.bizConfig = bizConfig;
+    }
 
-  @Override
-  protected String cloggingUrl() {
-    return bizConfig.cloggingUrl();
-  }
+    @Override
+    protected String cloggingUrl() {
+        return bizConfig.cloggingUrl();
+    }
 
-  @Override
-  protected String cloggingPort() {
-    return bizConfig.cloggingPort();
-  }
+    @Override
+    protected String cloggingPort() {
+        return bizConfig.cloggingPort();
+    }
 }

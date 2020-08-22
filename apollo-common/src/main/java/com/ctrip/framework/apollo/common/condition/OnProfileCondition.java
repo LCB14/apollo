@@ -15,43 +15,42 @@ import java.util.Set;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class OnProfileCondition implements Condition {
-  @Override
-  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-    Set<String> activeProfiles = Sets.newHashSet(context.getEnvironment().getActiveProfiles());
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        Set<String> activeProfiles = Sets.newHashSet(context.getEnvironment().getActiveProfiles());
 
-    Set<String> requiredActiveProfiles = retrieveAnnotatedProfiles(metadata, ConditionalOnProfile.class.getName());
-    Set<String> requiredInactiveProfiles = retrieveAnnotatedProfiles(metadata, ConditionalOnMissingProfile.class
-        .getName());
+        Set<String> requiredActiveProfiles = retrieveAnnotatedProfiles(metadata, ConditionalOnProfile.class.getName());
+        Set<String> requiredInactiveProfiles = retrieveAnnotatedProfiles(metadata, ConditionalOnMissingProfile.class
+                .getName());
 
-    return Sets.difference(requiredActiveProfiles, activeProfiles).isEmpty()
-        && Sets.intersection(requiredInactiveProfiles, activeProfiles).isEmpty();
-  }
-
-  private Set<String> retrieveAnnotatedProfiles(AnnotatedTypeMetadata metadata, String annotationType) {
-    if (!metadata.isAnnotated(annotationType)) {
-      return Collections.emptySet();
+        return Sets.difference(requiredActiveProfiles, activeProfiles).isEmpty()
+                && Sets.intersection(requiredInactiveProfiles, activeProfiles).isEmpty();
     }
 
-    MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(annotationType);
-
-    if (attributes == null) {
-      return Collections.emptySet();
-    }
-
-    Set<String> profiles = Sets.newHashSet();
-    List<?> values = attributes.get("value");
-
-    if (values != null) {
-      for (Object value : values) {
-        if (value instanceof String[]) {
-          Collections.addAll(profiles, (String[]) value);
+    private Set<String> retrieveAnnotatedProfiles(AnnotatedTypeMetadata metadata, String annotationType) {
+        if (!metadata.isAnnotated(annotationType)) {
+            return Collections.emptySet();
         }
-        else {
-          profiles.add((String) value);
-        }
-      }
-    }
 
-    return profiles;
-  }
+        MultiValueMap<String, Object> attributes = metadata.getAllAnnotationAttributes(annotationType);
+
+        if (attributes == null) {
+            return Collections.emptySet();
+        }
+
+        Set<String> profiles = Sets.newHashSet();
+        List<?> values = attributes.get("value");
+
+        if (values != null) {
+            for (Object value : values) {
+                if (value instanceof String[]) {
+                    Collections.addAll(profiles, (String[]) value);
+                } else {
+                    profiles.add((String) value);
+                }
+            }
+        }
+
+        return profiles;
+    }
 }

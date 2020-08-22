@@ -24,49 +24,49 @@ import static org.mockito.Mockito.when;
 
 public class NamespaceServiceTest extends AbstractUnitTest {
 
-  @Mock
-  private AppNamespaceService appNamespaceService;
-  @Mock
-  private NamespaceRepository namespaceRepository;
+    @Mock
+    private AppNamespaceService appNamespaceService;
+    @Mock
+    private NamespaceRepository namespaceRepository;
 
-  @Spy
-  @InjectMocks
-  private NamespaceService namespaceService;
+    @Spy
+    @InjectMocks
+    private NamespaceService namespaceService;
 
-  private final String testPublicAppNamespace = "publicAppNamespace";
+    private final String testPublicAppNamespace = "publicAppNamespace";
 
 
-  @Test(expected = BadRequestException.class)
-  public void testFindPublicAppNamespaceWithWrongNamespace() {
-    Pageable page = PageRequest.of(0, 10);
+    @Test(expected = BadRequestException.class)
+    public void testFindPublicAppNamespaceWithWrongNamespace() {
+        Pageable page = PageRequest.of(0, 10);
 
-    when(appNamespaceService.findPublicNamespaceByName(testPublicAppNamespace)).thenReturn(null);
+        when(appNamespaceService.findPublicNamespaceByName(testPublicAppNamespace)).thenReturn(null);
 
-    namespaceService.findPublicAppNamespaceAllNamespaces(testPublicAppNamespace, page);
-  }
+        namespaceService.findPublicAppNamespaceAllNamespaces(testPublicAppNamespace, page);
+    }
 
-  @Test
-  public void testFindPublicAppNamespace() {
+    @Test
+    public void testFindPublicAppNamespace() {
 
-    AppNamespace publicAppNamespace = MockBeanFactory.mockAppNamespace(null, testPublicAppNamespace, true);
-    when(appNamespaceService.findPublicNamespaceByName(testPublicAppNamespace)).thenReturn(publicAppNamespace);
+        AppNamespace publicAppNamespace = MockBeanFactory.mockAppNamespace(null, testPublicAppNamespace, true);
+        when(appNamespaceService.findPublicNamespaceByName(testPublicAppNamespace)).thenReturn(publicAppNamespace);
 
-    Namespace firstParentNamespace =
-        MockBeanFactory.mockNamespace("app", ConfigConsts.CLUSTER_NAME_DEFAULT, testPublicAppNamespace);
-    Namespace secondParentNamespace =
-        MockBeanFactory.mockNamespace("app1", ConfigConsts.CLUSTER_NAME_DEFAULT, testPublicAppNamespace);
+        Namespace firstParentNamespace =
+                MockBeanFactory.mockNamespace("app", ConfigConsts.CLUSTER_NAME_DEFAULT, testPublicAppNamespace);
+        Namespace secondParentNamespace =
+                MockBeanFactory.mockNamespace("app1", ConfigConsts.CLUSTER_NAME_DEFAULT, testPublicAppNamespace);
 
-    Pageable page = PageRequest.of(0, 10);
+        Pageable page = PageRequest.of(0, 10);
 
-    when(namespaceRepository.findByNamespaceName(testPublicAppNamespace, page))
-        .thenReturn(Arrays.asList(firstParentNamespace, secondParentNamespace));
+        when(namespaceRepository.findByNamespaceName(testPublicAppNamespace, page))
+                .thenReturn(Arrays.asList(firstParentNamespace, secondParentNamespace));
 
-    doReturn(false).when(namespaceService).isChildNamespace(firstParentNamespace);
-    doReturn(false).when(namespaceService).isChildNamespace(secondParentNamespace);
+        doReturn(false).when(namespaceService).isChildNamespace(firstParentNamespace);
+        doReturn(false).when(namespaceService).isChildNamespace(secondParentNamespace);
 
-    List<Namespace> namespaces = namespaceService.findPublicAppNamespaceAllNamespaces(testPublicAppNamespace, page);
+        List<Namespace> namespaces = namespaceService.findPublicAppNamespaceAllNamespaces(testPublicAppNamespace, page);
 
-    assertEquals(2, namespaces.size());
-  }
+        assertEquals(2, namespaces.size());
+    }
 
 }

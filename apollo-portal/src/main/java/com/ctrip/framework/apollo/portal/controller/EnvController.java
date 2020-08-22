@@ -12,15 +12,15 @@ import java.util.List;
 @RequestMapping("/envs")
 public class EnvController {
 
-  private final PortalSettings portalSettings;
+    private final PortalSettings portalSettings;
 
-  public EnvController(final PortalSettings portalSettings) {
-    this.portalSettings = portalSettings;
-  }
+    public EnvController(final PortalSettings portalSettings) {
+        this.portalSettings = portalSettings;
+    }
 
-  @GetMapping
-  public List<Env> envs() {
-    return portalSettings.getActiveEnvs();
-  }
+    @GetMapping
+    public List<Env> envs() {
+        return portalSettings.getActiveEnvs();
+    }
 
 }

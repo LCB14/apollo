@@ -19,21 +19,21 @@ import javax.annotation.PostConstruct;
 @SpringBootTest(classes = AdminServiceTestConfiguration.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractControllerTest {
 
-  @Autowired
-  private HttpMessageConverters httpMessageConverters;
+    @Autowired
+    private HttpMessageConverters httpMessageConverters;
 
-  protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
 
-  @PostConstruct
-  private void postConstruct() {
-    restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
-    restTemplate.setMessageConverters(httpMessageConverters.getConverters());
-  }
+    @PostConstruct
+    private void postConstruct() {
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+        restTemplate.setMessageConverters(httpMessageConverters.getConverters());
+    }
 
-  @Value("${local.server.port}")
-  int port;
+    @Value("${local.server.port}")
+    int port;
 
-  protected String url(String path) {
-    return "http://localhost:" + port + path;
-  }
+    protected String url(String path) {
+        return "http://localhost:" + port + path;
+    }
 }

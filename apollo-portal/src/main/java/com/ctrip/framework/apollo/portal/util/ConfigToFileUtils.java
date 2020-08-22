@@ -13,18 +13,18 @@ import java.util.stream.Collectors;
  */
 public class ConfigToFileUtils {
 
-  public static void itemsToFile(OutputStream os, List<String> items) {
-    try {
-      PrintWriter printWriter = new PrintWriter(os);
-      items.forEach(printWriter::println);
-      printWriter.close();
-    } catch (Exception e) {
-      throw e;
+    public static void itemsToFile(OutputStream os, List<String> items) {
+        try {
+            PrintWriter printWriter = new PrintWriter(os);
+            items.forEach(printWriter::println);
+            printWriter.close();
+        } catch (Exception e) {
+            throw e;
+        }
     }
-  }
 
-  public static String fileToString(InputStream inputStream) {
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-    return bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
-  }
+    public static String fileToString(InputStream inputStream) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        return bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+    }
 }

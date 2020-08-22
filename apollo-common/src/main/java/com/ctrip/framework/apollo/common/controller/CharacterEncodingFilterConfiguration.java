@@ -10,16 +10,16 @@ import javax.servlet.DispatcherType;
 @Configuration
 public class CharacterEncodingFilterConfiguration {
 
-  @Bean
-  public FilterRegistrationBean encodingFilter() {
-    FilterRegistrationBean bean = new FilterRegistrationBean();
-    bean.setFilter(new CharacterEncodingFilter());
-    bean.addInitParameter("encoding", "UTF-8");
-    //FIXME: https://github.com/Netflix/eureka/issues/702
+    @Bean
+    public FilterRegistrationBean encodingFilter() {
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter(new CharacterEncodingFilter());
+        bean.addInitParameter("encoding", "UTF-8");
+        //FIXME: https://github.com/Netflix/eureka/issues/702
 //    bean.addInitParameter("forceEncoding", "true");
-    bean.setName("encodingFilter");
-    bean.addUrlPatterns("/*");
-    bean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
-    return bean;
-  }
+        bean.setName("encodingFilter");
+        bean.addUrlPatterns("/*");
+        bean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
+        return bean;
+    }
 }

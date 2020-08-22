@@ -10,8 +10,10 @@ import java.util.Map;
 
 public interface GsonType {
 
-  Type CONFIG = new TypeToken<Map<String, String>>() {}.getType();
+    Type CONFIG = new TypeToken<Map<String, String>>() {
+    }.getType();
 
-  Type RULE_ITEMS = new TypeToken<List<GrayReleaseRuleItemDTO>>() {}.getType();
+    Type RULE_ITEMS = new TypeToken<List<GrayReleaseRuleItemDTO>>() {
+    }.getType();
 
 }

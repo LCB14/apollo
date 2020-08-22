@@ -35,7 +35,8 @@
                         注意: 隐藏字符(空格、换行符、制表符Tab)容易导致配置出错，如果需要检测Value中隐藏字符请点击 <a ng-click="showHiddenChars()">检测隐藏字符</a>
                         <br>
                         <div class="bg-info" ng-show="showHiddenCharsContext && hiddenCharCounter == 0">无隐藏字符</div>
-                        <div class="bg-info" ng-bind-html="valueWithHiddenChars" ng-show="showHiddenCharsContext && hiddenCharCounter > 0"></div>
+                        <div class="bg-info" ng-bind-html="valueWithHiddenChars"
+                             ng-show="showHiddenCharsContext && hiddenCharCounter > 0"></div>
                     </div>
 
 

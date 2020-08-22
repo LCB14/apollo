@@ -2,31 +2,31 @@ package com.ctrip.framework.apollo.openapi.dto;
 
 public class OpenNamespaceLockDTO {
 
-  private String namespaceName;
-  private boolean isLocked;
-  private String lockedBy;
+    private String namespaceName;
+    private boolean isLocked;
+    private String lockedBy;
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public boolean isLocked() {
-    return isLocked;
-  }
+    public boolean isLocked() {
+        return isLocked;
+    }
 
-  public void setLocked(boolean locked) {
-    isLocked = locked;
-  }
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
 
-  public String getLockedBy() {
-    return lockedBy;
-  }
+    public String getLockedBy() {
+        return lockedBy;
+    }
 
-  public void setLockedBy(String lockedBy) {
-    this.lockedBy = lockedBy;
-  }
+    public void setLockedBy(String lockedBy) {
+        this.lockedBy = lockedBy;
+    }
 }

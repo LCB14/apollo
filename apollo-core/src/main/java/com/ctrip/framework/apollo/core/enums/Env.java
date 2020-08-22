@@ -18,12 +18,12 @@ import com.google.common.base.Preconditions;
  *
  * @author Jason Song(song_s@ctrip.com)
  */
-public enum Env{
-  LOCAL, DEV, FWS, FAT, UAT, LPT, PRO, TOOLS, UNKNOWN;
+public enum Env {
+    LOCAL, DEV, FWS, FAT, UAT, LPT, PRO, TOOLS, UNKNOWN;
 
-  public static Env fromString(String env) {
-    Env environment = EnvUtils.transformEnv(env);
-    Preconditions.checkArgument(environment != UNKNOWN, String.format("Env %s is invalid", env));
-    return environment;
-  }
+    public static Env fromString(String env) {
+        Env environment = EnvUtils.transformEnv(env);
+        Preconditions.checkArgument(environment != UNKNOWN, String.format("Env %s is invalid", env));
+        return environment;
+    }
 }

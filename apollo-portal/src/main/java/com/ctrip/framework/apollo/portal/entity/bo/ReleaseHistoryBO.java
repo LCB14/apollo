@@ -8,155 +8,155 @@ import java.util.Map;
 
 public class ReleaseHistoryBO {
 
-  private long id;
+    private long id;
 
-  private String appId;
+    private String appId;
 
-  private String clusterName;
+    private String clusterName;
 
-  private String namespaceName;
+    private String namespaceName;
 
-  private String branchName;
+    private String branchName;
 
-  private String operator;
+    private String operator;
 
-  private long releaseId;
+    private long releaseId;
 
-  private String releaseTitle;
+    private String releaseTitle;
 
-  private String releaseComment;
+    private String releaseComment;
 
-  private Date releaseTime;
+    private Date releaseTime;
 
-  private String releaseTimeFormatted;
+    private String releaseTimeFormatted;
 
-  private List<EntityPair<String>> configuration;
+    private List<EntityPair<String>> configuration;
 
-  private long previousReleaseId;
+    private long previousReleaseId;
 
-  private int operation;
+    private int operation;
 
-  private Map<String, Object> operationContext;
+    private Map<String, Object> operationContext;
 
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  public void setClusterName(String clusterName) {
-    this.clusterName = clusterName;
-  }
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public String getBranchName() {
-    return branchName;
-  }
+    public String getBranchName() {
+        return branchName;
+    }
 
-  public void setBranchName(String branchName) {
-    this.branchName = branchName;
-  }
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
 
-  public long getReleaseId() {
-    return releaseId;
-  }
+    public long getReleaseId() {
+        return releaseId;
+    }
 
-  public void setReleaseId(long releaseId) {
-    this.releaseId = releaseId;
-  }
+    public void setReleaseId(long releaseId) {
+        this.releaseId = releaseId;
+    }
 
-  public long getPreviousReleaseId() {
-    return previousReleaseId;
-  }
+    public long getPreviousReleaseId() {
+        return previousReleaseId;
+    }
 
-  public void setPreviousReleaseId(long previousReleaseId) {
-    this.previousReleaseId = previousReleaseId;
-  }
+    public void setPreviousReleaseId(long previousReleaseId) {
+        this.previousReleaseId = previousReleaseId;
+    }
 
-  public int getOperation() {
-    return operation;
-  }
+    public int getOperation() {
+        return operation;
+    }
 
-  public void setOperation(int operation) {
-    this.operation = operation;
-  }
+    public void setOperation(int operation) {
+        this.operation = operation;
+    }
 
-  public Map<String, Object> getOperationContext() {
-    return operationContext;
-  }
+    public Map<String, Object> getOperationContext() {
+        return operationContext;
+    }
 
-  public void setOperationContext(Map<String, Object> operationContext) {
-    this.operationContext = operationContext;
-  }
+    public void setOperationContext(Map<String, Object> operationContext) {
+        this.operationContext = operationContext;
+    }
 
-  public String getOperator() {
-    return operator;
-  }
+    public String getOperator() {
+        return operator;
+    }
 
-  public void setOperator(String operator) {
-    this.operator = operator;
-  }
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
 
-  public String getReleaseTitle() {
-    return releaseTitle;
-  }
+    public String getReleaseTitle() {
+        return releaseTitle;
+    }
 
-  public void setReleaseTitle(String releaseTitle) {
-    this.releaseTitle = releaseTitle;
-  }
+    public void setReleaseTitle(String releaseTitle) {
+        this.releaseTitle = releaseTitle;
+    }
 
-  public String getReleaseComment() {
-    return releaseComment;
-  }
+    public String getReleaseComment() {
+        return releaseComment;
+    }
 
-  public void setReleaseComment(String releaseComment) {
-    this.releaseComment = releaseComment;
-  }
+    public void setReleaseComment(String releaseComment) {
+        this.releaseComment = releaseComment;
+    }
 
-  public Date getReleaseTime() {
-    return releaseTime;
-  }
+    public Date getReleaseTime() {
+        return releaseTime;
+    }
 
-  public void setReleaseTime(Date releaseTime) {
-    this.releaseTime = releaseTime;
-  }
+    public void setReleaseTime(Date releaseTime) {
+        this.releaseTime = releaseTime;
+    }
 
-  public String getReleaseTimeFormatted() {
-    return releaseTimeFormatted;
-  }
+    public String getReleaseTimeFormatted() {
+        return releaseTimeFormatted;
+    }
 
-  public void setReleaseTimeFormatted(String releaseTimeFormatted) {
-    this.releaseTimeFormatted = releaseTimeFormatted;
-  }
+    public void setReleaseTimeFormatted(String releaseTimeFormatted) {
+        this.releaseTimeFormatted = releaseTimeFormatted;
+    }
 
-  public List<EntityPair<String>> getConfiguration() {
-    return configuration;
-  }
+    public List<EntityPair<String>> getConfiguration() {
+        return configuration;
+    }
 
-  public void setConfiguration(
-      List<EntityPair<String>> configuration) {
-    this.configuration = configuration;
-  }
+    public void setConfiguration(
+            List<EntityPair<String>> configuration) {
+        this.configuration = configuration;
+    }
 }

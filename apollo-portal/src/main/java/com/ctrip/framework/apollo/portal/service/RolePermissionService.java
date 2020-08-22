@@ -12,63 +12,63 @@ import java.util.Set;
  */
 public interface RolePermissionService {
 
-  /**
-   * Create role with permissions, note that role name should be unique
-   */
-  Role createRoleWithPermissions(Role role, Set<Long> permissionIds);
+    /**
+     * Create role with permissions, note that role name should be unique
+     */
+    Role createRoleWithPermissions(Role role, Set<Long> permissionIds);
 
-  /**
-   * Assign role to users
-   *
-   * @return the users assigned roles
-   */
-  Set<String> assignRoleToUsers(String roleName, Set<String> userIds,
-                                String operatorUserId);
+    /**
+     * Assign role to users
+     *
+     * @return the users assigned roles
+     */
+    Set<String> assignRoleToUsers(String roleName, Set<String> userIds,
+                                  String operatorUserId);
 
-  /**
-   * Remove role from users
-   */
-  void removeRoleFromUsers(String roleName, Set<String> userIds, String operatorUserId);
+    /**
+     * Remove role from users
+     */
+    void removeRoleFromUsers(String roleName, Set<String> userIds, String operatorUserId);
 
-  /**
-   * Query users with role
-   */
-  Set<UserInfo> queryUsersWithRole(String roleName);
+    /**
+     * Query users with role
+     */
+    Set<UserInfo> queryUsersWithRole(String roleName);
 
-  /**
-   * Find role by role name, note that roleName should be unique
-   */
-  Role findRoleByRoleName(String roleName);
+    /**
+     * Find role by role name, note that roleName should be unique
+     */
+    Role findRoleByRoleName(String roleName);
 
-  /**
-   * Check whether user has the permission
-   */
-  boolean userHasPermission(String userId, String permissionType, String targetId);
+    /**
+     * Check whether user has the permission
+     */
+    boolean userHasPermission(String userId, String permissionType, String targetId);
 
-  /**
-   * Find the user's roles
-   */
-  List<Role> findUserRoles(String userId);
+    /**
+     * Find the user's roles
+     */
+    List<Role> findUserRoles(String userId);
 
-  boolean isSuperAdmin(String userId);
+    boolean isSuperAdmin(String userId);
 
-  /**
-   * Create permission, note that permissionType + targetId should be unique
-   */
-  Permission createPermission(Permission permission);
+    /**
+     * Create permission, note that permissionType + targetId should be unique
+     */
+    Permission createPermission(Permission permission);
 
-  /**
-   * Create permissions, note that permissionType + targetId should be unique
-   */
-  Set<Permission> createPermissions(Set<Permission> permissions);
+    /**
+     * Create permissions, note that permissionType + targetId should be unique
+     */
+    Set<Permission> createPermissions(Set<Permission> permissions);
 
-  /**
-   * delete permissions when delete app.
-   */
-  void deleteRolePermissionsByAppId(String appId, String operator);
+    /**
+     * delete permissions when delete app.
+     */
+    void deleteRolePermissionsByAppId(String appId, String operator);
 
-  /**
-   * delete permissions when delete app namespace.
-   */
-  void deleteRolePermissionsByAppIdAndNamespace(String appId, String namespaceName, String operator);
+    /**
+     * delete permissions when delete app namespace.
+     */
+    void deleteRolePermissionsByAppIdAndNamespace(String appId, String namespaceName, String operator);
 }

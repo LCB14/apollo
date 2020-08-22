@@ -13,22 +13,22 @@ import java.util.List;
 @Primary
 public class ApolloEurekaClientConfig extends EurekaClientConfigBean {
 
-  private final BizConfig bizConfig;
+    private final BizConfig bizConfig;
 
-  public ApolloEurekaClientConfig(final BizConfig bizConfig) {
-    this.bizConfig = bizConfig;
-  }
+    public ApolloEurekaClientConfig(final BizConfig bizConfig) {
+        this.bizConfig = bizConfig;
+    }
 
-  /**
-   * Assert only one zone: defaultZone, but multiple environments.
-   */
-  public List<String> getEurekaServerServiceUrls(String myZone) {
-    List<String> urls = bizConfig.eurekaServiceUrls();
-    return CollectionUtils.isEmpty(urls) ? super.getEurekaServerServiceUrls(myZone) : urls;
-  }
+    /**
+     * Assert only one zone: defaultZone, but multiple environments.
+     */
+    public List<String> getEurekaServerServiceUrls(String myZone) {
+        List<String> urls = bizConfig.eurekaServiceUrls();
+        return CollectionUtils.isEmpty(urls) ? super.getEurekaServerServiceUrls(myZone) : urls;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

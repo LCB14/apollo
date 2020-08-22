@@ -27,58 +27,58 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ConsumerAuditUtilTest {
-  private ConsumerAuditUtil consumerAuditUtil;
-  @Mock
-  private ConsumerService consumerService;
-  @Mock
-  private HttpServletRequest request;
-  private final long batchTimeout = 50;
-  private final TimeUnit batchTimeUnit = TimeUnit.MILLISECONDS;
+    private ConsumerAuditUtil consumerAuditUtil;
+    @Mock
+    private ConsumerService consumerService;
+    @Mock
+    private HttpServletRequest request;
+    private final long batchTimeout = 50;
+    private final TimeUnit batchTimeUnit = TimeUnit.MILLISECONDS;
 
-  @Before
-  public void setUp() throws Exception {
-    consumerAuditUtil = new ConsumerAuditUtil(consumerService);
-    ReflectionTestUtils.setField(consumerAuditUtil, "BATCH_TIMEOUT", batchTimeout);
-    ReflectionTestUtils.setField(consumerAuditUtil, "BATCH_TIMEUNIT", batchTimeUnit);
-    consumerAuditUtil.afterPropertiesSet();
-  }
+    @Before
+    public void setUp() throws Exception {
+        consumerAuditUtil = new ConsumerAuditUtil(consumerService);
+        ReflectionTestUtils.setField(consumerAuditUtil, "BATCH_TIMEOUT", batchTimeout);
+        ReflectionTestUtils.setField(consumerAuditUtil, "BATCH_TIMEUNIT", batchTimeUnit);
+        consumerAuditUtil.afterPropertiesSet();
+    }
 
-  @After
-  public void tearDown() throws Exception {
-    consumerAuditUtil.stopAudit();
-  }
+    @After
+    public void tearDown() throws Exception {
+        consumerAuditUtil.stopAudit();
+    }
 
-  @Test
-  public void audit() throws Exception {
-    long someConsumerId = 1;
-    String someUri = "someUri";
-    String someQuery = "someQuery";
-    String someMethod = "someMethod";
+    @Test
+    public void audit() throws Exception {
+        long someConsumerId = 1;
+        String someUri = "someUri";
+        String someQuery = "someQuery";
+        String someMethod = "someMethod";
 
-    when(request.getRequestURI()).thenReturn(someUri);
-    when(request.getQueryString()).thenReturn(someQuery);
-    when(request.getMethod()).thenReturn(someMethod);
+        when(request.getRequestURI()).thenReturn(someUri);
+        when(request.getQueryString()).thenReturn(someQuery);
+        when(request.getMethod()).thenReturn(someMethod);
 
-    SettableFuture<List<ConsumerAudit>> result = SettableFuture.create();
+        SettableFuture<List<ConsumerAudit>> result = SettableFuture.create();
 
-    doAnswer((Answer<Void>) invocation -> {
-      Object[] args = invocation.getArguments();
-      result.set((List<ConsumerAudit>) args[0]);
+        doAnswer((Answer<Void>) invocation -> {
+            Object[] args = invocation.getArguments();
+            result.set((List<ConsumerAudit>) args[0]);
 
-      return null;
-    }).when(consumerService).createConsumerAudits(anyCollection());
+            return null;
+        }).when(consumerService).createConsumerAudits(anyCollection());
 
-    consumerAuditUtil.audit(request, someConsumerId);
+        consumerAuditUtil.audit(request, someConsumerId);
 
-    List<ConsumerAudit> audits = result.get(batchTimeout * 5, batchTimeUnit);
+        List<ConsumerAudit> audits = result.get(batchTimeout * 5, batchTimeUnit);
 
-    assertEquals(1, audits.size());
+        assertEquals(1, audits.size());
 
-    ConsumerAudit audit = audits.get(0);
+        ConsumerAudit audit = audits.get(0);
 
-    assertEquals(String.format("%s?%s", someUri, someQuery), audit.getUri());
-    assertEquals(someMethod, audit.getMethod());
-    assertEquals(someConsumerId, audit.getConsumerId());
-  }
+        assertEquals(String.format("%s?%s", someUri, someQuery), audit.getUri());
+        assertEquals(someMethod, audit.getMethod());
+        assertEquals(someConsumerId, audit.getConsumerId());
+    }
 
 }

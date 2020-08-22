@@ -43,10 +43,13 @@
 
                                 <div class="item-container">
                                     <h5>已拥有权限用户</h5>
-                                    <div class="btn-group item-info" ng-repeat="user in hasCreateApplicationPermissionUserList">
+                                    <div class="btn-group item-info"
+                                         ng-repeat="user in hasCreateApplicationPermissionUserList">
                                         <button type="button" class="btn btn-default" ng-bind="user"></button>
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false" ng-click="deleteCreateApplicationRoleFromUser(user)">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"
+                                                ng-click="deleteCreateApplicationRoleFromUser(user)">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </button>
                                     </div>
@@ -92,7 +95,8 @@
                         <div class="col-sm-8">
                             <form class="form-inline">
                                 <div class="form-group">
-                                    <apollouserselector apollo-id="modifyManageAppMasterRoleWidgetId"></apollouserselector>
+                                    <apollouserselector
+                                            apollo-id="modifyManageAppMasterRoleWidgetId"></apollouserselector>
                                 </div>
                             </form>
                         </div>

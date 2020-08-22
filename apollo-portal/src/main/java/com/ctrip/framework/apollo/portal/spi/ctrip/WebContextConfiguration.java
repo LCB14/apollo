@@ -17,36 +17,36 @@ import javax.servlet.ServletException;
 @Profile("ctrip")
 public class WebContextConfiguration {
 
-  private final PortalConfig portalConfig;
-  private final UserInfoHolder userInfoHolder;
+    private final PortalConfig portalConfig;
+    private final UserInfoHolder userInfoHolder;
 
-  public WebContextConfiguration(final PortalConfig portalConfig, final UserInfoHolder userInfoHolder) {
-    this.portalConfig = portalConfig;
-    this.userInfoHolder = userInfoHolder;
-  }
+    public WebContextConfiguration(final PortalConfig portalConfig, final UserInfoHolder userInfoHolder) {
+        this.portalConfig = portalConfig;
+        this.userInfoHolder = userInfoHolder;
+    }
 
-  @Bean
-  public ServletContextInitializer servletContextInitializer() {
-    return servletContext -> {
-      String loggingServerIP = portalConfig.cloggingUrl();
-      String loggingServerPort = portalConfig.cloggingPort();
-      String credisServiceUrl = portalConfig.credisServiceUrl();
+    @Bean
+    public ServletContextInitializer servletContextInitializer() {
+        return servletContext -> {
+            String loggingServerIP = portalConfig.cloggingUrl();
+            String loggingServerPort = portalConfig.cloggingPort();
+            String credisServiceUrl = portalConfig.credisServiceUrl();
 
-      servletContext.setInitParameter("loggingServerIP",
-          Strings.isNullOrEmpty(loggingServerIP) ? "" : loggingServerIP);
-      servletContext.setInitParameter("loggingServerPort",
-          Strings.isNullOrEmpty(loggingServerPort) ? "" : loggingServerPort);
-      servletContext.setInitParameter("credisServiceUrl",
-          Strings.isNullOrEmpty(credisServiceUrl) ? "" : credisServiceUrl);
-    };
-  }
+            servletContext.setInitParameter("loggingServerIP",
+                    Strings.isNullOrEmpty(loggingServerIP) ? "" : loggingServerIP);
+            servletContext.setInitParameter("loggingServerPort",
+                    Strings.isNullOrEmpty(loggingServerPort) ? "" : loggingServerPort);
+            servletContext.setInitParameter("credisServiceUrl",
+                    Strings.isNullOrEmpty(credisServiceUrl) ? "" : credisServiceUrl);
+        };
+    }
 
-  @Bean
-  public FilterRegistrationBean userAccessFilter() {
-    FilterRegistrationBean filter = new FilterRegistrationBean();
-    filter.setFilter(new UserAccessFilter(userInfoHolder));
-    filter.addUrlPatterns("/*");
-    return filter;
-  }
+    @Bean
+    public FilterRegistrationBean userAccessFilter() {
+        FilterRegistrationBean filter = new FilterRegistrationBean();
+        filter.setFilter(new UserAccessFilter(userInfoHolder));
+        filter.addUrlPatterns("/*");
+        return filter;
+    }
 
 }

@@ -17,26 +17,26 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 abstract class AbstractOpenApiServiceTest {
-  @Mock
-  protected CloseableHttpClient httpClient;
-  @Mock
-  protected CloseableHttpResponse someHttpResponse;
-  @Mock
-  protected StatusLine statusLine;
+    @Mock
+    protected CloseableHttpClient httpClient;
+    @Mock
+    protected CloseableHttpResponse someHttpResponse;
+    @Mock
+    protected StatusLine statusLine;
 
-  protected Gson gson;
+    protected Gson gson;
 
-  protected String someBaseUrl;
+    protected String someBaseUrl;
 
-  @Before
-  public void setUp() throws Exception {
-    gson = new GsonBuilder().setDateFormat(ApolloOpenApiConstants.JSON_DATE_FORMAT).create();
-    someBaseUrl = "http://someBaseUrl";
+    @Before
+    public void setUp() throws Exception {
+        gson = new GsonBuilder().setDateFormat(ApolloOpenApiConstants.JSON_DATE_FORMAT).create();
+        someBaseUrl = "http://someBaseUrl";
 
-    when(someHttpResponse.getStatusLine()).thenReturn(statusLine);
-    when(statusLine.getStatusCode()).thenReturn(200);
+        when(someHttpResponse.getStatusLine()).thenReturn(statusLine);
+        when(statusLine.getStatusCode()).thenReturn(200);
 
-    when(httpClient.execute(any(HttpUriRequest.class))).thenReturn(someHttpResponse);
-  }
+        when(httpClient.execute(any(HttpUriRequest.class))).thenReturn(someHttpResponse);
+    }
 
 }

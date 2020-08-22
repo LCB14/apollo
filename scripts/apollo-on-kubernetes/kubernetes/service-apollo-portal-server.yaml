@@ -1,4 +1,3 @@
-
 ---
 # 为外部 mysql 服务设置 service
 kind: Service
@@ -96,16 +95,16 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - pod-apollo-portal-server
-              topologyKey: kubernetes.io/hostname
-      
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - pod-apollo-portal-server
+                topologyKey: kubernetes.io/hostname
+
       volumes:
         - name: volume-configmap-apollo-portal-server
           configMap:
@@ -115,7 +114,7 @@ spec:
                 path: application-github.properties
               - key: apollo-env.properties
                 path: apollo-env.properties
-      
+
       initContainers:
         # 确保 admin-service 正常提供服务
         - image: alpine-bash:3.8
@@ -129,8 +128,8 @@ spec:
           command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-test-beta.sre:8090"]
         - image: alpine-bash:3.8
           name: check-service-apollo-admin-server-prod
-          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-prod.sre:8090"]    
-      
+          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-prod.sre:8090"]
+
       containers:
         - image: apollo-portal-server:v1.0.0    # 更改为你的 docker registry 下的 image
           securityContext:
@@ -140,7 +139,7 @@ spec:
           ports:
             - protocol: TCP
               containerPort: 8070
-          
+
           volumeMounts:
             - name: volume-configmap-apollo-portal-server
               mountPath: /apollo-portal-server/config/application-github.properties
@@ -148,23 +147,23 @@ spec:
             - name: volume-configmap-apollo-portal-server
               mountPath: /apollo-portal-server/config/apollo-env.properties
               subPath: apollo-env.properties
-          
+
           env:
             - name: APOLLO_PORTAL_SERVICE_NAME
               value: "service-apollo-portal-server.sre"
-          
+
           readinessProbe:
             tcpSocket:
               port: 8070
             initialDelaySeconds: 10
             periodSeconds: 5
-          
+
           livenessProbe:
             tcpSocket:
               port: 8070
             # 120s 内, server 未启动则重启 container
             initialDelaySeconds: 120
             periodSeconds: 15
-          
+
       dnsPolicy: ClusterFirst
       restartPolicy: Always

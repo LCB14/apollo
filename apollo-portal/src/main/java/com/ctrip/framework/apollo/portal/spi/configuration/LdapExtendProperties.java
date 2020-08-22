@@ -14,22 +14,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "ldap")
 public class LdapExtendProperties {
 
-  private LdapMappingProperties mapping;
-  private LdapGroupProperties group;
+    private LdapMappingProperties mapping;
+    private LdapGroupProperties group;
 
-  public LdapMappingProperties getMapping() {
-    return mapping;
-  }
+    public LdapMappingProperties getMapping() {
+        return mapping;
+    }
 
-  public void setMapping(LdapMappingProperties mapping) {
-    this.mapping = mapping;
-  }
+    public void setMapping(LdapMappingProperties mapping) {
+        this.mapping = mapping;
+    }
 
-  public LdapGroupProperties getGroup() {
-    return group;
-  }
+    public LdapGroupProperties getGroup() {
+        return group;
+    }
 
-  public void setGroup(LdapGroupProperties group) {
-    this.group = group;
-  }
+    public void setGroup(LdapGroupProperties group) {
+        this.group = group;
+    }
 }

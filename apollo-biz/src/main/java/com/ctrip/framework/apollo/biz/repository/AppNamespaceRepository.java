@@ -10,27 +10,27 @@ import java.util.List;
 import java.util.Set;
 
 
-public interface AppNamespaceRepository extends PagingAndSortingRepository<AppNamespace, Long>{
+public interface AppNamespaceRepository extends PagingAndSortingRepository<AppNamespace, Long> {
 
-  AppNamespace findByAppIdAndName(String appId, String namespaceName);
+    AppNamespace findByAppIdAndName(String appId, String namespaceName);
 
-  List<AppNamespace> findByAppIdAndNameIn(String appId, Set<String> namespaceNames);
+    List<AppNamespace> findByAppIdAndNameIn(String appId, Set<String> namespaceNames);
 
-  AppNamespace findByNameAndIsPublicTrue(String namespaceName);
+    AppNamespace findByNameAndIsPublicTrue(String namespaceName);
 
-  List<AppNamespace> findByNameInAndIsPublicTrue(Set<String> namespaceNames);
+    List<AppNamespace> findByNameInAndIsPublicTrue(Set<String> namespaceNames);
 
-  List<AppNamespace> findByAppIdAndIsPublic(String appId, boolean isPublic);
+    List<AppNamespace> findByAppIdAndIsPublic(String appId, boolean isPublic);
 
-  List<AppNamespace> findByAppId(String appId);
+    List<AppNamespace> findByAppId(String appId);
 
-  List<AppNamespace> findFirst500ByIdGreaterThanOrderByIdAsc(long id);
+    List<AppNamespace> findFirst500ByIdGreaterThanOrderByIdAsc(long id);
 
-  @Modifying
-  @Query("UPDATE AppNamespace SET IsDeleted=1,DataChange_LastModifiedBy = ?2 WHERE AppId=?1")
-  int batchDeleteByAppId(String appId, String operator);
+    @Modifying
+    @Query("UPDATE AppNamespace SET IsDeleted=1,DataChange_LastModifiedBy = ?2 WHERE AppId=?1")
+    int batchDeleteByAppId(String appId, String operator);
 
-  @Modifying
-  @Query("UPDATE AppNamespace SET IsDeleted=1,DataChange_LastModifiedBy = ?3 WHERE AppId=?1 and Name = ?2")
-  int delete(String appId, String namespaceName, String operator);
+    @Modifying
+    @Query("UPDATE AppNamespace SET IsDeleted=1,DataChange_LastModifiedBy = ?3 WHERE AppId=?1 and Name = ?2")
+    int delete(String appId, String namespaceName, String operator);
 }

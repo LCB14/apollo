@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ClusterRepository extends PagingAndSortingRepository<Cluster, Long> {
 
-  List<Cluster> findByAppIdAndParentClusterId(String appId, Long parentClusterId);
+    List<Cluster> findByAppIdAndParentClusterId(String appId, Long parentClusterId);
 
-  List<Cluster> findByAppId(String appId);
+    List<Cluster> findByAppId(String appId);
 
-  Cluster findByAppIdAndName(String appId, String name);
+    Cluster findByAppIdAndName(String appId, String name);
 
-  List<Cluster> findByParentClusterId(Long parentClusterId);
+    List<Cluster> findByParentClusterId(Long parentClusterId);
 }

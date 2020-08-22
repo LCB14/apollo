@@ -6,22 +6,22 @@ import org.junit.Test;
 
 public class ApolloOpenApiClientTest {
 
-  @Test
-  public void testCreate() {
-    String someUrl = "http://someUrl";
-    String someToken = "someToken";
+    @Test
+    public void testCreate() {
+        String someUrl = "http://someUrl";
+        String someToken = "someToken";
 
-    ApolloOpenApiClient client = ApolloOpenApiClient.newBuilder().withPortalUrl(someUrl).withToken(someToken).build();
+        ApolloOpenApiClient client = ApolloOpenApiClient.newBuilder().withPortalUrl(someUrl).withToken(someToken).build();
 
-    assertEquals(someUrl, client.getPortalUrl());
-    assertEquals(someToken, client.getToken());
-  }
+        assertEquals(someUrl, client.getPortalUrl());
+        assertEquals(someToken, client.getToken());
+    }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testCreateWithInvalidUrl() {
-    String someInvalidUrl = "someInvalidUrl";
-    String someToken = "someToken";
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateWithInvalidUrl() {
+        String someInvalidUrl = "someInvalidUrl";
+        String someToken = "someToken";
 
-    ApolloOpenApiClient.newBuilder().withPortalUrl(someInvalidUrl).withToken(someToken).build();
-  }
+        ApolloOpenApiClient.newBuilder().withPortalUrl(someInvalidUrl).withToken(someToken).build();
+    }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PrivilegeRepository extends PagingAndSortingRepository<Privilege, Long> {
 
-  List<Privilege> findByNamespaceId(long namespaceId);
+    List<Privilege> findByNamespaceId(long namespaceId);
 
-  List<Privilege> findByNamespaceIdAndPrivilType(long namespaceId, String privilType);
+    List<Privilege> findByNamespaceIdAndPrivilType(long namespaceId, String privilType);
 
-  Privilege findByNamespaceIdAndNameAndPrivilType(long namespaceId, String name, String privilType);
+    Privilege findByNamespaceIdAndNameAndPrivilType(long namespaceId, String name, String privilType);
 }

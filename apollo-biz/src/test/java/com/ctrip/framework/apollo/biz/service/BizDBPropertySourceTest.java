@@ -26,79 +26,79 @@ import static org.mockito.Mockito.when;
  */
 public class BizDBPropertySourceTest extends AbstractUnitTest {
 
-  @Mock
-  private ServerConfigRepository serverConfigRepository;
-  private BizDBPropertySource propertySource;
+    @Mock
+    private ServerConfigRepository serverConfigRepository;
+    private BizDBPropertySource propertySource;
 
-  private final String clusterConfigKey = "clusterKey";
-  private final String clusterConfigValue = "clusterValue";
-  private final String dcConfigKey = "dcKey";
-  private final String dcConfigValue = "dcValue";
-  private final String defaultKey = "defaultKey";
-  private final String defaultValue = "defaultValue";
+    private final String clusterConfigKey = "clusterKey";
+    private final String clusterConfigValue = "clusterValue";
+    private final String dcConfigKey = "dcKey";
+    private final String dcConfigValue = "dcValue";
+    private final String defaultKey = "defaultKey";
+    private final String defaultValue = "defaultValue";
 
-  @Before
-  public void initTestData() {
-    propertySource = spy(new BizDBPropertySource());
-    ReflectionTestUtils.setField(propertySource, "serverConfigRepository", serverConfigRepository);
+    @Before
+    public void initTestData() {
+        propertySource = spy(new BizDBPropertySource());
+        ReflectionTestUtils.setField(propertySource, "serverConfigRepository", serverConfigRepository);
 
-    List<ServerConfig> configs = Lists.newLinkedList();
+        List<ServerConfig> configs = Lists.newLinkedList();
 
-    //cluster config
-    String cluster = "cluster";
-    configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue, cluster));
-    String dc = "dc";
-    configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue + "dc", dc));
-    configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue + ConfigConsts.CLUSTER_NAME_DEFAULT,
-                                   ConfigConsts.CLUSTER_NAME_DEFAULT));
+        //cluster config
+        String cluster = "cluster";
+        configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue, cluster));
+        String dc = "dc";
+        configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue + "dc", dc));
+        configs.add(MockBeanFactory.mockServerConfig(clusterConfigKey, clusterConfigValue + ConfigConsts.CLUSTER_NAME_DEFAULT,
+                ConfigConsts.CLUSTER_NAME_DEFAULT));
 
-    //dc config
-    configs.add(MockBeanFactory.mockServerConfig(dcConfigKey, dcConfigValue, dc));
-    configs.add(MockBeanFactory.mockServerConfig(dcConfigKey, dcConfigValue + ConfigConsts.CLUSTER_NAME_DEFAULT,
-                                   ConfigConsts.CLUSTER_NAME_DEFAULT));
+        //dc config
+        configs.add(MockBeanFactory.mockServerConfig(dcConfigKey, dcConfigValue, dc));
+        configs.add(MockBeanFactory.mockServerConfig(dcConfigKey, dcConfigValue + ConfigConsts.CLUSTER_NAME_DEFAULT,
+                ConfigConsts.CLUSTER_NAME_DEFAULT));
 
-    //default config
-    configs.add(MockBeanFactory.mockServerConfig(defaultKey, defaultValue, ConfigConsts.CLUSTER_NAME_DEFAULT));
+        //default config
+        configs.add(MockBeanFactory.mockServerConfig(defaultKey, defaultValue, ConfigConsts.CLUSTER_NAME_DEFAULT));
 
-    System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, cluster);
+        System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, cluster);
 
-    when(propertySource.getCurrentDataCenter()).thenReturn(dc);
-    when(serverConfigRepository.findAll()).thenReturn(configs);
-  }
+        when(propertySource.getCurrentDataCenter()).thenReturn(dc);
+        when(serverConfigRepository.findAll()).thenReturn(configs);
+    }
 
-  @After
-  public void clear() {
-    System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
-  }
+    @After
+    public void clear() {
+        System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
+    }
 
-  @Test
-  public void testGetClusterConfig() {
+    @Test
+    public void testGetClusterConfig() {
 
-    propertySource.refresh();
+        propertySource.refresh();
 
-    assertEquals(propertySource.getProperty(clusterConfigKey), clusterConfigValue);
-  }
+        assertEquals(propertySource.getProperty(clusterConfigKey), clusterConfigValue);
+    }
 
-  @Test
-  public void testGetDcConfig() {
-    propertySource.refresh();
+    @Test
+    public void testGetDcConfig() {
+        propertySource.refresh();
 
-    assertEquals(propertySource.getProperty(dcConfigKey), dcConfigValue);
-  }
+        assertEquals(propertySource.getProperty(dcConfigKey), dcConfigValue);
+    }
 
-  @Test
-  public void testGetDefaultConfig() {
-    propertySource.refresh();
+    @Test
+    public void testGetDefaultConfig() {
+        propertySource.refresh();
 
 
-    assertEquals(propertySource.getProperty(defaultKey), defaultValue);
-  }
+        assertEquals(propertySource.getProperty(defaultKey), defaultValue);
+    }
 
-  @Test
-  public void testGetNull() {
-    propertySource.refresh();
-    assertNull(propertySource.getProperty("noKey"));
-  }
+    @Test
+    public void testGetNull() {
+        propertySource.refresh();
+        assertNull(propertySource.getProperty("noKey"));
+    }
 
 
 }

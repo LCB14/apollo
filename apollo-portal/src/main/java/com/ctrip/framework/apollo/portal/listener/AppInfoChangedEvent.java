@@ -6,14 +6,14 @@ import com.ctrip.framework.apollo.common.entity.App;
 
 import org.springframework.context.ApplicationEvent;
 
-public class AppInfoChangedEvent extends ApplicationEvent{
+public class AppInfoChangedEvent extends ApplicationEvent {
 
-  public AppInfoChangedEvent(Object source) {
-    super(source);
-  }
+    public AppInfoChangedEvent(Object source) {
+        super(source);
+    }
 
-  public App getApp() {
-    Preconditions.checkState(source != null);
-    return (App) this.source;
-  }
+    public App getApp() {
+        Preconditions.checkState(source != null);
+        return (App) this.source;
+    }
 }

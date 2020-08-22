@@ -13,82 +13,82 @@ import javax.persistence.Table;
 @Table(name = "GrayReleaseRule")
 @SQLDelete(sql = "Update GrayReleaseRule set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
-public class GrayReleaseRule extends BaseEntity{
+public class GrayReleaseRule extends BaseEntity {
 
-  @Column(name = "appId", nullable = false)
-  private String appId;
+    @Column(name = "appId", nullable = false)
+    private String appId;
 
-  @Column(name = "ClusterName", nullable = false)
-  private String clusterName;
+    @Column(name = "ClusterName", nullable = false)
+    private String clusterName;
 
-  @Column(name = "NamespaceName", nullable = false)
-  private String namespaceName;
+    @Column(name = "NamespaceName", nullable = false)
+    private String namespaceName;
 
-  @Column(name = "BranchName", nullable = false)
-  private String branchName;
+    @Column(name = "BranchName", nullable = false)
+    private String branchName;
 
-  @Column(name = "Rules")
-  private String rules;
+    @Column(name = "Rules")
+    private String rules;
 
-  @Column(name = "releaseId", nullable = false)
-  private Long releaseId;
+    @Column(name = "releaseId", nullable = false)
+    private Long releaseId;
 
-  @Column(name = "BranchStatus", nullable = false)
-  private int branchStatus;
+    @Column(name = "BranchStatus", nullable = false)
+    private int branchStatus;
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  public void setClusterName(String clusterName) {
-    this.clusterName = clusterName;
-  }
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public String getBranchName() {
-    return branchName;
-  }
+    public String getBranchName() {
+        return branchName;
+    }
 
-  public void setBranchName(String branchName) {
-    this.branchName = branchName;
-  }
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
 
-  public String getRules() {
-    return rules;
-  }
+    public String getRules() {
+        return rules;
+    }
 
-  public void setRules(String rules) {
-    this.rules = rules;
-  }
+    public void setRules(String rules) {
+        this.rules = rules;
+    }
 
-  public Long getReleaseId() {
-    return releaseId;
-  }
+    public Long getReleaseId() {
+        return releaseId;
+    }
 
-  public void setReleaseId(Long releaseId) {
-    this.releaseId = releaseId;
-  }
+    public void setReleaseId(Long releaseId) {
+        this.releaseId = releaseId;
+    }
 
-  public int getBranchStatus() {
-    return branchStatus;
-  }
+    public int getBranchStatus() {
+        return branchStatus;
+    }
 
-  public void setBranchStatus(int branchStatus) {
-    this.branchStatus = branchStatus;
-  }
+    public void setBranchStatus(int branchStatus) {
+        this.branchStatus = branchStatus;
+    }
 }

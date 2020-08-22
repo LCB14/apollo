@@ -66,13 +66,13 @@
                         <div ng-repeat="change in toRollbackNamespace.releaseCompareResult"
                              ng-if="!toRollbackNamespace.isPropertiesFormat">
                             <h5>回滚前</h5>
-                                        <textarea class="form-control no-radius" rows="20"
-                                                  ng-disabled="true" ng-bind="change.entity.firstEntity.value">
+                            <textarea class="form-control no-radius" rows="20"
+                                      ng-disabled="true" ng-bind="change.entity.firstEntity.value">
                                             </textarea>
                             <hr>
                             <h5>回滚后</h5>
-                                        <textarea class="form-control no-radius" rows="20"
-                                                  ng-disabled="true" ng-bind="change.entity.secondEntity.value">
+                            <textarea class="form-control no-radius" rows="20"
+                                      ng-disabled="true" ng-bind="change.entity.secondEntity.value">
                                             </textarea>
                         </div>
 

@@ -11,18 +11,18 @@ import java.util.List;
 
 public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
 
-  Item findByNamespaceIdAndKey(Long namespaceId, String key);
+    Item findByNamespaceIdAndKey(Long namespaceId, String key);
 
-  List<Item> findByNamespaceIdOrderByLineNumAsc(Long namespaceId);
+    List<Item> findByNamespaceIdOrderByLineNumAsc(Long namespaceId);
 
-  List<Item> findByNamespaceId(Long namespaceId);
+    List<Item> findByNamespaceId(Long namespaceId);
 
-  List<Item> findByNamespaceIdAndDataChangeLastModifiedTimeGreaterThan(Long namespaceId, Date date);
+    List<Item> findByNamespaceIdAndDataChangeLastModifiedTimeGreaterThan(Long namespaceId, Date date);
 
-  Item findFirst1ByNamespaceIdOrderByLineNumDesc(Long namespaceId);
+    Item findFirst1ByNamespaceIdOrderByLineNumDesc(Long namespaceId);
 
-  @Modifying
-  @Query("update Item set isdeleted=1,DataChange_LastModifiedBy = ?2 where namespaceId = ?1")
-  int deleteByNamespaceId(long namespaceId, String operator);
+    @Modifying
+    @Query("update Item set isdeleted=1,DataChange_LastModifiedBy = ?2 where namespaceId = ?1")
+    int deleteByNamespaceId(long namespaceId, String operator);
 
 }

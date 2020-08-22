@@ -10,13 +10,13 @@ import java.util.Date;
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ConsumerTokenRepository extends PagingAndSortingRepository<ConsumerToken, Long> {
-  /**
-   * find consumer token by token
-   *
-   * @param token     the token
-   * @param validDate the date when the token is valid
-   */
-  ConsumerToken findTopByTokenAndExpiresAfter(String token, Date validDate);
+    /**
+     * find consumer token by token
+     *
+     * @param token     the token
+     * @param validDate the date when the token is valid
+     */
+    ConsumerToken findTopByTokenAndExpiresAfter(String token, Date validDate);
 
-  ConsumerToken findByConsumerId(Long consumerId);
+    ConsumerToken findByConsumerId(Long consumerId);
 }

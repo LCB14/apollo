@@ -15,15 +15,15 @@ import java.util.List;
 @RequestMapping("/organizations")
 public class OrganizationController {
 
-  private final PortalConfig portalConfig;
+    private final PortalConfig portalConfig;
 
-  public OrganizationController(final PortalConfig portalConfig) {
-    this.portalConfig = portalConfig;
-  }
+    public OrganizationController(final PortalConfig portalConfig) {
+        this.portalConfig = portalConfig;
+    }
 
 
-  @RequestMapping
-  public List<Organization> loadOrganization() {
-    return portalConfig.organizations();
-  }
+    @RequestMapping
+    public List<Organization> loadOrganization() {
+        return portalConfig.organizations();
+    }
 }

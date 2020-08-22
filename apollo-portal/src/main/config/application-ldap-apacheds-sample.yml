@@ -6,7 +6,7 @@ spring:
     password: "password"
     searchFilter: "(uid={0})"  # 用户过滤器，登录的时候用这个过滤器来搜索用户
     urls:
-    - "ldap://localhost:10389"
+      - "ldap://localhost:10389"
 
 ldap:
   mapping: # 配置 ldap 属性

@@ -1,10 +1,10 @@
 spring:
   application:
     name: apollo-adminservice
-    
+
 server:
   port: ${port:8090}
-  
+
 logging:
   level:
     org.springframework.cloud: 'DEBUG'

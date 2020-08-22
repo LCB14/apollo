@@ -18,54 +18,54 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class Cluster extends BaseEntity implements Comparable<Cluster> {
 
-  @Column(name = "Name", nullable = false)
-  private String name;
+    @Column(name = "Name", nullable = false)
+    private String name;
 
-  @Column(name = "AppId", nullable = false)
-  private String appId;
+    @Column(name = "AppId", nullable = false)
+    private String appId;
 
-  @Column(name = "ParentClusterId", nullable = false)
-  private long parentClusterId;
+    @Column(name = "ParentClusterId", nullable = false)
+    private long parentClusterId;
 
-  public String getAppId() {
-    return appId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public long getParentClusterId() {
-    return parentClusterId;
-  }
-
-  public void setParentClusterId(long parentClusterId) {
-    this.parentClusterId = parentClusterId;
-  }
-
-  public String toString() {
-    return toStringHelper().add("name", name).add("appId", appId)
-        .add("parentClusterId", parentClusterId).toString();
-  }
-
-  @Override
-  public int compareTo(Cluster o) {
-    if (o == null || getId() > o.getId()) {
-      return 1;
+    public String getAppId() {
+        return appId;
     }
 
-    if (getId() == o.getId()) {
-      return 0;
+    public String getName() {
+        return name;
     }
 
-    return -1;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getParentClusterId() {
+        return parentClusterId;
+    }
+
+    public void setParentClusterId(long parentClusterId) {
+        this.parentClusterId = parentClusterId;
+    }
+
+    public String toString() {
+        return toStringHelper().add("name", name).add("appId", appId)
+                .add("parentClusterId", parentClusterId).toString();
+    }
+
+    @Override
+    public int compareTo(Cluster o) {
+        if (o == null || getId() > o.getId()) {
+            return 1;
+        }
+
+        if (getId() == o.getId()) {
+            return 0;
+        }
+
+        return -1;
+    }
 }

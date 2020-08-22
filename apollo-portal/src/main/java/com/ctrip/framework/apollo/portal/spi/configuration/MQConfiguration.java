@@ -11,27 +11,27 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class MQConfiguration {
 
-  @Configuration
-  @Profile("ctrip")
-  public static class CtripMQConfiguration {
+    @Configuration
+    @Profile("ctrip")
+    public static class CtripMQConfiguration {
 
-    @Bean
-    public CtripMQService mqService() {
-      return new CtripMQService();
+        @Bean
+        public CtripMQService mqService() {
+            return new CtripMQService();
+        }
     }
-  }
 
-  /**
-   * spring.profiles.active != ctrip
-   */
-  @Configuration
-  @ConditionalOnMissingProfile({"ctrip"})
-  public static class DefaultMQConfiguration {
+    /**
+     * spring.profiles.active != ctrip
+     */
+    @Configuration
+    @ConditionalOnMissingProfile({"ctrip"})
+    public static class DefaultMQConfiguration {
 
-    @Bean
-    public DefaultMQService mqService() {
-      return new DefaultMQService();
+        @Bean
+        public DefaultMQService mqService() {
+            return new DefaultMQService();
+        }
     }
-  }
 
 }

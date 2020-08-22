@@ -6,12 +6,12 @@ import org.springframework.context.ApplicationEvent;
 
 public class AppNamespaceDeletionEvent extends ApplicationEvent {
 
-  public AppNamespaceDeletionEvent(Object source) {
-    super(source);
-  }
+    public AppNamespaceDeletionEvent(Object source) {
+        super(source);
+    }
 
-  public AppNamespace getAppNamespace() {
-    Preconditions.checkState(source != null);
-    return (AppNamespace) this.source;
-  }
+    public AppNamespace getAppNamespace() {
+        Preconditions.checkState(source != null);
+        return (AppNamespace) this.source;
+    }
 }

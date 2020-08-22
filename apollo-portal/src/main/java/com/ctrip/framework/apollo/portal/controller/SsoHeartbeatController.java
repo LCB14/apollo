@@ -17,14 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/sso_heartbeat")
 public class SsoHeartbeatController {
-  private final SsoHeartbeatHandler handler;
+    private final SsoHeartbeatHandler handler;
 
-  public SsoHeartbeatController(final SsoHeartbeatHandler handler) {
-    this.handler = handler;
-  }
+    public SsoHeartbeatController(final SsoHeartbeatHandler handler) {
+        this.handler = handler;
+    }
 
-  @GetMapping
-  public void heartbeat(HttpServletRequest request, HttpServletResponse response) {
-    handler.doHeartbeat(request, response);
-  }
+    @GetMapping
+    public void heartbeat(HttpServletRequest request, HttpServletResponse response) {
+        handler.doHeartbeat(request, response);
+    }
 }

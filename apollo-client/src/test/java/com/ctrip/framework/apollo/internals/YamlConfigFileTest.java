@@ -8,7 +8,9 @@ import com.ctrip.framework.apollo.core.ConfigConsts;
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
 import com.ctrip.framework.apollo.exceptions.ApolloConfigException;
 import com.ctrip.framework.apollo.util.yaml.YamlParser;
+
 import java.util.Properties;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,167 +19,167 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class YamlConfigFileTest {
-  private String someNamespace;
-  @Mock
-  private ConfigRepository configRepository;
-  @Mock
-  private YamlParser yamlParser;
+    private String someNamespace;
+    @Mock
+    private ConfigRepository configRepository;
+    @Mock
+    private YamlParser yamlParser;
 
-  private ConfigSourceType someSourceType;
+    private ConfigSourceType someSourceType;
 
-  @Before
-  public void setUp() throws Exception {
-    someNamespace = "someName";
+    @Before
+    public void setUp() throws Exception {
+        someNamespace = "someName";
 
-    MockInjector.reset();
-    MockInjector.setInstance(YamlParser.class, yamlParser);
-  }
-
-  @Test
-  public void testWhenHasContent() throws Exception {
-    Properties someProperties = new Properties();
-    String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
-    String someContent = "someKey: 'someValue'";
-    someProperties.setProperty(key, someContent);
-    someSourceType = ConfigSourceType.LOCAL;
-
-    Properties yamlProperties = new Properties();
-    yamlProperties.setProperty("someKey", "someValue");
-
-    when(configRepository.getConfig()).thenReturn(someProperties);
-    when(configRepository.getSourceType()).thenReturn(someSourceType);
-    when(yamlParser.yamlToProperties(someContent)).thenReturn(yamlProperties);
-
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
-
-    assertSame(someContent, configFile.getContent());
-    assertSame(yamlProperties, configFile.asProperties());
-  }
-
-  @Test
-  public void testWhenHasNoContent() throws Exception {
-    when(configRepository.getConfig()).thenReturn(null);
-
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
-
-    assertFalse(configFile.hasContent());
-    assertNull(configFile.getContent());
-
-    Properties properties = configFile.asProperties();
-
-    assertTrue(properties.isEmpty());
-  }
-
-  @Test
-  public void testWhenInvalidYamlContent() throws Exception {
-    Properties someProperties = new Properties();
-    String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
-    String someInvalidContent = ",";
-    someProperties.setProperty(key, someInvalidContent);
-    someSourceType = ConfigSourceType.LOCAL;
-
-    when(configRepository.getConfig()).thenReturn(someProperties);
-    when(configRepository.getSourceType()).thenReturn(someSourceType);
-    when(yamlParser.yamlToProperties(someInvalidContent)).thenThrow(new RuntimeException("some exception"));
-
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
-
-    assertSame(someInvalidContent, configFile.getContent());
-
-    Throwable exceptionThrown = null;
-    try {
-      configFile.asProperties();
-    } catch (Throwable ex) {
-      exceptionThrown = ex;
+        MockInjector.reset();
+        MockInjector.setInstance(YamlParser.class, yamlParser);
     }
 
-    assertTrue(exceptionThrown instanceof ApolloConfigException);
-    assertNotNull(exceptionThrown.getCause());
-  }
+    @Test
+    public void testWhenHasContent() throws Exception {
+        Properties someProperties = new Properties();
+        String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
+        String someContent = "someKey: 'someValue'";
+        someProperties.setProperty(key, someContent);
+        someSourceType = ConfigSourceType.LOCAL;
 
-  @Test
-  public void testWhenConfigRepositoryHasError() throws Exception {
-    when(configRepository.getConfig()).thenThrow(new RuntimeException("someError"));
+        Properties yamlProperties = new Properties();
+        yamlProperties.setProperty("someKey", "someValue");
 
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
+        when(configRepository.getConfig()).thenReturn(someProperties);
+        when(configRepository.getSourceType()).thenReturn(someSourceType);
+        when(yamlParser.yamlToProperties(someContent)).thenReturn(yamlProperties);
 
-    assertFalse(configFile.hasContent());
-    assertNull(configFile.getContent());
-    assertEquals(ConfigSourceType.NONE, configFile.getSourceType());
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
 
-    Properties properties = configFile.asProperties();
+        assertSame(someContent, configFile.getContent());
+        assertSame(yamlProperties, configFile.asProperties());
+    }
 
-    assertTrue(properties.isEmpty());
-  }
+    @Test
+    public void testWhenHasNoContent() throws Exception {
+        when(configRepository.getConfig()).thenReturn(null);
 
-  @Test
-  public void testOnRepositoryChange() throws Exception {
-    Properties someProperties = new Properties();
-    String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
-    String someValue = "someKey: 'someValue'";
-    String anotherValue = "anotherKey: 'anotherValue'";
-    someProperties.setProperty(key, someValue);
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
 
-    someSourceType = ConfigSourceType.LOCAL;
+        assertFalse(configFile.hasContent());
+        assertNull(configFile.getContent());
 
-    Properties someYamlProperties = new Properties();
-    someYamlProperties.setProperty("someKey", "someValue");
+        Properties properties = configFile.asProperties();
 
-    Properties anotherYamlProperties = new Properties();
-    anotherYamlProperties.setProperty("anotherKey", "anotherValue");
+        assertTrue(properties.isEmpty());
+    }
 
-    when(configRepository.getConfig()).thenReturn(someProperties);
-    when(configRepository.getSourceType()).thenReturn(someSourceType);
-    when(yamlParser.yamlToProperties(someValue)).thenReturn(someYamlProperties);
-    when(yamlParser.yamlToProperties(anotherValue)).thenReturn(anotherYamlProperties);
+    @Test
+    public void testWhenInvalidYamlContent() throws Exception {
+        Properties someProperties = new Properties();
+        String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
+        String someInvalidContent = ",";
+        someProperties.setProperty(key, someInvalidContent);
+        someSourceType = ConfigSourceType.LOCAL;
 
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
+        when(configRepository.getConfig()).thenReturn(someProperties);
+        when(configRepository.getSourceType()).thenReturn(someSourceType);
+        when(yamlParser.yamlToProperties(someInvalidContent)).thenThrow(new RuntimeException("some exception"));
 
-    assertEquals(someValue, configFile.getContent());
-    assertEquals(someSourceType, configFile.getSourceType());
-    assertSame(someYamlProperties, configFile.asProperties());
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
 
-    Properties anotherProperties = new Properties();
-    anotherProperties.setProperty(key, anotherValue);
+        assertSame(someInvalidContent, configFile.getContent());
 
-    ConfigSourceType anotherSourceType = ConfigSourceType.REMOTE;
-    when(configRepository.getSourceType()).thenReturn(anotherSourceType);
+        Throwable exceptionThrown = null;
+        try {
+            configFile.asProperties();
+        } catch (Throwable ex) {
+            exceptionThrown = ex;
+        }
 
-    configFile.onRepositoryChange(someNamespace, anotherProperties);
+        assertTrue(exceptionThrown instanceof ApolloConfigException);
+        assertNotNull(exceptionThrown.getCause());
+    }
 
-    assertEquals(anotherValue, configFile.getContent());
-    assertEquals(anotherSourceType, configFile.getSourceType());
-    assertSame(anotherYamlProperties, configFile.asProperties());
-  }
+    @Test
+    public void testWhenConfigRepositoryHasError() throws Exception {
+        when(configRepository.getConfig()).thenThrow(new RuntimeException("someError"));
 
-  @Test
-  public void testWhenConfigRepositoryHasErrorAndThenRecovered() throws Exception {
-    Properties someProperties = new Properties();
-    String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
-    String someValue = "someKey: 'someValue'";
-    someProperties.setProperty(key, someValue);
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
 
-    someSourceType = ConfigSourceType.LOCAL;
+        assertFalse(configFile.hasContent());
+        assertNull(configFile.getContent());
+        assertEquals(ConfigSourceType.NONE, configFile.getSourceType());
 
-    Properties someYamlProperties = new Properties();
-    someYamlProperties.setProperty("someKey", "someValue");
+        Properties properties = configFile.asProperties();
 
-    when(configRepository.getConfig()).thenThrow(new RuntimeException("someError"));
-    when(configRepository.getSourceType()).thenReturn(someSourceType);
-    when(yamlParser.yamlToProperties(someValue)).thenReturn(someYamlProperties);
+        assertTrue(properties.isEmpty());
+    }
 
-    YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
+    @Test
+    public void testOnRepositoryChange() throws Exception {
+        Properties someProperties = new Properties();
+        String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
+        String someValue = "someKey: 'someValue'";
+        String anotherValue = "anotherKey: 'anotherValue'";
+        someProperties.setProperty(key, someValue);
 
-    assertFalse(configFile.hasContent());
-    assertNull(configFile.getContent());
-    assertEquals(ConfigSourceType.NONE, configFile.getSourceType());
-    assertTrue(configFile.asProperties().isEmpty());
+        someSourceType = ConfigSourceType.LOCAL;
 
-    configFile.onRepositoryChange(someNamespace, someProperties);
+        Properties someYamlProperties = new Properties();
+        someYamlProperties.setProperty("someKey", "someValue");
 
-    assertTrue(configFile.hasContent());
-    assertEquals(someValue, configFile.getContent());
-    assertEquals(someSourceType, configFile.getSourceType());
-    assertSame(someYamlProperties, configFile.asProperties());
-  }
+        Properties anotherYamlProperties = new Properties();
+        anotherYamlProperties.setProperty("anotherKey", "anotherValue");
+
+        when(configRepository.getConfig()).thenReturn(someProperties);
+        when(configRepository.getSourceType()).thenReturn(someSourceType);
+        when(yamlParser.yamlToProperties(someValue)).thenReturn(someYamlProperties);
+        when(yamlParser.yamlToProperties(anotherValue)).thenReturn(anotherYamlProperties);
+
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
+
+        assertEquals(someValue, configFile.getContent());
+        assertEquals(someSourceType, configFile.getSourceType());
+        assertSame(someYamlProperties, configFile.asProperties());
+
+        Properties anotherProperties = new Properties();
+        anotherProperties.setProperty(key, anotherValue);
+
+        ConfigSourceType anotherSourceType = ConfigSourceType.REMOTE;
+        when(configRepository.getSourceType()).thenReturn(anotherSourceType);
+
+        configFile.onRepositoryChange(someNamespace, anotherProperties);
+
+        assertEquals(anotherValue, configFile.getContent());
+        assertEquals(anotherSourceType, configFile.getSourceType());
+        assertSame(anotherYamlProperties, configFile.asProperties());
+    }
+
+    @Test
+    public void testWhenConfigRepositoryHasErrorAndThenRecovered() throws Exception {
+        Properties someProperties = new Properties();
+        String key = ConfigConsts.CONFIG_FILE_CONTENT_KEY;
+        String someValue = "someKey: 'someValue'";
+        someProperties.setProperty(key, someValue);
+
+        someSourceType = ConfigSourceType.LOCAL;
+
+        Properties someYamlProperties = new Properties();
+        someYamlProperties.setProperty("someKey", "someValue");
+
+        when(configRepository.getConfig()).thenThrow(new RuntimeException("someError"));
+        when(configRepository.getSourceType()).thenReturn(someSourceType);
+        when(yamlParser.yamlToProperties(someValue)).thenReturn(someYamlProperties);
+
+        YamlConfigFile configFile = new YamlConfigFile(someNamespace, configRepository);
+
+        assertFalse(configFile.hasContent());
+        assertNull(configFile.getContent());
+        assertEquals(ConfigSourceType.NONE, configFile.getSourceType());
+        assertTrue(configFile.asProperties().isEmpty());
+
+        configFile.onRepositoryChange(someNamespace, someProperties);
+
+        assertTrue(configFile.hasContent());
+        assertEquals(someValue, configFile.getContent());
+        assertEquals(someSourceType, configFile.getSourceType());
+        assertSame(someYamlProperties, configFile.asProperties());
+    }
 }

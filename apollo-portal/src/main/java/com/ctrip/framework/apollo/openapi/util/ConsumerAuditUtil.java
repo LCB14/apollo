@@ -24,63 +24,63 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Service
 public class ConsumerAuditUtil implements InitializingBean {
-  private static final int CONSUMER_AUDIT_MAX_SIZE = 10000;
-  private final BlockingQueue<ConsumerAudit> audits = Queues.newLinkedBlockingQueue(CONSUMER_AUDIT_MAX_SIZE);
-  private final ExecutorService auditExecutorService;
-  private final AtomicBoolean auditStopped;
-  private final int BATCH_SIZE = 100;
-  private final long BATCH_TIMEOUT = 5;
-  private final TimeUnit BATCH_TIMEUNIT = TimeUnit.SECONDS;
+    private static final int CONSUMER_AUDIT_MAX_SIZE = 10000;
+    private final BlockingQueue<ConsumerAudit> audits = Queues.newLinkedBlockingQueue(CONSUMER_AUDIT_MAX_SIZE);
+    private final ExecutorService auditExecutorService;
+    private final AtomicBoolean auditStopped;
+    private final int BATCH_SIZE = 100;
+    private final long BATCH_TIMEOUT = 5;
+    private final TimeUnit BATCH_TIMEUNIT = TimeUnit.SECONDS;
 
-  private final ConsumerService consumerService;
+    private final ConsumerService consumerService;
 
-  public ConsumerAuditUtil(final ConsumerService consumerService) {
-    this.consumerService = consumerService;
-    auditExecutorService = Executors.newSingleThreadExecutor(
-        ApolloThreadFactory.create("ConsumerAuditUtil", true));
-    auditStopped = new AtomicBoolean(false);
-  }
-
-  public boolean audit(HttpServletRequest request, long consumerId) {
-    //ignore GET request
-    if ("GET".equalsIgnoreCase(request.getMethod())) {
-      return true;
-    }
-    String uri = request.getRequestURI();
-    if (!Strings.isNullOrEmpty(request.getQueryString())) {
-      uri += "?" + request.getQueryString();
+    public ConsumerAuditUtil(final ConsumerService consumerService) {
+        this.consumerService = consumerService;
+        auditExecutorService = Executors.newSingleThreadExecutor(
+                ApolloThreadFactory.create("ConsumerAuditUtil", true));
+        auditStopped = new AtomicBoolean(false);
     }
 
-    ConsumerAudit consumerAudit = new ConsumerAudit();
-    Date now = new Date();
-    consumerAudit.setConsumerId(consumerId);
-    consumerAudit.setUri(uri);
-    consumerAudit.setMethod(request.getMethod());
-    consumerAudit.setDataChangeCreatedTime(now);
-    consumerAudit.setDataChangeLastModifiedTime(now);
-
-    //throw away audits if exceeds the max size
-    return this.audits.offer(consumerAudit);
-  }
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    auditExecutorService.submit(() -> {
-      while (!auditStopped.get() && !Thread.currentThread().isInterrupted()) {
-        List<ConsumerAudit> toAudit = Lists.newArrayList();
-        try {
-          Queues.drain(audits, toAudit, BATCH_SIZE, BATCH_TIMEOUT, BATCH_TIMEUNIT);
-          if (!toAudit.isEmpty()) {
-            consumerService.createConsumerAudits(toAudit);
-          }
-        } catch (Throwable ex) {
-          Tracer.logError(ex);
+    public boolean audit(HttpServletRequest request, long consumerId) {
+        //ignore GET request
+        if ("GET".equalsIgnoreCase(request.getMethod())) {
+            return true;
         }
-      }
-    });
-  }
+        String uri = request.getRequestURI();
+        if (!Strings.isNullOrEmpty(request.getQueryString())) {
+            uri += "?" + request.getQueryString();
+        }
 
-  public void stopAudit() {
-    auditStopped.set(true);
-  }
+        ConsumerAudit consumerAudit = new ConsumerAudit();
+        Date now = new Date();
+        consumerAudit.setConsumerId(consumerId);
+        consumerAudit.setUri(uri);
+        consumerAudit.setMethod(request.getMethod());
+        consumerAudit.setDataChangeCreatedTime(now);
+        consumerAudit.setDataChangeLastModifiedTime(now);
+
+        //throw away audits if exceeds the max size
+        return this.audits.offer(consumerAudit);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        auditExecutorService.submit(() -> {
+            while (!auditStopped.get() && !Thread.currentThread().isInterrupted()) {
+                List<ConsumerAudit> toAudit = Lists.newArrayList();
+                try {
+                    Queues.drain(audits, toAudit, BATCH_SIZE, BATCH_TIMEOUT, BATCH_TIMEUNIT);
+                    if (!toAudit.isEmpty()) {
+                        consumerService.createConsumerAudits(toAudit);
+                    }
+                } catch (Throwable ex) {
+                    Tracer.logError(ex);
+                }
+            }
+        });
+    }
+
+    public void stopAudit() {
+        auditStopped.set(true);
+    }
 }

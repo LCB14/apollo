@@ -9,6 +9,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface ConsumerRepository extends PagingAndSortingRepository<Consumer, Long> {
 
-  Consumer findByAppId(String appId);
+    Consumer findByAppId(String appId);
 
 }

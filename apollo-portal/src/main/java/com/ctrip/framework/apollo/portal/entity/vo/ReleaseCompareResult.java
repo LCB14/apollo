@@ -9,22 +9,22 @@ import java.util.List;
 
 public class ReleaseCompareResult {
 
-  private List<Change> changes = new LinkedList<>();
+    private List<Change> changes = new LinkedList<>();
 
-  public void addEntityPair(ChangeType type, KVEntity firstEntity, KVEntity secondEntity) {
-    changes.add(new Change(type, new EntityPair<>(firstEntity, secondEntity)));
-  }
+    public void addEntityPair(ChangeType type, KVEntity firstEntity, KVEntity secondEntity) {
+        changes.add(new Change(type, new EntityPair<>(firstEntity, secondEntity)));
+    }
 
-  public boolean hasContent(){
-    return !changes.isEmpty();
-  }
+    public boolean hasContent() {
+        return !changes.isEmpty();
+    }
 
-  public List<Change> getChanges() {
-    return changes;
-  }
+    public List<Change> getChanges() {
+        return changes;
+    }
 
-  public void setChanges(List<Change> changes) {
-    this.changes = changes;
-  }
+    public void setChanges(List<Change> changes) {
+        this.changes = changes;
+    }
 
 }

@@ -6,12 +6,12 @@ import org.springframework.context.ApplicationEvent;
 
 public class AppDeletionEvent extends ApplicationEvent {
 
-  public AppDeletionEvent(Object source) {
-    super(source);
-  }
+    public AppDeletionEvent(Object source) {
+        super(source);
+    }
 
-  public App getApp() {
-    Preconditions.checkState(source != null);
-    return (App) this.source;
-  }
+    public App getApp() {
+        Preconditions.checkState(source != null);
+        return (App) this.source;
+    }
 }

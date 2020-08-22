@@ -13,25 +13,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoryAspect {
 
-  @Pointcut("execution(public * org.springframework.data.repository.Repository+.*(..))")
-  public void anyRepositoryMethod() {
-  }
-
-  @Around("anyRepositoryMethod()")
-  public Object invokeWithCatTransaction(ProceedingJoinPoint joinPoint) throws Throwable {
-    String name =
-        joinPoint.getSignature().getDeclaringType().getSimpleName() + "." + joinPoint.getSignature()
-            .getName();
-    Transaction catTransaction = Tracer.newTransaction("SQL", name);
-    try {
-      Object result = joinPoint.proceed();
-      catTransaction.setStatus(Transaction.SUCCESS);
-      return result;
-    } catch (Throwable ex) {
-      catTransaction.setStatus(ex);
-      throw ex;
-    } finally {
-      catTransaction.complete();
+    @Pointcut("execution(public * org.springframework.data.repository.Repository+.*(..))")
+    public void anyRepositoryMethod() {
     }
-  }
+
+    @Around("anyRepositoryMethod()")
+    public Object invokeWithCatTransaction(ProceedingJoinPoint joinPoint) throws Throwable {
+        String name =
+                joinPoint.getSignature().getDeclaringType().getSimpleName() + "." + joinPoint.getSignature()
+                        .getName();
+        Transaction catTransaction = Tracer.newTransaction("SQL", name);
+        try {
+            Object result = joinPoint.proceed();
+            catTransaction.setStatus(Transaction.SUCCESS);
+            return result;
+        } catch (Throwable ex) {
+            catTransaction.setStatus(ex);
+            throw ex;
+        } finally {
+            catTransaction.complete();
+        }
+    }
 }

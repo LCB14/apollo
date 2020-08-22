@@ -1,11 +1,11 @@
 left hand:
-- Ring of Teleportation
-- Ring of Speed
+  - Ring of Teleportation
+  - Ring of Speed
 
 right hand:
-- Ring of Resist Fire
-- Ring of Resist Cold
-- Ring of Resist Poison
+  - Ring of Resist Fire
+  - Ring of Resist Cold
+  - Ring of Resist Poison
 base armor class: 0
 base damage: [4,4]
 plus to-hit: 12

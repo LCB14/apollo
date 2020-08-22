@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
+
 import static org.hamcrest.Matchers.containsString;
 
 /**
@@ -19,28 +20,28 @@ import static org.hamcrest.Matchers.containsString;
  */
 @ActiveProfiles("skipAuthorization")
 public class NamespaceControllerTest extends AbstractControllerTest {
-  @Autowired
-  private ConsumerPermissionValidator consumerPermissionValidator;
+    @Autowired
+    private ConsumerPermissionValidator consumerPermissionValidator;
 
-  @Test
-  public void shouldFailWhenAppNamespaceNameIsInvalid() {
-    Assert.assertTrue(consumerPermissionValidator.hasCreateNamespacePermission(null, null));
+    @Test
+    public void shouldFailWhenAppNamespaceNameIsInvalid() {
+        Assert.assertTrue(consumerPermissionValidator.hasCreateNamespacePermission(null, null));
 
-    OpenAppNamespaceDTO dto = new OpenAppNamespaceDTO();
-    dto.setAppId("appId");
-    dto.setName("invalid name");
-    dto.setFormat(ConfigFileFormat.Properties.getValue());
-    dto.setDataChangeCreatedBy("apollo");
-    try {
-      restTemplate.postForEntity(
-          url("/openapi/v1/apps/{appId}/appnamespaces"),
-          dto, OpenAppNamespaceDTO.class, dto.getAppId()
-      );
-      Assert.fail("should throw");
-    } catch (HttpClientErrorException e) {
-      String result = e.getResponseBodyAsString();
-      Assert.assertThat(result, containsString(InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE));
-      Assert.assertThat(result, containsString(InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE));
+        OpenAppNamespaceDTO dto = new OpenAppNamespaceDTO();
+        dto.setAppId("appId");
+        dto.setName("invalid name");
+        dto.setFormat(ConfigFileFormat.Properties.getValue());
+        dto.setDataChangeCreatedBy("apollo");
+        try {
+            restTemplate.postForEntity(
+                    url("/openapi/v1/apps/{appId}/appnamespaces"),
+                    dto, OpenAppNamespaceDTO.class, dto.getAppId()
+            );
+            Assert.fail("should throw");
+        } catch (HttpClientErrorException e) {
+            String result = e.getResponseBodyAsString();
+            Assert.assertThat(result, containsString(InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE));
+            Assert.assertThat(result, containsString(InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE));
+        }
     }
-  }
 }

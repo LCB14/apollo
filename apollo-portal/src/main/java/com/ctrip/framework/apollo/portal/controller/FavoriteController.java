@@ -17,36 +17,36 @@ import java.util.List;
 @RestController
 public class FavoriteController {
 
-  private final FavoriteService favoriteService;
+    private final FavoriteService favoriteService;
 
-  public FavoriteController(final FavoriteService favoriteService) {
-    this.favoriteService = favoriteService;
-  }
-
-
-  @PostMapping("/favorites")
-  public Favorite addFavorite(@RequestBody Favorite favorite) {
-    return favoriteService.addFavorite(favorite);
-  }
+    public FavoriteController(final FavoriteService favoriteService) {
+        this.favoriteService = favoriteService;
+    }
 
 
-  @GetMapping("/favorites")
-  public List<Favorite> findFavorites(@RequestParam(value = "userId", required = false) String userId,
-                                      @RequestParam(value = "appId", required = false) String appId,
-                                      Pageable page) {
-    return favoriteService.search(userId, appId, page);
-  }
+    @PostMapping("/favorites")
+    public Favorite addFavorite(@RequestBody Favorite favorite) {
+        return favoriteService.addFavorite(favorite);
+    }
 
 
-  @DeleteMapping("/favorites/{favoriteId}")
-  public void deleteFavorite(@PathVariable long favoriteId) {
-    favoriteService.deleteFavorite(favoriteId);
-  }
+    @GetMapping("/favorites")
+    public List<Favorite> findFavorites(@RequestParam(value = "userId", required = false) String userId,
+                                        @RequestParam(value = "appId", required = false) String appId,
+                                        Pageable page) {
+        return favoriteService.search(userId, appId, page);
+    }
 
 
-  @PutMapping("/favorites/{favoriteId}")
-  public void toTop(@PathVariable long favoriteId) {
-    favoriteService.adjustFavoriteToFirst(favoriteId);
-  }
+    @DeleteMapping("/favorites/{favoriteId}")
+    public void deleteFavorite(@PathVariable long favoriteId) {
+        favoriteService.deleteFavorite(favoriteId);
+    }
+
+
+    @PutMapping("/favorites/{favoriteId}")
+    public void toTop(@PathVariable long favoriteId) {
+        favoriteService.adjustFavoriteToFirst(favoriteId);
+    }
 
 }

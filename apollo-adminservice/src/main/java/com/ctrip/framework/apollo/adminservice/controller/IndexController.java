@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/")
 public class IndexController {
 
-  @GetMapping
-  public String index() {
-    return "apollo-adminservice";
-  }
+    @GetMapping
+    public String index() {
+        return "apollo-adminservice";
+    }
 }

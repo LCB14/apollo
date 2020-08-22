@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface ConfigTextResolver {
 
-  ItemChangeSets resolve(long namespaceId, String configText, List<ItemDTO> baseItems);
+    ItemChangeSets resolve(long namespaceId, String configText, List<ItemDTO> baseItems);
 
 }

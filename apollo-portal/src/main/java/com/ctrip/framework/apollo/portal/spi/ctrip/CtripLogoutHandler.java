@@ -14,31 +14,31 @@ import javax.servlet.http.HttpSession;
 
 public class CtripLogoutHandler implements LogoutHandler {
 
-  @Autowired
-  private PortalConfig portalConfig;
+    @Autowired
+    private PortalConfig portalConfig;
 
-  @Override
-  public void logout(HttpServletRequest request, HttpServletResponse response) {
-    //将session销毁
-    HttpSession session = request.getSession(false);
-    if (session != null) {
-      session.invalidate();
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        //将session销毁
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Cookie cookie = new Cookie("memCacheAssertionID", null);
+        //将cookie的有效期设置为0，命令浏览器删除该cookie
+        cookie.setMaxAge(0);
+        cookie.setPath(request.getContextPath() + "/");
+        response.addCookie(cookie);
+
+        //重定向到SSO的logout地址
+        String casServerUrl = portalConfig.casServerUrlPrefix();
+        String serverName = portalConfig.portalServerName();
+
+        try {
+            response.sendRedirect(casServerUrl + "/logout?service=" + serverName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
-    Cookie cookie = new Cookie("memCacheAssertionID", null);
-    //将cookie的有效期设置为0，命令浏览器删除该cookie
-    cookie.setMaxAge(0);
-    cookie.setPath(request.getContextPath() + "/");
-    response.addCookie(cookie);
-
-    //重定向到SSO的logout地址
-    String casServerUrl = portalConfig.casServerUrlPrefix();
-    String serverName = portalConfig.portalServerName();
-
-    try {
-      response.sendRedirect(casServerUrl + "/logout?service=" + serverName);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
 }

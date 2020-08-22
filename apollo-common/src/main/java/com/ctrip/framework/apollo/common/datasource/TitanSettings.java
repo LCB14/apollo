@@ -10,54 +10,54 @@ import org.springframework.stereotype.Component;
 @Component
 public class TitanSettings {
 
-  @Value("${fat.titan.url:}")
-  private String fatTitanUrl;
+    @Value("${fat.titan.url:}")
+    private String fatTitanUrl;
 
-  @Value("${uat.titan.url:}")
-  private String uatTitanUrl;
+    @Value("${uat.titan.url:}")
+    private String uatTitanUrl;
 
-  @Value("${pro.titan.url:}")
-  private String proTitanUrl;
+    @Value("${pro.titan.url:}")
+    private String proTitanUrl;
 
-  @Value("${fat.titan.dbname:}")
-  private String fatTitanDbname;
+    @Value("${fat.titan.dbname:}")
+    private String fatTitanDbname;
 
-  @Value("${uat.titan.dbname:}")
-  private String uatTitanDbname;
+    @Value("${uat.titan.dbname:}")
+    private String uatTitanDbname;
 
-  @Value("${pro.titan.dbname:}")
-  private String proTitanDbname;
+    @Value("${pro.titan.dbname:}")
+    private String proTitanDbname;
 
-  public String getTitanUrl() {
-    Env env = EnvUtils.transformEnv(Foundation.server().getEnvType());
-    switch (env) {
-      case FAT:
-      case FWS:
-        return fatTitanUrl;
-      case UAT:
-        return uatTitanUrl;
-      case TOOLS:
-      case PRO:
-        return proTitanUrl;
-      default:
-        return "";
+    public String getTitanUrl() {
+        Env env = EnvUtils.transformEnv(Foundation.server().getEnvType());
+        switch (env) {
+            case FAT:
+            case FWS:
+                return fatTitanUrl;
+            case UAT:
+                return uatTitanUrl;
+            case TOOLS:
+            case PRO:
+                return proTitanUrl;
+            default:
+                return "";
+        }
     }
-  }
 
-  public String getTitanDbname() {
-    Env env = EnvUtils.transformEnv(Foundation.server().getEnvType());
-    switch (env) {
-      case FAT:
-      case FWS:
-        return fatTitanDbname;
-      case UAT:
-        return uatTitanDbname;
-      case TOOLS:
-      case PRO:
-        return proTitanDbname;
-      default:
-        return "";
+    public String getTitanDbname() {
+        Env env = EnvUtils.transformEnv(Foundation.server().getEnvType());
+        switch (env) {
+            case FAT:
+            case FWS:
+                return fatTitanDbname;
+            case UAT:
+                return uatTitanDbname;
+            case TOOLS:
+            case PRO:
+                return proTitanDbname;
+            default:
+                return "";
+        }
     }
-  }
 
 }

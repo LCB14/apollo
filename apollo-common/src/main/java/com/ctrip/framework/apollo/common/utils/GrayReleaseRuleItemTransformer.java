@@ -12,15 +12,15 @@ import java.util.Set;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class GrayReleaseRuleItemTransformer {
-  private static final Gson gson = new Gson();
-  private static final Type grayReleaseRuleItemsType = new TypeToken<Set<GrayReleaseRuleItemDTO>>() {
-  }.getType();
+    private static final Gson gson = new Gson();
+    private static final Type grayReleaseRuleItemsType = new TypeToken<Set<GrayReleaseRuleItemDTO>>() {
+    }.getType();
 
-  public static Set<GrayReleaseRuleItemDTO> batchTransformFromJSON(String content) {
-    return gson.fromJson(content, grayReleaseRuleItemsType);
-  }
+    public static Set<GrayReleaseRuleItemDTO> batchTransformFromJSON(String content) {
+        return gson.fromJson(content, grayReleaseRuleItemsType);
+    }
 
-  public static String batchTransformToJSON(Set<GrayReleaseRuleItemDTO> ruleItems) {
-    return gson.toJson(ruleItems);
-  }
+    public static String batchTransformToJSON(Set<GrayReleaseRuleItemDTO> ruleItems) {
+        return gson.toJson(ruleItems);
+    }
 }

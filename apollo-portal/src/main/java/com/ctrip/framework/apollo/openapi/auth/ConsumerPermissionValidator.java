@@ -11,48 +11,48 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class ConsumerPermissionValidator {
 
-  private final ConsumerRolePermissionService permissionService;
-  private final ConsumerAuthUtil consumerAuthUtil;
+    private final ConsumerRolePermissionService permissionService;
+    private final ConsumerAuthUtil consumerAuthUtil;
 
-  public ConsumerPermissionValidator(
-      final ConsumerRolePermissionService permissionService,
-      final ConsumerAuthUtil consumerAuthUtil) {
-    this.permissionService = permissionService;
-    this.consumerAuthUtil = consumerAuthUtil;
-  }
-
-  public boolean hasModifyNamespacePermission(HttpServletRequest request, String appId, String namespaceName,
-      String env) {
-    if (hasCreateNamespacePermission(request, appId)) {
-      return true;
+    public ConsumerPermissionValidator(
+            final ConsumerRolePermissionService permissionService,
+            final ConsumerAuthUtil consumerAuthUtil) {
+        this.permissionService = permissionService;
+        this.consumerAuthUtil = consumerAuthUtil;
     }
-    return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
-        PermissionType.MODIFY_NAMESPACE, RoleUtils.buildNamespaceTargetId(appId, namespaceName))
-        ||
-        permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
-        PermissionType.MODIFY_NAMESPACE, RoleUtils.buildNamespaceTargetId(appId, namespaceName, env));
 
-  }
+    public boolean hasModifyNamespacePermission(HttpServletRequest request, String appId, String namespaceName,
+                                                String env) {
+        if (hasCreateNamespacePermission(request, appId)) {
+            return true;
+        }
+        return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
+                PermissionType.MODIFY_NAMESPACE, RoleUtils.buildNamespaceTargetId(appId, namespaceName))
+                ||
+                permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
+                        PermissionType.MODIFY_NAMESPACE, RoleUtils.buildNamespaceTargetId(appId, namespaceName, env));
 
-  public boolean hasReleaseNamespacePermission(HttpServletRequest request, String appId, String namespaceName,
-      String env) {
-    if (hasCreateNamespacePermission(request, appId)) {
-      return true;
     }
-    return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
-        PermissionType.RELEASE_NAMESPACE,
-        RoleUtils.buildNamespaceTargetId(appId, namespaceName))
-        ||
-        permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
-        PermissionType.RELEASE_NAMESPACE,
-        RoleUtils.buildNamespaceTargetId(appId, namespaceName, env));
 
-  }
+    public boolean hasReleaseNamespacePermission(HttpServletRequest request, String appId, String namespaceName,
+                                                 String env) {
+        if (hasCreateNamespacePermission(request, appId)) {
+            return true;
+        }
+        return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
+                PermissionType.RELEASE_NAMESPACE,
+                RoleUtils.buildNamespaceTargetId(appId, namespaceName))
+                ||
+                permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
+                        PermissionType.RELEASE_NAMESPACE,
+                        RoleUtils.buildNamespaceTargetId(appId, namespaceName, env));
 
-  public boolean hasCreateNamespacePermission(HttpServletRequest request, String appId) {
-    return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
-                                                   PermissionType.CREATE_NAMESPACE,
-                                                   appId);
-  }
+    }
+
+    public boolean hasCreateNamespacePermission(HttpServletRequest request, String appId) {
+        return permissionService.consumerHasPermission(consumerAuthUtil.retrieveConsumerId(request),
+                PermissionType.CREATE_NAMESPACE,
+                appId);
+    }
 
 }

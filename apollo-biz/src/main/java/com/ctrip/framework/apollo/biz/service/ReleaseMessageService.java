@@ -16,35 +16,35 @@ import java.util.List;
  */
 @Service
 public class ReleaseMessageService {
-  private final ReleaseMessageRepository releaseMessageRepository;
+    private final ReleaseMessageRepository releaseMessageRepository;
 
-  public ReleaseMessageService(final ReleaseMessageRepository releaseMessageRepository) {
-    this.releaseMessageRepository = releaseMessageRepository;
-  }
+    public ReleaseMessageService(final ReleaseMessageRepository releaseMessageRepository) {
+        this.releaseMessageRepository = releaseMessageRepository;
+    }
 
-  public ReleaseMessage findLatestReleaseMessageForMessages(Collection<String> messages) {
-    if (CollectionUtils.isEmpty(messages)) {
-      return null;
+    public ReleaseMessage findLatestReleaseMessageForMessages(Collection<String> messages) {
+        if (CollectionUtils.isEmpty(messages)) {
+            return null;
+        }
+        return releaseMessageRepository.findTopByMessageInOrderByIdDesc(messages);
     }
-    return releaseMessageRepository.findTopByMessageInOrderByIdDesc(messages);
-  }
 
-  public List<ReleaseMessage> findLatestReleaseMessagesGroupByMessages(Collection<String> messages) {
-    if (CollectionUtils.isEmpty(messages)) {
-      return Collections.emptyList();
+    public List<ReleaseMessage> findLatestReleaseMessagesGroupByMessages(Collection<String> messages) {
+        if (CollectionUtils.isEmpty(messages)) {
+            return Collections.emptyList();
+        }
+        List<Object[]> result =
+                releaseMessageRepository.findLatestReleaseMessagesGroupByMessages(messages);
+        List<ReleaseMessage> releaseMessages = Lists.newArrayList();
+        for (Object[] o : result) {
+            try {
+                ReleaseMessage releaseMessage = new ReleaseMessage((String) o[0]);
+                releaseMessage.setId((Long) o[1]);
+                releaseMessages.add(releaseMessage);
+            } catch (Exception ex) {
+                Tracer.logError("Parsing LatestReleaseMessagesGroupByMessages failed", ex);
+            }
+        }
+        return releaseMessages;
     }
-    List<Object[]> result =
-        releaseMessageRepository.findLatestReleaseMessagesGroupByMessages(messages);
-    List<ReleaseMessage> releaseMessages = Lists.newArrayList();
-    for (Object[] o : result) {
-      try {
-        ReleaseMessage releaseMessage = new ReleaseMessage((String) o[0]);
-        releaseMessage.setId((Long) o[1]);
-        releaseMessages.add(releaseMessage);
-      } catch (Exception ex) {
-        Tracer.logError("Parsing LatestReleaseMessagesGroupByMessages failed", ex);
-      }
-    }
-    return releaseMessages;
-  }
 }

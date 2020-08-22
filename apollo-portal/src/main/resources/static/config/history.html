@@ -49,7 +49,8 @@
 
         </div>
 
-        <div class="release-history-container panel-body row" ng-show="!isConfigHidden && releaseHistories && releaseHistories.length > 0">
+        <div class="release-history-container panel-body row"
+             ng-show="!isConfigHidden && releaseHistories && releaseHistories.length > 0">
             <div class="release-history-list col-md-3">
 
                 <div class="media hover" ng-class="{'active': releaseHistory.id == selectedReleaseHistory}"
@@ -195,7 +196,8 @@
                     </section>
 
 
-                    <section ng-show="history.branchName != history.clusterName && history.operation != 8 && history.operation != 7">
+                    <section
+                            ng-show="history.branchName != history.clusterName && history.operation != 8 && history.operation != 7">
                         <hr>
                         <h4 class="section-title">灰度规则</h4>
                         <table class="no-margin table table-striped table-hover table-bordered"
@@ -234,7 +236,8 @@
         </div>
 
         <div class="panel-body" ng-show="isConfigHidden || !releaseHistories || releaseHistories.length == 0">
-            <h4 class="text-center empty-container" ng-show="isConfigHidden">您不是该项目的管理员，也没有该Namespace的编辑或发布权限，无法查看发布历史</h4>
+            <h4 class="text-center empty-container" ng-show="isConfigHidden">
+                您不是该项目的管理员，也没有该Namespace的编辑或发布权限，无法查看发布历史</h4>
             <h4 class="text-center empty-container" ng-show="!isConfigHidden">无发布历史信息</h4>
         </div>
     </section>

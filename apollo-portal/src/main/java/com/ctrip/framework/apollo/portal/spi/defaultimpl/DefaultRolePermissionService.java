@@ -85,7 +85,7 @@ public class DefaultRolePermissionService implements RolePermissionService {
         List<UserRole> existedUserRoles =
                 userRoleRepository.findByUserIdInAndRoleId(userIds, role.getId());
         Set<String> existedUserIds =
-            existedUserRoles.stream().map(UserRole::getUserId).collect(Collectors.toSet());
+                existedUserRoles.stream().map(UserRole::getUserId).collect(Collectors.toSet());
 
         Set<String> toAssignUserIds = Sets.difference(userIds, existedUserIds);
 
@@ -170,7 +170,7 @@ public class DefaultRolePermissionService implements RolePermissionService {
         }
 
         Set<Long> roleIds =
-            userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+                userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
         List<RolePermission> rolePermissions = rolePermissionRepository.findByRoleIdIn(roleIds);
         if (CollectionUtils.isEmpty(rolePermissions)) {
             return false;

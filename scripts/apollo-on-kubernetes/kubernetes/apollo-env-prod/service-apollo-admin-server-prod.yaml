@@ -1,4 +1,3 @@
-
 ---
 # configmap for apollo-admin-server-prod
 kind: ConfigMap
@@ -27,7 +26,7 @@ spec:
       port: 8090
       targetPort: 8090
   selector:
-    app: pod-apollo-admin-server-prod  
+    app: pod-apollo-admin-server-prod
   type: ClusterIP
   sessionAffinity: ClientIP
 
@@ -57,16 +56,16 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - pod-apollo-admin-server-prod
-              topologyKey: kubernetes.io/hostname
-      
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - pod-apollo-admin-server-prod
+                topologyKey: kubernetes.io/hostname
+
       volumes:
         - name: volume-configmap-apollo-admin-server-prod
           configMap:
@@ -74,12 +73,12 @@ spec:
             items:
               - key: application-github.properties
                 path: application-github.properties
-      
+
       initContainers:
         - image: alpine-bash:3.8
           name: check-service-apollo-config-server-prod
           command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 50 --retry-delay 1 --retry-max-time 120 service-apollo-config-server-prod.sre:8080"]
-      
+
       containers:
         - image: apollo-admin-server:v1.0.0
           securityContext:
@@ -89,22 +88,22 @@ spec:
           ports:
             - protocol: TCP
               containerPort: 8090
-          
+
           volumeMounts:
             - name: volume-configmap-apollo-admin-server-prod
               mountPath: /apollo-admin-server/config/application-github.properties
               subPath: application-github.properties
-          
+
           env:
             - name: APOLLO_ADMIN_SERVICE_NAME
               value: "service-apollo-admin-server-prod.sre"
-          
+
           readinessProbe:
             tcpSocket:
               port: 8090
             initialDelaySeconds: 10
             periodSeconds: 5
-          
+
           livenessProbe:
             tcpSocket:
               port: 8090

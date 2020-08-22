@@ -16,65 +16,65 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class Commit extends BaseEntity {
 
-  @Lob
-  @Column(name = "ChangeSets", nullable = false)
-  private String changeSets;
+    @Lob
+    @Column(name = "ChangeSets", nullable = false)
+    private String changeSets;
 
-  @Column(name = "AppId", nullable = false)
-  private String appId;
+    @Column(name = "AppId", nullable = false)
+    private String appId;
 
-  @Column(name = "ClusterName", nullable = false)
-  private String clusterName;
+    @Column(name = "ClusterName", nullable = false)
+    private String clusterName;
 
-  @Column(name = "NamespaceName", nullable = false)
-  private String namespaceName;
+    @Column(name = "NamespaceName", nullable = false)
+    private String namespaceName;
 
-  @Column(name = "Comment")
-  private String comment;
+    @Column(name = "Comment")
+    private String comment;
 
-  public String getChangeSets() {
-    return changeSets;
-  }
+    public String getChangeSets() {
+        return changeSets;
+    }
 
-  public void setChangeSets(String changeSets) {
-    this.changeSets = changeSets;
-  }
+    public void setChangeSets(String changeSets) {
+        this.changeSets = changeSets;
+    }
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  public void setClusterName(String clusterName) {
-    this.clusterName = clusterName;
-  }
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
-  public String getNamespaceName() {
-    return namespaceName;
-  }
+    public String getNamespaceName() {
+        return namespaceName;
+    }
 
-  public void setNamespaceName(String namespaceName) {
-    this.namespaceName = namespaceName;
-  }
+    public void setNamespaceName(String namespaceName) {
+        this.namespaceName = namespaceName;
+    }
 
-  public String getComment() {
-    return comment;
-  }
+    public String getComment() {
+        return comment;
+    }
 
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-  @Override
-  public String toString() {
-    return toStringHelper().add("changeSets", changeSets).add("appId", appId).add("clusterName", clusterName)
-        .add("namespaceName", namespaceName).add("comment", comment).toString();
-  }
+    @Override
+    public String toString() {
+        return toStringHelper().add("changeSets", changeSets).add("appId", appId).add("clusterName", clusterName)
+                .add("namespaceName", namespaceName).add("comment", comment).toString();
+    }
 }

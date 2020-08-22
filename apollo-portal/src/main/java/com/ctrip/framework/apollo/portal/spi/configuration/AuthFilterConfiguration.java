@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AuthFilterConfiguration {
 
-  @Bean
-  public FilterRegistrationBean openApiAuthenticationFilter(ConsumerAuthUtil consumerAuthUtil,
-                                                            ConsumerAuditUtil consumerAuditUtil) {
-    FilterRegistrationBean openApiFilter = new FilterRegistrationBean();
+    @Bean
+    public FilterRegistrationBean openApiAuthenticationFilter(ConsumerAuthUtil consumerAuthUtil,
+                                                              ConsumerAuditUtil consumerAuditUtil) {
+        FilterRegistrationBean openApiFilter = new FilterRegistrationBean();
 
-    openApiFilter.setFilter(new ConsumerAuthenticationFilter(consumerAuthUtil, consumerAuditUtil));
-    openApiFilter.addUrlPatterns("/openapi/*");
+        openApiFilter.setFilter(new ConsumerAuthenticationFilter(consumerAuthUtil, consumerAuditUtil));
+        openApiFilter.addUrlPatterns("/openapi/*");
 
-    return openApiFilter;
-  }
+        return openApiFilter;
+    }
 
 
 }

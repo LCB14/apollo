@@ -8,5 +8,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ServerConfigRepository extends PagingAndSortingRepository<ServerConfig, Long> {
-  ServerConfig findTopByKeyAndCluster(String key, String cluster);
+    ServerConfig findTopByKeyAndCluster(String key, String cluster);
 }

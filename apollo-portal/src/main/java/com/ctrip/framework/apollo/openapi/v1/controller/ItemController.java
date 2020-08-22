@@ -29,109 +29,109 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/openapi/v1/envs/{env}")
 public class ItemController {
 
-  private final ItemService itemService;
-  private final UserService userService;
+    private final ItemService itemService;
+    private final UserService userService;
 
-  public ItemController(final ItemService itemService, final UserService userService) {
-    this.itemService = itemService;
-    this.userService = userService;
-  }
-
-  @GetMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
-  public OpenItemDTO getItem(@PathVariable String appId, @PathVariable String env, @PathVariable String clusterName,
-      @PathVariable String namespaceName, @PathVariable String key) {
-
-    ItemDTO itemDTO = itemService.loadItem(Env.fromString(env), appId, clusterName, namespaceName, key);
-
-    return itemDTO == null ? null : OpenApiBeanUtils.transformFromItemDTO(itemDTO);
-  }
-
-  @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
-  @PostMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items")
-  public OpenItemDTO createItem(@PathVariable String appId, @PathVariable String env,
-                                @PathVariable String clusterName, @PathVariable String namespaceName,
-                                @RequestBody OpenItemDTO item, HttpServletRequest request) {
-
-    RequestPrecondition.checkArguments(
-        !StringUtils.isContainEmpty(item.getKey(), item.getDataChangeCreatedBy()),
-        "key and dataChangeCreatedBy should not be null or empty");
-
-    if (userService.findByUserId(item.getDataChangeCreatedBy()) == null) {
-      throw new BadRequestException("User " + item.getDataChangeCreatedBy() + " doesn't exist!");
+    public ItemController(final ItemService itemService, final UserService userService) {
+        this.itemService = itemService;
+        this.userService = userService;
     }
 
-    ItemDTO toCreate = OpenApiBeanUtils.transformToItemDTO(item);
+    @GetMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
+    public OpenItemDTO getItem(@PathVariable String appId, @PathVariable String env, @PathVariable String clusterName,
+                               @PathVariable String namespaceName, @PathVariable String key) {
 
-    //protect
-    toCreate.setLineNum(0);
-    toCreate.setId(0);
-    toCreate.setDataChangeLastModifiedBy(toCreate.getDataChangeCreatedBy());
-    toCreate.setDataChangeLastModifiedTime(null);
-    toCreate.setDataChangeCreatedTime(null);
+        ItemDTO itemDTO = itemService.loadItem(Env.fromString(env), appId, clusterName, namespaceName, key);
 
-    ItemDTO createdItem = itemService.createItem(appId, Env.fromString(env),
-        clusterName, namespaceName, toCreate);
-    return OpenApiBeanUtils.transformFromItemDTO(createdItem);
-  }
-
-  @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
-  @PutMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
-  public void updateItem(@PathVariable String appId, @PathVariable String env,
-                         @PathVariable String clusterName, @PathVariable String namespaceName,
-                         @PathVariable String key, @RequestBody OpenItemDTO item,
-                         @RequestParam(defaultValue = "false") boolean createIfNotExists, HttpServletRequest request) {
-
-    RequestPrecondition.checkArguments(item != null, "item payload can not be empty");
-
-    RequestPrecondition.checkArguments(
-        !StringUtils.isContainEmpty(item.getKey(), item.getDataChangeLastModifiedBy()),
-        "key and dataChangeLastModifiedBy can not be empty");
-
-    RequestPrecondition.checkArguments(item.getKey().equals(key), "Key in path and payload is not consistent");
-
-    if (userService.findByUserId(item.getDataChangeLastModifiedBy()) == null) {
-      throw new BadRequestException("user(dataChangeLastModifiedBy) not exists");
+        return itemDTO == null ? null : OpenApiBeanUtils.transformFromItemDTO(itemDTO);
     }
 
-    try {
-      ItemDTO toUpdateItem = itemService
-          .loadItem(Env.fromString(env), appId, clusterName, namespaceName, item.getKey());
-      //protect. only value,comment,lastModifiedBy can be modified
-      toUpdateItem.setComment(item.getComment());
-      toUpdateItem.setValue(item.getValue());
-      toUpdateItem.setDataChangeLastModifiedBy(item.getDataChangeLastModifiedBy());
+    @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
+    @PostMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items")
+    public OpenItemDTO createItem(@PathVariable String appId, @PathVariable String env,
+                                  @PathVariable String clusterName, @PathVariable String namespaceName,
+                                  @RequestBody OpenItemDTO item, HttpServletRequest request) {
 
-      itemService.updateItem(appId, Env.fromString(env), clusterName, namespaceName, toUpdateItem);
-    } catch (Throwable ex) {
-      if (ex instanceof HttpStatusCodeException) {
-        // check createIfNotExists
-        if (((HttpStatusCodeException) ex).getStatusCode().equals(HttpStatus.NOT_FOUND) && createIfNotExists) {
-          createItem(appId, env, clusterName, namespaceName, item, request);
-          return;
+        RequestPrecondition.checkArguments(
+                !StringUtils.isContainEmpty(item.getKey(), item.getDataChangeCreatedBy()),
+                "key and dataChangeCreatedBy should not be null or empty");
+
+        if (userService.findByUserId(item.getDataChangeCreatedBy()) == null) {
+            throw new BadRequestException("User " + item.getDataChangeCreatedBy() + " doesn't exist!");
         }
-      }
-      throw ex;
-    }
-  }
 
+        ItemDTO toCreate = OpenApiBeanUtils.transformToItemDTO(item);
 
-  @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
-  @DeleteMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
-  public void deleteItem(@PathVariable String appId, @PathVariable String env,
-                         @PathVariable String clusterName, @PathVariable String namespaceName,
-                         @PathVariable String key, @RequestParam String operator,
-                         HttpServletRequest request) {
+        //protect
+        toCreate.setLineNum(0);
+        toCreate.setId(0);
+        toCreate.setDataChangeLastModifiedBy(toCreate.getDataChangeCreatedBy());
+        toCreate.setDataChangeLastModifiedTime(null);
+        toCreate.setDataChangeCreatedTime(null);
 
-    if (userService.findByUserId(operator) == null) {
-      throw new BadRequestException("user(operator) not exists");
+        ItemDTO createdItem = itemService.createItem(appId, Env.fromString(env),
+                clusterName, namespaceName, toCreate);
+        return OpenApiBeanUtils.transformFromItemDTO(createdItem);
     }
 
-    ItemDTO toDeleteItem = itemService.loadItem(Env.fromString(env), appId, clusterName, namespaceName, key);
-    if (toDeleteItem == null){
-      throw new BadRequestException("item not exists");
+    @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
+    @PutMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
+    public void updateItem(@PathVariable String appId, @PathVariable String env,
+                           @PathVariable String clusterName, @PathVariable String namespaceName,
+                           @PathVariable String key, @RequestBody OpenItemDTO item,
+                           @RequestParam(defaultValue = "false") boolean createIfNotExists, HttpServletRequest request) {
+
+        RequestPrecondition.checkArguments(item != null, "item payload can not be empty");
+
+        RequestPrecondition.checkArguments(
+                !StringUtils.isContainEmpty(item.getKey(), item.getDataChangeLastModifiedBy()),
+                "key and dataChangeLastModifiedBy can not be empty");
+
+        RequestPrecondition.checkArguments(item.getKey().equals(key), "Key in path and payload is not consistent");
+
+        if (userService.findByUserId(item.getDataChangeLastModifiedBy()) == null) {
+            throw new BadRequestException("user(dataChangeLastModifiedBy) not exists");
+        }
+
+        try {
+            ItemDTO toUpdateItem = itemService
+                    .loadItem(Env.fromString(env), appId, clusterName, namespaceName, item.getKey());
+            //protect. only value,comment,lastModifiedBy can be modified
+            toUpdateItem.setComment(item.getComment());
+            toUpdateItem.setValue(item.getValue());
+            toUpdateItem.setDataChangeLastModifiedBy(item.getDataChangeLastModifiedBy());
+
+            itemService.updateItem(appId, Env.fromString(env), clusterName, namespaceName, toUpdateItem);
+        } catch (Throwable ex) {
+            if (ex instanceof HttpStatusCodeException) {
+                // check createIfNotExists
+                if (((HttpStatusCodeException) ex).getStatusCode().equals(HttpStatus.NOT_FOUND) && createIfNotExists) {
+                    createItem(appId, env, clusterName, namespaceName, item, request);
+                    return;
+                }
+            }
+            throw ex;
+        }
     }
 
-    itemService.deleteItem(Env.fromString(env), toDeleteItem.getId(), operator);
-  }
+
+    @PreAuthorize(value = "@consumerPermissionValidator.hasModifyNamespacePermission(#request, #appId, #namespaceName, #env)")
+    @DeleteMapping(value = "/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key:.+}")
+    public void deleteItem(@PathVariable String appId, @PathVariable String env,
+                           @PathVariable String clusterName, @PathVariable String namespaceName,
+                           @PathVariable String key, @RequestParam String operator,
+                           HttpServletRequest request) {
+
+        if (userService.findByUserId(operator) == null) {
+            throw new BadRequestException("user(operator) not exists");
+        }
+
+        ItemDTO toDeleteItem = itemService.loadItem(Env.fromString(env), appId, clusterName, namespaceName, key);
+        if (toDeleteItem == null) {
+            throw new BadRequestException("item not exists");
+        }
+
+        itemService.deleteItem(Env.fromString(env), toDeleteItem.getId(), operator);
+    }
 
 }

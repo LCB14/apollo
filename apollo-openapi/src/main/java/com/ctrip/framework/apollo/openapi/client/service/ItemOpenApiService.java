@@ -11,140 +11,140 @@ import org.apache.http.util.EntityUtils;
 
 public class ItemOpenApiService extends AbstractOpenApiService {
 
-  public ItemOpenApiService(CloseableHttpClient client, String baseUrl, Gson gson) {
-    super(client, baseUrl, gson);
-  }
-
-  public OpenItemDTO getItem(String appId, String env, String clusterName, String namespaceName, String key) {
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
-    }
-    if (Strings.isNullOrEmpty(namespaceName)) {
-      namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+    public ItemOpenApiService(CloseableHttpClient client, String baseUrl, Gson gson) {
+        super(client, baseUrl, gson);
     }
 
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(key, "Item key");
+    public OpenItemDTO getItem(String appId, String env, String clusterName, String namespaceName, String key) {
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+        if (Strings.isNullOrEmpty(namespaceName)) {
+            namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        }
 
-    String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s",
-        escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName), escapePath(key));
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(key, "Item key");
 
-    try (CloseableHttpResponse response = get(path)) {
-      return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenItemDTO.class);
-    } catch (Throwable ex) {
-      // return null if item doesn't exist
-      if (ex instanceof ApolloOpenApiException && ((ApolloOpenApiException)ex).getStatus() == 404) {
-        return null;
-      }
-      throw new RuntimeException(String
-          .format("Get item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", key, appId, clusterName,
-              namespaceName, env), ex);
-    }
-  }
+        String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s",
+                escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName), escapePath(key));
 
-  public OpenItemDTO createItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
-    }
-    if (Strings.isNullOrEmpty(namespaceName)) {
-      namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
-    }
-
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(itemDTO.getKey(), "Item key");
-    checkNotEmpty(itemDTO.getDataChangeCreatedBy(), "Item created by");
-
-    String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items",
-        escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName));
-
-    try (CloseableHttpResponse response = post(path, itemDTO)) {
-      return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenItemDTO.class);
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("Create item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
-              appId, clusterName, namespaceName, env), ex);
-    }
-  }
-
-  public void updateItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
-    }
-    if (Strings.isNullOrEmpty(namespaceName)) {
-      namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        try (CloseableHttpResponse response = get(path)) {
+            return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenItemDTO.class);
+        } catch (Throwable ex) {
+            // return null if item doesn't exist
+            if (ex instanceof ApolloOpenApiException && ((ApolloOpenApiException) ex).getStatus() == 404) {
+                return null;
+            }
+            throw new RuntimeException(String
+                    .format("Get item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", key, appId, clusterName,
+                            namespaceName, env), ex);
+        }
     }
 
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(itemDTO.getKey(), "Item key");
-    checkNotEmpty(itemDTO.getDataChangeLastModifiedBy(), "Item modified by");
+    public OpenItemDTO createItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+        if (Strings.isNullOrEmpty(namespaceName)) {
+            namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        }
 
-    String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s",
-        escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName),
-        escapePath(itemDTO.getKey()));
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(itemDTO.getKey(), "Item key");
+        checkNotEmpty(itemDTO.getDataChangeCreatedBy(), "Item created by");
 
-    try (CloseableHttpResponse ignored = put(path, itemDTO)) {
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("Update item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
-              appId, clusterName, namespaceName, env), ex);
-    }
-  }
+        String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items",
+                escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName));
 
-  public void createOrUpdateItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
-    }
-    if (Strings.isNullOrEmpty(namespaceName)) {
-      namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
-    }
-
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(itemDTO.getKey(), "Item key");
-    checkNotEmpty(itemDTO.getDataChangeCreatedBy(), "Item created by");
-
-    if (Strings.isNullOrEmpty(itemDTO.getDataChangeLastModifiedBy())) {
-      itemDTO.setDataChangeLastModifiedBy(itemDTO.getDataChangeCreatedBy());
+        try (CloseableHttpResponse response = post(path, itemDTO)) {
+            return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenItemDTO.class);
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("Create item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
+                            appId, clusterName, namespaceName, env), ex);
+        }
     }
 
-    String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?createIfNotExists=true",
-        escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName),
-        escapePath(itemDTO.getKey()));
+    public void updateItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+        if (Strings.isNullOrEmpty(namespaceName)) {
+            namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        }
 
-    try (CloseableHttpResponse ignored = put(path, itemDTO)) {
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("CreateOrUpdate item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
-              appId, clusterName, namespaceName, env), ex);
-    }
-  }
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(itemDTO.getKey(), "Item key");
+        checkNotEmpty(itemDTO.getDataChangeLastModifiedBy(), "Item modified by");
 
-  public void removeItem(String appId, String env, String clusterName, String namespaceName, String key, String operator) {
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
-    }
-    if (Strings.isNullOrEmpty(namespaceName)) {
-      namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
-    }
+        String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s",
+                escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName),
+                escapePath(itemDTO.getKey()));
 
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(key, "Item key");
-    checkNotEmpty(operator, "Operator");
-
-    String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?operator=%s",
-        escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName), escapePath(key),
-        escapeParam(operator));
-
-    try (CloseableHttpResponse ignored = delete(path)) {
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("Remove item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", key, appId,
-              clusterName, namespaceName, env), ex);
+        try (CloseableHttpResponse ignored = put(path, itemDTO)) {
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("Update item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
+                            appId, clusterName, namespaceName, env), ex);
+        }
     }
 
-  }
+    public void createOrUpdateItem(String appId, String env, String clusterName, String namespaceName, OpenItemDTO itemDTO) {
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+        if (Strings.isNullOrEmpty(namespaceName)) {
+            namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        }
+
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(itemDTO.getKey(), "Item key");
+        checkNotEmpty(itemDTO.getDataChangeCreatedBy(), "Item created by");
+
+        if (Strings.isNullOrEmpty(itemDTO.getDataChangeLastModifiedBy())) {
+            itemDTO.setDataChangeLastModifiedBy(itemDTO.getDataChangeCreatedBy());
+        }
+
+        String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?createIfNotExists=true",
+                escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName),
+                escapePath(itemDTO.getKey()));
+
+        try (CloseableHttpResponse ignored = put(path, itemDTO)) {
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("CreateOrUpdate item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", itemDTO.getKey(),
+                            appId, clusterName, namespaceName, env), ex);
+        }
+    }
+
+    public void removeItem(String appId, String env, String clusterName, String namespaceName, String key, String operator) {
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+        if (Strings.isNullOrEmpty(namespaceName)) {
+            namespaceName = ConfigConsts.NAMESPACE_APPLICATION;
+        }
+
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(key, "Item key");
+        checkNotEmpty(operator, "Operator");
+
+        String path = String.format("envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?operator=%s",
+                escapePath(env), escapePath(appId), escapePath(clusterName), escapePath(namespaceName), escapePath(key),
+                escapeParam(operator));
+
+        try (CloseableHttpResponse ignored = delete(path)) {
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("Remove item: %s for appId: %s, cluster: %s, namespace: %s in env: %s failed", key, appId,
+                            clusterName, namespaceName, env), ex);
+        }
+
+    }
 }

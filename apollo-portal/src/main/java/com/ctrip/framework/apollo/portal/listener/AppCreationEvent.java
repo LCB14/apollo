@@ -8,12 +8,12 @@ import org.springframework.context.ApplicationEvent;
 
 public class AppCreationEvent extends ApplicationEvent {
 
-  public AppCreationEvent(Object source) {
-    super(source);
-  }
+    public AppCreationEvent(Object source) {
+        super(source);
+    }
 
-  public App getApp() {
-    Preconditions.checkState(source != null);
-    return (App) this.source;
-  }
+    public App getApp() {
+        Preconditions.checkState(source != null);
+        return (App) this.source;
+    }
 }

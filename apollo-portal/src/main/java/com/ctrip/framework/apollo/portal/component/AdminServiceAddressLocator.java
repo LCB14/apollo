@@ -26,100 +26,100 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AdminServiceAddressLocator {
 
-  private static final long NORMAL_REFRESH_INTERVAL = 5 * 60 * 1000;
-  private static final long OFFLINE_REFRESH_INTERVAL = 10 * 1000;
-  private static final int RETRY_TIMES = 3;
-  private static final String ADMIN_SERVICE_URL_PATH = "/services/admin";
-  private static final Logger logger = LoggerFactory.getLogger(AdminServiceAddressLocator.class);
+    private static final long NORMAL_REFRESH_INTERVAL = 5 * 60 * 1000;
+    private static final long OFFLINE_REFRESH_INTERVAL = 10 * 1000;
+    private static final int RETRY_TIMES = 3;
+    private static final String ADMIN_SERVICE_URL_PATH = "/services/admin";
+    private static final Logger logger = LoggerFactory.getLogger(AdminServiceAddressLocator.class);
 
-  private ScheduledExecutorService refreshServiceAddressService;
-  private RestTemplate restTemplate;
-  private List<Env> allEnvs;
-  private final Map<Env, List<ServiceDTO>> cache = new ConcurrentHashMap<>();
+    private ScheduledExecutorService refreshServiceAddressService;
+    private RestTemplate restTemplate;
+    private List<Env> allEnvs;
+    private final Map<Env, List<ServiceDTO>> cache = new ConcurrentHashMap<>();
 
-  private final PortalSettings portalSettings;
-  private final RestTemplateFactory restTemplateFactory;
+    private final PortalSettings portalSettings;
+    private final RestTemplateFactory restTemplateFactory;
 
-  public AdminServiceAddressLocator(
-      final HttpMessageConverters httpMessageConverters,
-      final PortalSettings portalSettings,
-      final RestTemplateFactory restTemplateFactory) {
-    this.portalSettings = portalSettings;
-    this.restTemplateFactory = restTemplateFactory;
-  }
-
-  @PostConstruct
-  public void init() {
-    allEnvs = portalSettings.getAllEnvs();
-
-    //init restTemplate
-    restTemplate = restTemplateFactory.getObject();
-
-    refreshServiceAddressService =
-        Executors.newScheduledThreadPool(1, ApolloThreadFactory.create("ServiceLocator", true));
-
-    refreshServiceAddressService.schedule(new RefreshAdminServerAddressTask(), 1, TimeUnit.MILLISECONDS);
-  }
-
-  public List<ServiceDTO> getServiceList(Env env) {
-    List<ServiceDTO> services = cache.get(env);
-    if (CollectionUtils.isEmpty(services)) {
-      return Collections.emptyList();
+    public AdminServiceAddressLocator(
+            final HttpMessageConverters httpMessageConverters,
+            final PortalSettings portalSettings,
+            final RestTemplateFactory restTemplateFactory) {
+        this.portalSettings = portalSettings;
+        this.restTemplateFactory = restTemplateFactory;
     }
-    List<ServiceDTO> randomConfigServices = Lists.newArrayList(services);
-    Collections.shuffle(randomConfigServices);
-    return randomConfigServices;
-  }
 
-  //maintain admin server address
-  private class RefreshAdminServerAddressTask implements Runnable {
+    @PostConstruct
+    public void init() {
+        allEnvs = portalSettings.getAllEnvs();
 
-    @Override
-    public void run() {
-      boolean refreshSuccess = true;
-      //refresh fail if get any env address fail
-      for (Env env : allEnvs) {
-        boolean currentEnvRefreshResult = refreshServerAddressCache(env);
-        refreshSuccess = refreshSuccess && currentEnvRefreshResult;
-      }
+        //init restTemplate
+        restTemplate = restTemplateFactory.getObject();
 
-      if (refreshSuccess) {
-        refreshServiceAddressService
-            .schedule(new RefreshAdminServerAddressTask(), NORMAL_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
-      } else {
-        refreshServiceAddressService
-            .schedule(new RefreshAdminServerAddressTask(), OFFLINE_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
-      }
+        refreshServiceAddressService =
+                Executors.newScheduledThreadPool(1, ApolloThreadFactory.create("ServiceLocator", true));
+
+        refreshServiceAddressService.schedule(new RefreshAdminServerAddressTask(), 1, TimeUnit.MILLISECONDS);
     }
-  }
 
-  private boolean refreshServerAddressCache(Env env) {
-
-    for (int i = 0; i < RETRY_TIMES; i++) {
-
-      try {
-        ServiceDTO[] services = getAdminServerAddress(env);
-        if (services == null || services.length == 0) {
-          continue;
+    public List<ServiceDTO> getServiceList(Env env) {
+        List<ServiceDTO> services = cache.get(env);
+        if (CollectionUtils.isEmpty(services)) {
+            return Collections.emptyList();
         }
-        cache.put(env, Arrays.asList(services));
-        return true;
-      } catch (Throwable e) {
-        logger.error(String.format("Get admin server address from meta server failed. env: %s, meta server address:%s",
-                                   env, MetaDomainConsts.getDomain(env)), e);
-        Tracer
-            .logError(String.format("Get admin server address from meta server failed. env: %s, meta server address:%s",
-                                    env, MetaDomainConsts.getDomain(env)), e);
-      }
+        List<ServiceDTO> randomConfigServices = Lists.newArrayList(services);
+        Collections.shuffle(randomConfigServices);
+        return randomConfigServices;
     }
-    return false;
-  }
 
-  private ServiceDTO[] getAdminServerAddress(Env env) {
-    String domainName = MetaDomainConsts.getDomain(env);
-    String url = domainName + ADMIN_SERVICE_URL_PATH;
-    return restTemplate.getForObject(url, ServiceDTO[].class);
-  }
+    //maintain admin server address
+    private class RefreshAdminServerAddressTask implements Runnable {
+
+        @Override
+        public void run() {
+            boolean refreshSuccess = true;
+            //refresh fail if get any env address fail
+            for (Env env : allEnvs) {
+                boolean currentEnvRefreshResult = refreshServerAddressCache(env);
+                refreshSuccess = refreshSuccess && currentEnvRefreshResult;
+            }
+
+            if (refreshSuccess) {
+                refreshServiceAddressService
+                        .schedule(new RefreshAdminServerAddressTask(), NORMAL_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
+            } else {
+                refreshServiceAddressService
+                        .schedule(new RefreshAdminServerAddressTask(), OFFLINE_REFRESH_INTERVAL, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
+    private boolean refreshServerAddressCache(Env env) {
+
+        for (int i = 0; i < RETRY_TIMES; i++) {
+
+            try {
+                ServiceDTO[] services = getAdminServerAddress(env);
+                if (services == null || services.length == 0) {
+                    continue;
+                }
+                cache.put(env, Arrays.asList(services));
+                return true;
+            } catch (Throwable e) {
+                logger.error(String.format("Get admin server address from meta server failed. env: %s, meta server address:%s",
+                        env, MetaDomainConsts.getDomain(env)), e);
+                Tracer
+                        .logError(String.format("Get admin server address from meta server failed. env: %s, meta server address:%s",
+                                env, MetaDomainConsts.getDomain(env)), e);
+            }
+        }
+        return false;
+    }
+
+    private ServiceDTO[] getAdminServerAddress(Env env) {
+        String domainName = MetaDomainConsts.getDomain(env);
+        String url = domainName + ADMIN_SERVICE_URL_PATH;
+        return restTemplate.getForObject(url, ServiceDTO[].class);
+    }
 
 
 }

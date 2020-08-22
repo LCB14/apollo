@@ -15,41 +15,41 @@ import java.util.stream.Collectors;
 @RequestMapping("/services")
 public class ServiceController {
 
-  private final DiscoveryService discoveryService;
+    private final DiscoveryService discoveryService;
 
-  private static final Function<InstanceInfo, ServiceDTO> instanceInfoToServiceDTOFunc = instance -> {
-    ServiceDTO service = new ServiceDTO();
-    service.setAppName(instance.getAppName());
-    service.setInstanceId(instance.getInstanceId());
-    service.setHomepageUrl(instance.getHomePageUrl());
-    return service;
-  };
+    private static final Function<InstanceInfo, ServiceDTO> instanceInfoToServiceDTOFunc = instance -> {
+        ServiceDTO service = new ServiceDTO();
+        service.setAppName(instance.getAppName());
+        service.setInstanceId(instance.getInstanceId());
+        service.setHomepageUrl(instance.getHomePageUrl());
+        return service;
+    };
 
-  public ServiceController(final DiscoveryService discoveryService) {
-    this.discoveryService = discoveryService;
-  }
+    public ServiceController(final DiscoveryService discoveryService) {
+        this.discoveryService = discoveryService;
+    }
 
 
-  @RequestMapping("/meta")
-  public List<ServiceDTO> getMetaService() {
-    List<InstanceInfo> instances = discoveryService.getMetaServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
-    return result;
-  }
+    @RequestMapping("/meta")
+    public List<ServiceDTO> getMetaService() {
+        List<InstanceInfo> instances = discoveryService.getMetaServiceInstances();
+        List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
+        return result;
+    }
 
-  @RequestMapping("/config")
-  public List<ServiceDTO> getConfigService(
-      @RequestParam(value = "appId", defaultValue = "") String appId,
-      @RequestParam(value = "ip", required = false) String clientIp) {
-    List<InstanceInfo> instances = discoveryService.getConfigServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
-    return result;
-  }
+    @RequestMapping("/config")
+    public List<ServiceDTO> getConfigService(
+            @RequestParam(value = "appId", defaultValue = "") String appId,
+            @RequestParam(value = "ip", required = false) String clientIp) {
+        List<InstanceInfo> instances = discoveryService.getConfigServiceInstances();
+        List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
+        return result;
+    }
 
-  @RequestMapping("/admin")
-  public List<ServiceDTO> getAdminService() {
-    List<InstanceInfo> instances = discoveryService.getAdminServiceInstances();
-    List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
-    return result;
-  }
+    @RequestMapping("/admin")
+    public List<ServiceDTO> getAdminService() {
+        List<InstanceInfo> instances = discoveryService.getAdminServiceInstances();
+        List<ServiceDTO> result = instances.stream().map(instanceInfoToServiceDTOFunc).collect(Collectors.toList());
+        return result;
+    }
 }

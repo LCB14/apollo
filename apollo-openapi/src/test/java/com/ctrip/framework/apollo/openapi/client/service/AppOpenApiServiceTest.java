@@ -13,40 +13,40 @@ import org.mockito.ArgumentCaptor;
 
 public class AppOpenApiServiceTest extends AbstractOpenApiServiceTest {
 
-  private AppOpenApiService appOpenApiService;
+    private AppOpenApiService appOpenApiService;
 
-  private String someAppId;
+    private String someAppId;
 
-  @Override
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
-    someAppId = "someAppId";
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        someAppId = "someAppId";
 
-    StringEntity responseEntity = new StringEntity("[]");
-    when(someHttpResponse.getEntity()).thenReturn(responseEntity);
+        StringEntity responseEntity = new StringEntity("[]");
+        when(someHttpResponse.getEntity()).thenReturn(responseEntity);
 
-    appOpenApiService = new AppOpenApiService(httpClient, someBaseUrl, gson);
-  }
+        appOpenApiService = new AppOpenApiService(httpClient, someBaseUrl, gson);
+    }
 
-  @Test
-  public void testGetEnvClusterInfo() throws Exception {
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+    @Test
+    public void testGetEnvClusterInfo() throws Exception {
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    appOpenApiService.getEnvClusterInfo(someAppId);
+        appOpenApiService.getEnvClusterInfo(someAppId);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet get = request.getValue();
+        HttpGet get = request.getValue();
 
-    assertEquals(String
-        .format("%s/apps/%s/envclusters", someBaseUrl, someAppId), get.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/apps/%s/envclusters", someBaseUrl, someAppId), get.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetEnvClusterInfoWithError() throws Exception {
-    when(statusLine.getStatusCode()).thenReturn(500);
+    @Test(expected = RuntimeException.class)
+    public void testGetEnvClusterInfoWithError() throws Exception {
+        when(statusLine.getStatusCode()).thenReturn(500);
 
-    appOpenApiService.getEnvClusterInfo(someAppId);
-  }
+        appOpenApiService.getEnvClusterInfo(someAppId);
+    }
 }

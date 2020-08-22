@@ -17,54 +17,54 @@ import java.util.List;
 @Component
 public class DeletionListener {
 
-  private static final Logger logger = LoggerFactory.getLogger(DeletionListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeletionListener.class);
 
-  private final PortalSettings portalSettings;
-  private final AdminServiceAPI.AppAPI appAPI;
-  private final AdminServiceAPI.NamespaceAPI namespaceAPI;
+    private final PortalSettings portalSettings;
+    private final AdminServiceAPI.AppAPI appAPI;
+    private final AdminServiceAPI.NamespaceAPI namespaceAPI;
 
-  public DeletionListener(
-      final PortalSettings portalSettings,
-      final AdminServiceAPI.AppAPI appAPI,
-      final AdminServiceAPI.NamespaceAPI namespaceAPI) {
-    this.portalSettings = portalSettings;
-    this.appAPI = appAPI;
-    this.namespaceAPI = namespaceAPI;
-  }
-
-  @EventListener
-  public void onAppDeletionEvent(AppDeletionEvent event) {
-    AppDTO appDTO = BeanUtils.transform(AppDTO.class, event.getApp());
-    String appId = appDTO.getAppId();
-    String operator = appDTO.getDataChangeLastModifiedBy();
-
-    List<Env> envs = portalSettings.getActiveEnvs();
-    for (Env env : envs) {
-      try {
-        appAPI.deleteApp(env, appId, operator);
-      } catch (Throwable e) {
-        logger.error("Delete app failed. Env = {}, AppId = {}", env, appId, e);
-        Tracer.logError(String.format("Delete app failed. Env = %s, AppId = %s", env, appId), e);
-      }
+    public DeletionListener(
+            final PortalSettings portalSettings,
+            final AdminServiceAPI.AppAPI appAPI,
+            final AdminServiceAPI.NamespaceAPI namespaceAPI) {
+        this.portalSettings = portalSettings;
+        this.appAPI = appAPI;
+        this.namespaceAPI = namespaceAPI;
     }
-  }
 
-  @EventListener
-  public void onAppNamespaceDeletionEvent(AppNamespaceDeletionEvent event) {
-    AppNamespaceDTO appNamespace = BeanUtils.transform(AppNamespaceDTO.class, event.getAppNamespace());
-    List<Env> envs = portalSettings.getActiveEnvs();
-    String appId = appNamespace.getAppId();
-    String namespaceName = appNamespace.getName();
-    String operator = appNamespace.getDataChangeLastModifiedBy();
+    @EventListener
+    public void onAppDeletionEvent(AppDeletionEvent event) {
+        AppDTO appDTO = BeanUtils.transform(AppDTO.class, event.getApp());
+        String appId = appDTO.getAppId();
+        String operator = appDTO.getDataChangeLastModifiedBy();
 
-    for (Env env : envs) {
-      try {
-        namespaceAPI.deleteAppNamespace(env, appId, namespaceName, operator);
-      } catch (Throwable e) {
-        logger.error("Delete appNamespace failed. appId = {}, namespace = {}, env = {}", appId, namespaceName, env, e);
-        Tracer.logError(String
-            .format("Delete appNamespace failed. appId = %s, namespace = %s, env = %s", appId, namespaceName, env), e);
-      }
+        List<Env> envs = portalSettings.getActiveEnvs();
+        for (Env env : envs) {
+            try {
+                appAPI.deleteApp(env, appId, operator);
+            } catch (Throwable e) {
+                logger.error("Delete app failed. Env = {}, AppId = {}", env, appId, e);
+                Tracer.logError(String.format("Delete app failed. Env = %s, AppId = %s", env, appId), e);
+            }
+        }
     }
-  }
+
+    @EventListener
+    public void onAppNamespaceDeletionEvent(AppNamespaceDeletionEvent event) {
+        AppNamespaceDTO appNamespace = BeanUtils.transform(AppNamespaceDTO.class, event.getAppNamespace());
+        List<Env> envs = portalSettings.getActiveEnvs();
+        String appId = appNamespace.getAppId();
+        String namespaceName = appNamespace.getName();
+        String operator = appNamespace.getDataChangeLastModifiedBy();
+
+        for (Env env : envs) {
+            try {
+                namespaceAPI.deleteAppNamespace(env, appId, namespaceName, operator);
+            } catch (Throwable e) {
+                logger.error("Delete appNamespace failed. appId = {}, namespace = {}, env = {}", appId, namespaceName, env, e);
+                Tracer.logError(String
+                        .format("Delete appNamespace failed. appId = %s, namespace = %s, env = %s", appId, namespaceName, env), e);
+            }
+        }
+    }
 }

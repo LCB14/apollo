@@ -13,14 +13,14 @@ import java.util.List;
  * @author Jason Song(song_s@ctrip.com)
  */
 public interface ReleaseMessageRepository extends PagingAndSortingRepository<ReleaseMessage, Long> {
-  List<ReleaseMessage> findFirst500ByIdGreaterThanOrderByIdAsc(Long id);
+    List<ReleaseMessage> findFirst500ByIdGreaterThanOrderByIdAsc(Long id);
 
-  ReleaseMessage findTopByOrderByIdDesc();
+    ReleaseMessage findTopByOrderByIdDesc();
 
-  ReleaseMessage findTopByMessageInOrderByIdDesc(Collection<String> messages);
+    ReleaseMessage findTopByMessageInOrderByIdDesc(Collection<String> messages);
 
-  List<ReleaseMessage> findFirst100ByMessageAndIdLessThanOrderByIdAsc(String message, Long id);
+    List<ReleaseMessage> findFirst100ByMessageAndIdLessThanOrderByIdAsc(String message, Long id);
 
-  @Query("select message, max(id) as id from ReleaseMessage where message in :messages group by message")
-  List<Object[]> findLatestReleaseMessagesGroupByMessages(@Param("messages") Collection<String> messages);
+    @Query("select message, max(id) as id from ReleaseMessage where message in :messages group by message")
+    List<Object[]> findLatestReleaseMessagesGroupByMessages(@Param("messages") Collection<String> messages);
 }

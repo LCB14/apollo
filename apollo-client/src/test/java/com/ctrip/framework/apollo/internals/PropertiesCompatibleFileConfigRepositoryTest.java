@@ -10,7 +10,9 @@ import static org.mockito.Mockito.when;
 import com.ctrip.framework.apollo.PropertiesCompatibleConfigFile;
 import com.ctrip.framework.apollo.enums.ConfigSourceType;
 import com.ctrip.framework.apollo.model.ConfigFileChangeEvent;
+
 import java.util.Properties;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,99 +22,99 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class PropertiesCompatibleFileConfigRepositoryTest {
 
-  @Mock
-  private PropertiesCompatibleConfigFile configFile;
+    @Mock
+    private PropertiesCompatibleConfigFile configFile;
 
-  private String someNamespaceName;
+    private String someNamespaceName;
 
-  @Mock
-  private Properties someProperties;
+    @Mock
+    private Properties someProperties;
 
-  @Before
-  public void setUp() throws Exception {
-    someNamespaceName = "someNamespaceName";
-    when(configFile.getNamespace()).thenReturn(someNamespaceName);
-    when(configFile.asProperties()).thenReturn(someProperties);
-  }
-
-  @Test
-  public void testGetConfig() throws Exception {
-    PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
-        configFile);
-
-    assertSame(someProperties, configFileRepository.getConfig());
-    verify(configFile, times(1)).addChangeListener(configFileRepository);
-  }
-
-  @Test
-  public void testGetConfigFailedAndThenRecovered() throws Exception {
-    RuntimeException someException = new RuntimeException("some exception");
-
-    when(configFile.asProperties()).thenThrow(someException);
-
-    PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
-        configFile);
-
-    Throwable exceptionThrown = null;
-    try {
-      configFileRepository.getConfig();
-    } catch (Throwable ex) {
-      exceptionThrown = ex;
+    @Before
+    public void setUp() throws Exception {
+        someNamespaceName = "someNamespaceName";
+        when(configFile.getNamespace()).thenReturn(someNamespaceName);
+        when(configFile.asProperties()).thenReturn(someProperties);
     }
 
-    assertSame(someException, exceptionThrown);
+    @Test
+    public void testGetConfig() throws Exception {
+        PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
+                configFile);
 
-    // recovered
-    reset(configFile);
+        assertSame(someProperties, configFileRepository.getConfig());
+        verify(configFile, times(1)).addChangeListener(configFileRepository);
+    }
 
-    Properties someProperties = mock(Properties.class);
+    @Test
+    public void testGetConfigFailedAndThenRecovered() throws Exception {
+        RuntimeException someException = new RuntimeException("some exception");
 
-    when(configFile.asProperties()).thenReturn(someProperties);
+        when(configFile.asProperties()).thenThrow(someException);
 
-    assertSame(someProperties, configFileRepository.getConfig());
-  }
+        PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
+                configFile);
 
-  @Test(expected = IllegalStateException.class)
-  public void testGetConfigWithConfigFileReturnNullProperties() throws Exception {
-    when(configFile.asProperties()).thenReturn(null);
+        Throwable exceptionThrown = null;
+        try {
+            configFileRepository.getConfig();
+        } catch (Throwable ex) {
+            exceptionThrown = ex;
+        }
 
-    PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
-        configFile);
+        assertSame(someException, exceptionThrown);
 
-    configFileRepository.getConfig();
-  }
+        // recovered
+        reset(configFile);
 
-  @Test
-  public void testGetSourceType() throws Exception {
-    ConfigSourceType someType = ConfigSourceType.REMOTE;
+        Properties someProperties = mock(Properties.class);
 
-    when(configFile.getSourceType()).thenReturn(someType);
+        when(configFile.asProperties()).thenReturn(someProperties);
 
-    PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
-        configFile);
+        assertSame(someProperties, configFileRepository.getConfig());
+    }
 
-    assertSame(someType, configFileRepository.getSourceType());
-  }
+    @Test(expected = IllegalStateException.class)
+    public void testGetConfigWithConfigFileReturnNullProperties() throws Exception {
+        when(configFile.asProperties()).thenReturn(null);
 
-  @Test
-  public void testOnChange() throws Exception {
-    Properties anotherProperties = mock(Properties.class);
-    ConfigFileChangeEvent someChangeEvent = mock(ConfigFileChangeEvent.class);
+        PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
+                configFile);
 
-    RepositoryChangeListener someListener = mock(RepositoryChangeListener.class);
+        configFileRepository.getConfig();
+    }
 
-    PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
-        configFile);
+    @Test
+    public void testGetSourceType() throws Exception {
+        ConfigSourceType someType = ConfigSourceType.REMOTE;
 
-    configFileRepository.addChangeListener(someListener);
+        when(configFile.getSourceType()).thenReturn(someType);
 
-    assertSame(someProperties, configFileRepository.getConfig());
+        PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
+                configFile);
 
-    when(configFile.asProperties()).thenReturn(anotherProperties);
+        assertSame(someType, configFileRepository.getSourceType());
+    }
 
-    configFileRepository.onChange(someChangeEvent);
+    @Test
+    public void testOnChange() throws Exception {
+        Properties anotherProperties = mock(Properties.class);
+        ConfigFileChangeEvent someChangeEvent = mock(ConfigFileChangeEvent.class);
 
-    assertSame(anotherProperties, configFileRepository.getConfig());
-    verify(someListener, times(1)).onRepositoryChange(someNamespaceName, anotherProperties);
-  }
+        RepositoryChangeListener someListener = mock(RepositoryChangeListener.class);
+
+        PropertiesCompatibleFileConfigRepository configFileRepository = new PropertiesCompatibleFileConfigRepository(
+                configFile);
+
+        configFileRepository.addChangeListener(someListener);
+
+        assertSame(someProperties, configFileRepository.getConfig());
+
+        when(configFile.asProperties()).thenReturn(anotherProperties);
+
+        configFileRepository.onChange(someChangeEvent);
+
+        assertSame(anotherProperties, configFileRepository.getConfig());
+        verify(someListener, times(1)).onRepositoryChange(someNamespaceName, anotherProperties);
+    }
 }

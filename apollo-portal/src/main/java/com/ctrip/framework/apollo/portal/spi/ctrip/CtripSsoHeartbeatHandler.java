@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CtripSsoHeartbeatHandler implements SsoHeartbeatHandler {
 
-  @Override
-  public void doHeartbeat(HttpServletRequest request, HttpServletResponse response) {
-    try {
-      response.sendRedirect("ctrip_sso_heartbeat.html");
-    } catch (IOException e) {
+    @Override
+    public void doHeartbeat(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.sendRedirect("ctrip_sso_heartbeat.html");
+        } catch (IOException e) {
+        }
     }
-  }
 
 }

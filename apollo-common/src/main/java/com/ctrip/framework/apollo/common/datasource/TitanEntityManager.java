@@ -12,22 +12,22 @@ import java.lang.reflect.Method;
 @Conditional(TitanCondition.class)
 public class TitanEntityManager {
 
-  private final TitanSettings settings;
+    private final TitanSettings settings;
 
-  public TitanEntityManager(final TitanSettings settings) {
-    this.settings = settings;
-  }
+    public TitanEntityManager(final TitanSettings settings) {
+        this.settings = settings;
+    }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Bean
-  public DataSource datasource() throws Exception {
-    Class clazz = Class.forName("com.ctrip.datasource.configure.DalDataSourceFactory");
-    Object obj = clazz.newInstance();
-    Method method = clazz.getMethod("createDataSource", String.class, String.class);
-    DataSource ds = ((DataSource) method.invoke(obj,
-        new Object[] {settings.getTitanDbname(), settings.getTitanUrl()}));
-    Tracer.logEvent("Apollo.Datasource.Titan", settings.getTitanDbname());
-    return ds;
-  }
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Bean
+    public DataSource datasource() throws Exception {
+        Class clazz = Class.forName("com.ctrip.datasource.configure.DalDataSourceFactory");
+        Object obj = clazz.newInstance();
+        Method method = clazz.getMethod("createDataSource", String.class, String.class);
+        DataSource ds = ((DataSource) method.invoke(obj,
+                new Object[]{settings.getTitanDbname(), settings.getTitanUrl()}));
+        Tracer.logEvent("Apollo.Datasource.Titan", settings.getTitanDbname());
+        return ds;
+    }
 
 }

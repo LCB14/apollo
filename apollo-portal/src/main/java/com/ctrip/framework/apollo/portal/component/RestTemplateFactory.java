@@ -16,36 +16,36 @@ import java.io.UnsupportedEncodingException;
 @Component
 public class RestTemplateFactory implements FactoryBean<RestTemplate>, InitializingBean {
 
-  @Autowired
-  private HttpMessageConverters httpMessageConverters;
-  @Autowired
-  private PortalConfig portalConfig;
+    @Autowired
+    private HttpMessageConverters httpMessageConverters;
+    @Autowired
+    private PortalConfig portalConfig;
 
-  private RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
-  public RestTemplate getObject() {
-    return restTemplate;
-  }
+    public RestTemplate getObject() {
+        return restTemplate;
+    }
 
-  public Class<RestTemplate> getObjectType() {
-    return RestTemplate.class;
-  }
+    public Class<RestTemplate> getObjectType() {
+        return RestTemplate.class;
+    }
 
-  public boolean isSingleton() {
-    return true;
-  }
+    public boolean isSingleton() {
+        return true;
+    }
 
-  public void afterPropertiesSet() throws UnsupportedEncodingException {
-    CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+    public void afterPropertiesSet() throws UnsupportedEncodingException {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-    restTemplate = new RestTemplate(httpMessageConverters.getConverters());
-    HttpComponentsClientHttpRequestFactory requestFactory =
-        new HttpComponentsClientHttpRequestFactory(httpClient);
-    requestFactory.setConnectTimeout(portalConfig.connectTimeout());
-    requestFactory.setReadTimeout(portalConfig.readTimeout());
+        restTemplate = new RestTemplate(httpMessageConverters.getConverters());
+        HttpComponentsClientHttpRequestFactory requestFactory =
+                new HttpComponentsClientHttpRequestFactory(httpClient);
+        requestFactory.setConnectTimeout(portalConfig.connectTimeout());
+        requestFactory.setReadTimeout(portalConfig.readTimeout());
 
-    restTemplate.setRequestFactory(requestFactory);
-  }
+        restTemplate.setRequestFactory(requestFactory);
+    }
 
 
 }

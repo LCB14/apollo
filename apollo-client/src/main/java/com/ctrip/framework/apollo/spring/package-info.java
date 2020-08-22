@@ -10,7 +10,7 @@
  *   <li>@EnableApolloConfig(namespaces={"someNamespace"}) to inject configurations from Apollo into Spring Property
  *   Sources so that placeholders like ${someProperty} and @Value("someProperty") are supported.</li>
  * </ul>
- *
+ * <p>
  * With the above configuration, annotations like @ApolloConfig("someNamespace")
  * and @ApolloConfigChangeListener("someNamespace) are also supported.<br />
  * <br />

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class API {
 
-  @Autowired
-  protected RetryableRestTemplate restTemplate;
+    @Autowired
+    protected RetryableRestTemplate restTemplate;
 
 }

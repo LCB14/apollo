@@ -24,56 +24,56 @@ import java.util.List;
 @RestController
 public class UserInfoController {
 
-  private final UserInfoHolder userInfoHolder;
-  private final LogoutHandler logoutHandler;
-  private final UserService userService;
+    private final UserInfoHolder userInfoHolder;
+    private final LogoutHandler logoutHandler;
+    private final UserService userService;
 
-  public UserInfoController(
-      final UserInfoHolder userInfoHolder,
-      final LogoutHandler logoutHandler,
-      final UserService userService) {
-    this.userInfoHolder = userInfoHolder;
-    this.logoutHandler = logoutHandler;
-    this.userService = userService;
-  }
-
-
-  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
-  @PostMapping("/users")
-  public void createOrUpdateUser(@RequestBody UserPO user) {
-    if (StringUtils.isContainEmpty(user.getUsername(), user.getPassword())) {
-      throw new BadRequestException("Username and password can not be empty.");
+    public UserInfoController(
+            final UserInfoHolder userInfoHolder,
+            final LogoutHandler logoutHandler,
+            final UserService userService) {
+        this.userInfoHolder = userInfoHolder;
+        this.logoutHandler = logoutHandler;
+        this.userService = userService;
     }
 
-    if (userService instanceof SpringSecurityUserService) {
-      ((SpringSecurityUserService) userService).createOrUpdate(user);
-    } else {
-      throw new UnsupportedOperationException("Create or update user operation is unsupported");
+
+    @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+    @PostMapping("/users")
+    public void createOrUpdateUser(@RequestBody UserPO user) {
+        if (StringUtils.isContainEmpty(user.getUsername(), user.getPassword())) {
+            throw new BadRequestException("Username and password can not be empty.");
+        }
+
+        if (userService instanceof SpringSecurityUserService) {
+            ((SpringSecurityUserService) userService).createOrUpdate(user);
+        } else {
+            throw new UnsupportedOperationException("Create or update user operation is unsupported");
+        }
+
     }
 
-  }
+    @GetMapping("/user")
+    public UserInfo getCurrentUserName() {
+        return userInfoHolder.getUser();
+    }
 
-  @GetMapping("/user")
-  public UserInfo getCurrentUserName() {
-    return userInfoHolder.getUser();
-  }
+    @GetMapping("/user/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logoutHandler.logout(request, response);
+    }
 
-  @GetMapping("/user/logout")
-  public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    logoutHandler.logout(request, response);
-  }
+    @GetMapping("/users")
+    public List<UserInfo> searchUsersByKeyword(@RequestParam(value = "keyword") String keyword,
+                                               @RequestParam(value = "offset", defaultValue = "0") int offset,
+                                               @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        return userService.searchUsers(keyword, offset, limit);
+    }
 
-  @GetMapping("/users")
-  public List<UserInfo> searchUsersByKeyword(@RequestParam(value = "keyword") String keyword,
-                                             @RequestParam(value = "offset", defaultValue = "0") int offset,
-                                             @RequestParam(value = "limit", defaultValue = "10") int limit) {
-    return userService.searchUsers(keyword, offset, limit);
-  }
-
-  @GetMapping("/users/{userId}")
-  public UserInfo getUserByUserId(@PathVariable String userId) {
-    return userService.findByUserId(userId);
-  }
+    @GetMapping("/users/{userId}")
+    public UserInfo getUserByUserId(@PathVariable String userId) {
+        return userService.findByUserId(userId);
+    }
 
 
 }

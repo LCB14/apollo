@@ -9,6 +9,7 @@ import com.ctrip.framework.apollo.portal.repository.UserRepository;
 import com.ctrip.framework.apollo.portal.spi.UserService;
 
 import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,77 +31,77 @@ import javax.annotation.PostConstruct;
  */
 public class SpringSecurityUserService implements UserService {
 
-  private final PasswordEncoder encoder = new BCryptPasswordEncoder();
-  private List<GrantedAuthority> authorities;
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
+    private List<GrantedAuthority> authorities;
 
-  @Autowired
-  private JdbcUserDetailsManager userDetailsManager;
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private JdbcUserDetailsManager userDetailsManager;
+    @Autowired
+    private UserRepository userRepository;
 
-  @PostConstruct
-  public void init() {
-    authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("ROLE_user"));
-  }
-
-  @Transactional
-  public void createOrUpdate(UserPO user) {
-    String username = user.getUsername();
-
-    User userDetails = new User(username, encoder.encode(user.getPassword()), authorities);
-
-    if (userDetailsManager.userExists(username)) {
-      userDetailsManager.updateUser(userDetails);
-    } else {
-      userDetailsManager.createUser(userDetails);
+    @PostConstruct
+    public void init() {
+        authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_user"));
     }
 
-    UserPO managedUser = userRepository.findByUsername(username);
-    managedUser.setEmail(user.getEmail());
+    @Transactional
+    public void createOrUpdate(UserPO user) {
+        String username = user.getUsername();
 
-    userRepository.save(managedUser);
-  }
+        User userDetails = new User(username, encoder.encode(user.getPassword()), authorities);
 
-  @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
-    List<UserPO> users;
-    if (StringUtils.isEmpty(keyword)) {
-      users = userRepository.findFirst20ByEnabled(1);
-    } else {
-      users = userRepository.findByUsernameLikeAndEnabled("%" + keyword + "%", 1);
+        if (userDetailsManager.userExists(username)) {
+            userDetailsManager.updateUser(userDetails);
+        } else {
+            userDetailsManager.createUser(userDetails);
+        }
+
+        UserPO managedUser = userRepository.findByUsername(username);
+        managedUser.setEmail(user.getEmail());
+
+        userRepository.save(managedUser);
     }
 
-    List<UserInfo> result = Lists.newArrayList();
-    if (CollectionUtils.isEmpty(users)) {
-      return result;
+    @Override
+    public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+        List<UserPO> users;
+        if (StringUtils.isEmpty(keyword)) {
+            users = userRepository.findFirst20ByEnabled(1);
+        } else {
+            users = userRepository.findByUsernameLikeAndEnabled("%" + keyword + "%", 1);
+        }
+
+        List<UserInfo> result = Lists.newArrayList();
+        if (CollectionUtils.isEmpty(users)) {
+            return result;
+        }
+
+        result.addAll(users.stream().map(UserPO::toUserInfo).collect(Collectors.toList()));
+
+        return result;
     }
 
-    result.addAll(users.stream().map(UserPO::toUserInfo).collect(Collectors.toList()));
-
-    return result;
-  }
-
-  @Override
-  public UserInfo findByUserId(String userId) {
-    UserPO userPO = userRepository.findByUsername(userId);
-    return userPO == null ? null : userPO.toUserInfo();
-  }
-
-  @Override
-  public List<UserInfo> findByUserIds(List<String> userIds) {
-    List<UserPO> users = userRepository.findByUsernameIn(userIds);
-
-    if (CollectionUtils.isEmpty(users)) {
-      return Collections.emptyList();
+    @Override
+    public UserInfo findByUserId(String userId) {
+        UserPO userPO = userRepository.findByUsername(userId);
+        return userPO == null ? null : userPO.toUserInfo();
     }
 
-    List<UserInfo> result = Lists.newArrayList();
+    @Override
+    public List<UserInfo> findByUserIds(List<String> userIds) {
+        List<UserPO> users = userRepository.findByUsernameIn(userIds);
 
-    result.addAll(users.stream().map(UserPO::toUserInfo).collect(Collectors.toList()));
+        if (CollectionUtils.isEmpty(users)) {
+            return Collections.emptyList();
+        }
 
-    return result;
-  }
+        List<UserInfo> result = Lists.newArrayList();
+
+        result.addAll(users.stream().map(UserPO::toUserInfo).collect(Collectors.toList()));
+
+        return result;
+    }
 
 
 }

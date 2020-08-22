@@ -14,5 +14,5 @@
         <property name="batch" value="${batch:100}"/>
     </bean>
 
-    <context:annotation-config />
+    <context:annotation-config/>
 </beans>

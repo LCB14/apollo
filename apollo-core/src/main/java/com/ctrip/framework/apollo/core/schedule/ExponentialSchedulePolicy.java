@@ -4,32 +4,32 @@ package com.ctrip.framework.apollo.core.schedule;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ExponentialSchedulePolicy implements SchedulePolicy {
-  private final long delayTimeLowerBound;
-  private final long delayTimeUpperBound;
-  private long lastDelayTime;
+    private final long delayTimeLowerBound;
+    private final long delayTimeUpperBound;
+    private long lastDelayTime;
 
-  public ExponentialSchedulePolicy(long delayTimeLowerBound, long delayTimeUpperBound) {
-    this.delayTimeLowerBound = delayTimeLowerBound;
-    this.delayTimeUpperBound = delayTimeUpperBound;
-  }
-
-  @Override
-  public long fail() {
-    long delayTime = lastDelayTime;
-
-    if (delayTime == 0) {
-      delayTime = delayTimeLowerBound;
-    } else {
-      delayTime = Math.min(lastDelayTime << 1, delayTimeUpperBound);
+    public ExponentialSchedulePolicy(long delayTimeLowerBound, long delayTimeUpperBound) {
+        this.delayTimeLowerBound = delayTimeLowerBound;
+        this.delayTimeUpperBound = delayTimeUpperBound;
     }
 
-    lastDelayTime = delayTime;
+    @Override
+    public long fail() {
+        long delayTime = lastDelayTime;
 
-    return delayTime;
-  }
+        if (delayTime == 0) {
+            delayTime = delayTimeLowerBound;
+        } else {
+            delayTime = Math.min(lastDelayTime << 1, delayTimeUpperBound);
+        }
 
-  @Override
-  public void success() {
-    lastDelayTime = 0;
-  }
+        lastDelayTime = delayTime;
+
+        return delayTime;
+    }
+
+    @Override
+    public void success() {
+        lastDelayTime = 0;
+    }
 }

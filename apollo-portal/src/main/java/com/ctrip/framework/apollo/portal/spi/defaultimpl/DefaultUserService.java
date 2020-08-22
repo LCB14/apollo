@@ -13,33 +13,33 @@ import java.util.List;
  */
 public class DefaultUserService implements UserService {
 
-  @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
-    return Arrays.asList(assembleDefaultUser());
-  }
-
-  @Override
-  public UserInfo findByUserId(String userId) {
-    if (userId.equals("apollo")) {
-      return assembleDefaultUser();
+    @Override
+    public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+        return Arrays.asList(assembleDefaultUser());
     }
-    return null;
-  }
 
-  @Override
-  public List<UserInfo> findByUserIds(List<String> userIds) {
-    if (userIds.contains("apollo")) {
-      return Lists.newArrayList(assembleDefaultUser());
+    @Override
+    public UserInfo findByUserId(String userId) {
+        if (userId.equals("apollo")) {
+            return assembleDefaultUser();
+        }
+        return null;
     }
-    return null;
-  }
 
-  private UserInfo assembleDefaultUser() {
-    UserInfo defaultUser = new UserInfo();
-    defaultUser.setUserId("apollo");
-    defaultUser.setName("apollo");
-    defaultUser.setEmail("apollo@acme.com");
+    @Override
+    public List<UserInfo> findByUserIds(List<String> userIds) {
+        if (userIds.contains("apollo")) {
+            return Lists.newArrayList(assembleDefaultUser());
+        }
+        return null;
+    }
 
-    return defaultUser;
-  }
+    private UserInfo assembleDefaultUser() {
+        UserInfo defaultUser = new UserInfo();
+        defaultUser.setUserId("apollo");
+        defaultUser.setName("apollo");
+        defaultUser.setEmail("apollo@acme.com");
+
+        return defaultUser;
+    }
 }

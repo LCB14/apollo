@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.HttpClientErrorException;
+
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -18,46 +19,46 @@ import static org.junit.Assert.assertThat;
  */
 @ActiveProfiles("skipAuthorization")
 public class ServerConfigControllerTest extends AbstractIntegrationTest {
-  @Test
-  public void shouldSuccessWhenParameterValid() {
-    ServerConfig serverConfig = new ServerConfig();
-    serverConfig.setKey("validKey");
-    serverConfig.setValue("validValue");
-    ResponseEntity<ServerConfig> responseEntity = restTemplate.postForEntity(
-        url("/server/config"), serverConfig, ServerConfig.class
-    );
-    assertEquals(responseEntity.getBody().getKey(), serverConfig.getKey());
-    assertEquals(responseEntity.getBody().getValue(), serverConfig.getValue());
-  }
+    @Test
+    public void shouldSuccessWhenParameterValid() {
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setKey("validKey");
+        serverConfig.setValue("validValue");
+        ResponseEntity<ServerConfig> responseEntity = restTemplate.postForEntity(
+                url("/server/config"), serverConfig, ServerConfig.class
+        );
+        assertEquals(responseEntity.getBody().getKey(), serverConfig.getKey());
+        assertEquals(responseEntity.getBody().getValue(), serverConfig.getValue());
+    }
 
-  @Test
-  public void shouldFailWhenParameterInvalid() {
-    ServerConfig serverConfig = new ServerConfig();
-    serverConfig.setKey("  ");
-    serverConfig.setValue("valid");
-    try {
-      restTemplate.postForEntity(
-          url("/server/config"), serverConfig, ServerConfig.class
-      );
-      Assert.fail("Should throw");
-    } catch (final HttpClientErrorException e) {
-      assertThat(
-          new String(e.getResponseBodyAsByteArray()),
-          containsString("ServerConfig.Key cannot be blank")
-      );
+    @Test
+    public void shouldFailWhenParameterInvalid() {
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setKey("  ");
+        serverConfig.setValue("valid");
+        try {
+            restTemplate.postForEntity(
+                    url("/server/config"), serverConfig, ServerConfig.class
+            );
+            Assert.fail("Should throw");
+        } catch (final HttpClientErrorException e) {
+            assertThat(
+                    new String(e.getResponseBodyAsByteArray()),
+                    containsString("ServerConfig.Key cannot be blank")
+            );
+        }
+        serverConfig.setKey("valid");
+        serverConfig.setValue("   ");
+        try {
+            restTemplate.postForEntity(
+                    url("/server/config"), serverConfig, ServerConfig.class
+            );
+            Assert.fail("Should throw");
+        } catch (final HttpClientErrorException e) {
+            assertThat(
+                    new String(e.getResponseBodyAsByteArray()),
+                    containsString("ServerConfig.Value cannot be blank")
+            );
+        }
     }
-    serverConfig.setKey("valid");
-    serverConfig.setValue("   ");
-    try {
-      restTemplate.postForEntity(
-          url("/server/config"), serverConfig, ServerConfig.class
-      );
-      Assert.fail("Should throw");
-    } catch (final HttpClientErrorException e) {
-      assertThat(
-          new String(e.getResponseBodyAsByteArray()),
-          containsString("ServerConfig.Value cannot be blank")
-      );
-    }
-  }
 }

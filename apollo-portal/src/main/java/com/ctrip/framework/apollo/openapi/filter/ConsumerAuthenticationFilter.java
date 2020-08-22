@@ -18,42 +18,42 @@ import javax.servlet.http.HttpServletResponse;
  * @author Jason Song(song_s@ctrip.com)
  */
 public class ConsumerAuthenticationFilter implements Filter {
-  private final ConsumerAuthUtil consumerAuthUtil;
-  private final ConsumerAuditUtil consumerAuditUtil;
+    private final ConsumerAuthUtil consumerAuthUtil;
+    private final ConsumerAuditUtil consumerAuditUtil;
 
-  public ConsumerAuthenticationFilter(ConsumerAuthUtil consumerAuthUtil, ConsumerAuditUtil consumerAuditUtil) {
-    this.consumerAuthUtil = consumerAuthUtil;
-    this.consumerAuditUtil = consumerAuditUtil;
-  }
-
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    //nothing
-  }
-
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws
-      IOException, ServletException {
-    HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) resp;
-
-    String token = request.getHeader("Authorization");
-
-    Long consumerId = consumerAuthUtil.getConsumerId(token);
-
-    if (consumerId == null) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-      return;
+    public ConsumerAuthenticationFilter(ConsumerAuthUtil consumerAuthUtil, ConsumerAuditUtil consumerAuditUtil) {
+        this.consumerAuthUtil = consumerAuthUtil;
+        this.consumerAuditUtil = consumerAuditUtil;
     }
 
-    consumerAuthUtil.storeConsumerId(request, consumerId);
-    consumerAuditUtil.audit(request, consumerId);
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        //nothing
+    }
 
-    chain.doFilter(req, resp);
-  }
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws
+            IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
-  @Override
-  public void destroy() {
-    //nothing
-  }
+        String token = request.getHeader("Authorization");
+
+        Long consumerId = consumerAuthUtil.getConsumerId(token);
+
+        if (consumerId == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            return;
+        }
+
+        consumerAuthUtil.storeConsumerId(request, consumerId);
+        consumerAuditUtil.audit(request, consumerId);
+
+        chain.doFilter(req, resp);
+    }
+
+    @Override
+    public void destroy() {
+        //nothing
+    }
 }

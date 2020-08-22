@@ -39,92 +39,92 @@ import javax.annotation.PostConstruct;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AbstractBaseIntegrationTest.TestConfiguration.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractBaseIntegrationTest {
-  @Autowired
-  private ReleaseMessageRepository releaseMessageRepository;
-  @Autowired
-  private ReleaseRepository releaseRepository;
+    @Autowired
+    private ReleaseMessageRepository releaseMessageRepository;
+    @Autowired
+    private ReleaseRepository releaseRepository;
 
-  private final Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
-  protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
 
-  @PostConstruct
-  private void postConstruct() {
-    restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
-  }
-
-  @Value("${local.server.port}")
-  int port;
-
-  protected String getHostUrl() {
-    return "localhost:" + port;
-  }
-
-  @Configuration
-  @Import(ConfigServiceTestConfiguration.class)
-  protected static class TestConfiguration {
-    @Bean
-    public BizConfig bizConfig(final BizDBPropertySource bizDBPropertySource) {
-      return new TestBizConfig(bizDBPropertySource);
+    @PostConstruct
+    private void postConstruct() {
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
     }
-  }
 
-  protected void sendReleaseMessage(String message) {
-    ReleaseMessage releaseMessage = new ReleaseMessage(message);
-    releaseMessageRepository.save(releaseMessage);
-  }
+    @Value("${local.server.port}")
+    int port;
 
-  public Release buildRelease(String name, String comment, Namespace namespace,
-                              Map<String, String> configurations, String owner) {
-    Release release = new Release();
-    release.setReleaseKey(ReleaseKeyGenerator.generateReleaseKey(namespace));
-    release.setDataChangeCreatedTime(new Date());
-    release.setDataChangeCreatedBy(owner);
-    release.setDataChangeLastModifiedBy(owner);
-    release.setName(name);
-    release.setComment(comment);
-    release.setAppId(namespace.getAppId());
-    release.setClusterName(namespace.getClusterName());
-    release.setNamespaceName(namespace.getNamespaceName());
-    release.setConfigurations(gson.toJson(configurations));
-    release = releaseRepository.save(release);
+    protected String getHostUrl() {
+        return "localhost:" + port;
+    }
 
-    return release;
-  }
+    @Configuration
+    @Import(ConfigServiceTestConfiguration.class)
+    protected static class TestConfiguration {
+        @Bean
+        public BizConfig bizConfig(final BizDBPropertySource bizDBPropertySource) {
+            return new TestBizConfig(bizDBPropertySource);
+        }
+    }
 
-  protected void periodicSendMessage(ExecutorService executorService, String message, AtomicBoolean stop) {
-    executorService.submit(() -> {
-      //wait for the request connected to server
-      while (!stop.get() && !Thread.currentThread().isInterrupted()) {
-        try {
-          TimeUnit.MILLISECONDS.sleep(100);
-        } catch (InterruptedException e) {
+    protected void sendReleaseMessage(String message) {
+        ReleaseMessage releaseMessage = new ReleaseMessage(message);
+        releaseMessageRepository.save(releaseMessage);
+    }
+
+    public Release buildRelease(String name, String comment, Namespace namespace,
+                                Map<String, String> configurations, String owner) {
+        Release release = new Release();
+        release.setReleaseKey(ReleaseKeyGenerator.generateReleaseKey(namespace));
+        release.setDataChangeCreatedTime(new Date());
+        release.setDataChangeCreatedBy(owner);
+        release.setDataChangeLastModifiedBy(owner);
+        release.setName(name);
+        release.setComment(comment);
+        release.setAppId(namespace.getAppId());
+        release.setClusterName(namespace.getClusterName());
+        release.setNamespaceName(namespace.getNamespaceName());
+        release.setConfigurations(gson.toJson(configurations));
+        release = releaseRepository.save(release);
+
+        return release;
+    }
+
+    protected void periodicSendMessage(ExecutorService executorService, String message, AtomicBoolean stop) {
+        executorService.submit(() -> {
+            //wait for the request connected to server
+            while (!stop.get() && !Thread.currentThread().isInterrupted()) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException e) {
+                }
+
+                //double check
+                if (stop.get()) {
+                    break;
+                }
+
+                sendReleaseMessage(message);
+            }
+        });
+    }
+
+    private static class TestBizConfig extends BizConfig {
+        public TestBizConfig(final BizDBPropertySource propertySource) {
+            super(propertySource);
         }
 
-        //double check
-        if (stop.get()) {
-          break;
+        @Override
+        public int appNamespaceCacheScanInterval() {
+            //should be short enough to update the AppNamespace cache in time
+            return 1;
         }
 
-        sendReleaseMessage(message);
-      }
-    });
-  }
-
-  private static class TestBizConfig extends BizConfig {
-    public TestBizConfig(final BizDBPropertySource propertySource) {
-      super(propertySource);
+        @Override
+        public TimeUnit appNamespaceCacheScanIntervalTimeUnit() {
+            return TimeUnit.MILLISECONDS;
+        }
     }
-
-    @Override
-    public int appNamespaceCacheScanInterval() {
-      //should be short enough to update the AppNamespace cache in time
-      return 1;
-    }
-
-    @Override
-    public TimeUnit appNamespaceCacheScanIntervalTimeUnit() {
-      return TimeUnit.MILLISECONDS;
-    }
-  }
 }

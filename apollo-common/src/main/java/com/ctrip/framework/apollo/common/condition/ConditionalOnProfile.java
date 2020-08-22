@@ -13,15 +13,16 @@ import java.lang.annotation.Target;
  *
  * @author Jason Song(song_s@ctrip.com)
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnProfileCondition.class)
 public @interface ConditionalOnProfile {
 
-  /**
-   * The profiles that should be active
-   * @return
-   */
-  String[] value() default {};
+    /**
+     * The profiles that should be active
+     *
+     * @return
+     */
+    String[] value() default {};
 }

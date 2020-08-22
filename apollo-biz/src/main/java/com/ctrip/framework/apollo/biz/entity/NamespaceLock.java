@@ -11,16 +11,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "NamespaceLock")
 @Where(clause = "isDeleted = 0")
-public class NamespaceLock extends BaseEntity{
+public class NamespaceLock extends BaseEntity {
 
-  @Column(name = "NamespaceId")
-  private long namespaceId;
+    @Column(name = "NamespaceId")
+    private long namespaceId;
 
-  public long getNamespaceId() {
-    return namespaceId;
-  }
+    public long getNamespaceId() {
+        return namespaceId;
+    }
 
-  public void setNamespaceId(long namespaceId) {
-    this.namespaceId = namespaceId;
-  }
+    public void setNamespaceId(long namespaceId) {
+        this.namespaceId = namespaceId;
+    }
 }

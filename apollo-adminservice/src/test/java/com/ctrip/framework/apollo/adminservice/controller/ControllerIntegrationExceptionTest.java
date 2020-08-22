@@ -26,61 +26,61 @@ import static org.mockito.Mockito.when;
 
 public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
 
-  @Autowired
-  AppController appController;
+    @Autowired
+    AppController appController;
 
-  @Mock
-  AdminService adminService;
+    @Mock
+    AdminService adminService;
 
-  private Object realAdminService;
+    private Object realAdminService;
 
-  @Autowired
-  AppService appService;
+    @Autowired
+    AppService appService;
 
-  Gson gson = new Gson();
+    Gson gson = new Gson();
 
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
 
-    realAdminService = ReflectionTestUtils.getField(appController, "adminService");
+        realAdminService = ReflectionTestUtils.getField(appController, "adminService");
 
-    ReflectionTestUtils.setField(appController, "adminService", adminService);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    ReflectionTestUtils.setField(appController, "adminService", realAdminService);
-  }
-
-  private String getBaseAppUrl() {
-    return "http://localhost:" + port + "/apps/";
-  }
-
-  @Test
-  @Sql(scripts = "/controller/cleanup.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
-  public void testCreateFailed() {
-    AppDTO dto = generateSampleDTOData();
-
-    when(adminService.createNewApp(any(App.class))).thenThrow(new RuntimeException("save failed"));
-
-    try {
-      restTemplate.postForEntity(getBaseAppUrl(), dto, AppDTO.class);
-    } catch (HttpStatusCodeException e) {
-      @SuppressWarnings("unchecked")
-      Map<String, String> attr = gson.fromJson(e.getResponseBodyAsString(), Map.class);
-      Assert.assertEquals("save failed", attr.get("message"));
+        ReflectionTestUtils.setField(appController, "adminService", adminService);
     }
-    App savedApp = appService.findOne(dto.getAppId());
-    Assert.assertNull(savedApp);
-  }
 
-  private AppDTO generateSampleDTOData() {
-    AppDTO dto = new AppDTO();
-    dto.setAppId("someAppId");
-    dto.setName("someName");
-    dto.setOwnerName("someOwner");
-    dto.setOwnerEmail("someOwner@ctrip.com");
-    return dto;
-  }
+    @After
+    public void tearDown() throws Exception {
+        ReflectionTestUtils.setField(appController, "adminService", realAdminService);
+    }
+
+    private String getBaseAppUrl() {
+        return "http://localhost:" + port + "/apps/";
+    }
+
+    @Test
+    @Sql(scripts = "/controller/cleanup.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+    public void testCreateFailed() {
+        AppDTO dto = generateSampleDTOData();
+
+        when(adminService.createNewApp(any(App.class))).thenThrow(new RuntimeException("save failed"));
+
+        try {
+            restTemplate.postForEntity(getBaseAppUrl(), dto, AppDTO.class);
+        } catch (HttpStatusCodeException e) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> attr = gson.fromJson(e.getResponseBodyAsString(), Map.class);
+            Assert.assertEquals("save failed", attr.get("message"));
+        }
+        App savedApp = appService.findOne(dto.getAppId());
+        Assert.assertNull(savedApp);
+    }
+
+    private AppDTO generateSampleDTOData() {
+        AppDTO dto = new AppDTO();
+        dto.setAppId("someAppId");
+        dto.setName("someName");
+        dto.setOwnerName("someOwner");
+        dto.setOwnerEmail("someOwner@ctrip.com");
+        return dto;
+    }
 }

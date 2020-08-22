@@ -26,22 +26,22 @@ double quotes: "have many: \", \0, \t, \u263A, \x0d\x0a == \r\n, and more."
 # Multiple-line strings can be written either as a 'literal block' (using |),
 # or a 'folded block' (using '>').
 literal_block: |
-    This entire block of text will be the value of the 'literal_block' key,
-    with line breaks being preserved.
+  This entire block of text will be the value of the 'literal_block' key,
+  with line breaks being preserved.
 
-    The literal continues until de-dented, and the leading indentation is
-    stripped.
+  The literal continues until de-dented, and the leading indentation is
+  stripped.
 
-        Any lines that are 'more-indented' keep the rest of their indentation -
-        these lines will be indented by 4 spaces.
+      Any lines that are 'more-indented' keep the rest of their indentation -
+      these lines will be indented by 4 spaces.
 folded_style: >
-    This entire block of text will be the value of 'folded_style', but this
-    time, all newlines will be replaced with a single space.
+  This entire block of text will be the value of 'folded_style', but this
+  time, all newlines will be replaced with a single space.
 
-    Blank lines, like above, are converted to a newline character.
+  Blank lines, like above, are converted to a newline character.
 
-        'More-indented' lines keep their newlines, too -
-        this text will appear over two lines.
+      'More-indented' lines keep their newlines, too -
+      this text will appear over two lines.
 
 ####################
 # COLLECTION TYPES #
@@ -62,14 +62,14 @@ a_nested_map:
 ? |
   This is a key
   that has multiple lines
-: and this is its value
+  : and this is its value
 
 # YAML also allows mapping between sequences with the complex key syntax
 # Some language parsers might complain
 # An example
 ? - Manchester United
   - Real Madrid
-: [2001-01-01, 2002-02-02]
+  : [2001-01-01, 2002-02-02]
 
 # Sequences (equivalent to lists or arrays) look like this
 # (note that the '-' counts as indentation):
@@ -80,8 +80,7 @@ a_sequence:
   - Item 4
   - key: value
     another_key: another_value
-  -
-    - This is a sequence
+  - - This is a sequence
     - inside another sequence
   - - - Nested sequence indicators
       - can be collapsed

@@ -5,6 +5,7 @@ import com.ctrip.framework.apollo.common.utils.InputValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.client.HttpClientErrorException;
+
 import static org.hamcrest.Matchers.containsString;
 
 /**
@@ -13,19 +14,19 @@ import static org.hamcrest.Matchers.containsString;
  * @author kezhenxu (kezhenxu94@163.com)
  */
 public class NamespaceControllerTest extends AbstractControllerTest {
-  @Test
-  public void create() {
-    try {
-      NamespaceDTO namespaceDTO = new NamespaceDTO();
-      namespaceDTO.setClusterName("cluster");
-      namespaceDTO.setNamespaceName("invalid name");
-      namespaceDTO.setAppId("whatever");
-      restTemplate.postForEntity(
-          url("/apps/{appId}/clusters/{clusterName}/namespaces"),
-          namespaceDTO, NamespaceDTO.class, namespaceDTO.getAppId(), namespaceDTO.getClusterName());
-      Assert.fail("Should throw");
-    } catch (HttpClientErrorException e) {
-      Assert.assertThat(new String(e.getResponseBodyAsByteArray()), containsString(InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE));
+    @Test
+    public void create() {
+        try {
+            NamespaceDTO namespaceDTO = new NamespaceDTO();
+            namespaceDTO.setClusterName("cluster");
+            namespaceDTO.setNamespaceName("invalid name");
+            namespaceDTO.setAppId("whatever");
+            restTemplate.postForEntity(
+                    url("/apps/{appId}/clusters/{clusterName}/namespaces"),
+                    namespaceDTO, NamespaceDTO.class, namespaceDTO.getAppId(), namespaceDTO.getClusterName());
+            Assert.fail("Should throw");
+        } catch (HttpClientErrorException e) {
+            Assert.assertThat(new String(e.getResponseBodyAsByteArray()), containsString(InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE));
+        }
     }
-  }
 }

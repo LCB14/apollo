@@ -25,10 +25,15 @@
                 <h3>系统信息
                 </h3>
                 <h6 ng-show="systemInfo.version">系统版本: {{systemInfo.version}}</h6>
-                <h6>环境列表来自于ApolloPortalDB.ServerConfig中的<strong>apollo.portal.envs</strong>配置，可以到<a href="server_config.html">系统参数</a>页面配置，
-                    更多信息可以参考<a href="https://github.com/ctripcorp/apollo/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97">分布式部署指南</a>中的<strong>apollo.portal.envs - 可支持的环境列表</strong>章节。
+                <h6>环境列表来自于ApolloPortalDB.ServerConfig中的<strong>apollo.portal.envs</strong>配置，可以到<a
+                        href="server_config.html">系统参数</a>页面配置，
+                    更多信息可以参考<a
+                            href="https://github.com/ctripcorp/apollo/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97">分布式部署指南</a>中的<strong>apollo.portal.envs
+                        - 可支持的环境列表</strong>章节。
                 </h6>
-                <h6>Meta server地址展示了该环境配置的meta server信息，更多信息可以参考<a href="https://github.com/ctripcorp/apollo/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97">分布式部署指南</a>中的<strong>配置apollo-portal的meta service信息</strong>章节。
+                <h6>Meta server地址展示了该环境配置的meta server信息，更多信息可以参考<a
+                        href="https://github.com/ctripcorp/apollo/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97">分布式部署指南</a>中的<strong>配置apollo-portal的meta
+                    service信息</strong>章节。
                 </h6>
 
                 <div ng-repeat="env in systemInfo.environments">
@@ -55,11 +60,13 @@
                         <tr ng-show="(!env.configServices || env.configServices.length < 1)">
                             <td colspan="4">No config service found!</td>
                         </tr>
-                        <tr ng-show="env.configServices && env.configServices.length > 0" ng-repeat="service in env.configServices">
+                        <tr ng-show="env.configServices && env.configServices.length > 0"
+                            ng-repeat="service in env.configServices">
                             <td>{{service.appName}}</td>
                             <td>{{service.instanceId}}</td>
                             <td>{{service.homepageUrl}}</td>
-                            <td><a href="javascript:;" ng-click="check(service.instanceId, service.homepageUrl)">check</a>
+                            <td><a href="javascript:;"
+                                   ng-click="check(service.instanceId, service.homepageUrl)">check</a>
                             </td>
                         </tr>
                         </tbody>
@@ -78,11 +85,13 @@
                         <tr ng-show="(!env.adminServices || env.adminServices.length < 1)">
                             <td colspan="4">No admin service found!</td>
                         </tr>
-                        <tr ng-show="env.adminServices && env.adminServices.length > 0" ng-repeat="service in env.adminServices">
+                        <tr ng-show="env.adminServices && env.adminServices.length > 0"
+                            ng-repeat="service in env.adminServices">
                             <td>{{service.appName}}</td>
                             <td>{{service.instanceId}}</td>
                             <td>{{service.homepageUrl}}</td>
-                            <td><a href="javascript:;" ng-click="check(service.instanceId, service.homepageUrl)">check</a>
+                            <td><a href="javascript:;"
+                                   ng-click="check(service.instanceId, service.homepageUrl)">check</a>
                         </tr>
                         </tbody>
                     </table>

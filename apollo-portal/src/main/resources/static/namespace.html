@@ -24,9 +24,10 @@
                 <header class="panel-heading">
                     <div class="row">
                         <div class="col-md-6">新建Namespace
-                        <small><a target="_blank" href="https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D">
-                            (点击了解更多Namespace相关知识)
-                        </a> </small>
+                            <small><a target="_blank"
+                                      href="https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D">
+                                (点击了解更多Namespace相关知识)
+                            </a> </small>
                         </div>
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-info" ng-click="back()">返回到项目首页
@@ -57,8 +58,13 @@
                             <li>
                                 通过创建一个私有的Namespace可以实现分组管理配置
                             </li>
-                            <li>私有Namespace的格式可以是xml、yml、yaml、json、txt. 您可以通过apollo-client中ConfigFile接口来获取非properties格式Namespace的内容</li>
-                            <li>1.3.0及以上版本的apollo-client针对yaml/yml提供了更好的支持，可以通过ConfigService.getConfig("someNamespace.yml")直接获取Config对象，也可以通过@EnableApolloConfig("someNamespace.yml")或apollo.bootstrap.namespaces=someNamespace.yml注入yml配置到Spring/Spring Boot中去</li>
+                            <li>私有Namespace的格式可以是xml、yml、yaml、json、txt.
+                                您可以通过apollo-client中ConfigFile接口来获取非properties格式Namespace的内容
+                            </li>
+                            <li>
+                                1.3.0及以上版本的apollo-client针对yaml/yml提供了更好的支持，可以通过ConfigService.getConfig("someNamespace.yml")直接获取Config对象，也可以通过@EnableApolloConfig("someNamespace.yml")或apollo.bootstrap.namespaces=someNamespace.yml注入yml配置到Spring/Spring
+                                Boot中去
+                            </li>
                         </ul>
                     </div>
                     <div class="row text-right" style="padding-right: 20px;">
@@ -98,7 +104,8 @@
                                 名称</label>
                             <div class="col-sm-5" valdr-form-group>
                                 <div ng-class="{'input-group':appNamespace.isPublic && appendNamespacePrefix}">
-                                    <span class="input-group-addon" ng-show="appNamespace.isPublic && appendNamespacePrefix"
+                                    <span class="input-group-addon"
+                                          ng-show="appNamespace.isPublic && appendNamespacePrefix"
                                           ng-bind="appBaseInfo.namespacePrefix"></span>
                                     <input type="text" name="namespaceName" class="form-control"
                                            ng-model="appNamespace.name">
@@ -129,7 +136,7 @@
                             <div class="col-sm-6" valdr-form-group>
                                 <div>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" ng-model="appendNamespacePrefix" />
+                                        <input type="checkbox" ng-model="appendNamespacePrefix"/>
                                         {{appBaseInfo.namespacePrefix}}
                                     </label>
                                 </div>
@@ -137,7 +144,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group" ng-show="type == 'create' && (pageSetting.canAppAdminCreatePrivateNamespace || hasRootPermission)">
+                        <div class="form-group"
+                             ng-show="type == 'create' && (pageSetting.canAppAdminCreatePrivateNamespace || hasRootPermission)">
                             <label class="col-sm-3 control-label">
                                 <apollorequiredfield></apollorequiredfield>
                                 类型</label>

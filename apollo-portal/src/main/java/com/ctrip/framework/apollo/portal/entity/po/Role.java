@@ -17,14 +17,14 @@ import javax.persistence.Table;
 @SQLDelete(sql = "Update Role set isDeleted = 1 where id = ?")
 @Where(clause = "isDeleted = 0")
 public class Role extends BaseEntity {
-  @Column(name = "RoleName", nullable = false)
-  private String roleName;
+    @Column(name = "RoleName", nullable = false)
+    private String roleName;
 
-  public String getRoleName() {
-    return roleName;
-  }
+    public String getRoleName() {
+        return roleName;
+    }
 
-  public void setRoleName(String roleName) {
-    this.roleName = roleName;
-  }
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

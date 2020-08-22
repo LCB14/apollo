@@ -8,6 +8,6 @@ import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
  */
 public interface UserInfoHolder {
 
-  UserInfo getUser();
+    UserInfo getUser();
 
 }

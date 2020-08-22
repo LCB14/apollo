@@ -27,65 +27,65 @@ import static org.junit.Assert.assertTrue;
 public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
 
-  @Autowired
-  private NamespaceService namespaceService;
-  @Autowired
-  private ItemService itemService;
-  @Autowired
-  private CommitService commitService;
-  @Autowired
-  private AppNamespaceService appNamespaceService;
-  @Autowired
-  private ClusterService clusterService;
-  @Autowired
-  private ReleaseService releaseService;
-  @Autowired
-  private ReleaseHistoryService releaseHistoryService;
-  @Autowired
-  private InstanceConfigRepository instanceConfigRepository;
+    @Autowired
+    private NamespaceService namespaceService;
+    @Autowired
+    private ItemService itemService;
+    @Autowired
+    private CommitService commitService;
+    @Autowired
+    private AppNamespaceService appNamespaceService;
+    @Autowired
+    private ClusterService clusterService;
+    @Autowired
+    private ReleaseService releaseService;
+    @Autowired
+    private ReleaseHistoryService releaseHistoryService;
+    @Autowired
+    private InstanceConfigRepository instanceConfigRepository;
 
-  private final String testApp = "testApp";
-  private final String testCluster = "default";
-  private final String testChildCluster = "child-cluster";
-  private final String testPrivateNamespace = "application";
-  private final String testUser = "apollo";
+    private final String testApp = "testApp";
+    private final String testCluster = "default";
+    private final String testChildCluster = "child-cluster";
+    private final String testPrivateNamespace = "application";
+    private final String testUser = "apollo";
 
-  @Test
-  @Sql(scripts = "/sql/namespace-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-  @Sql(scripts = "/sql/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  public void testDeleteNamespace() {
+    @Test
+    @Sql(scripts = "/sql/namespace-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/sql/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testDeleteNamespace() {
 
-    Namespace namespace = new Namespace();
-    namespace.setAppId(testApp);
-    namespace.setClusterName(testCluster);
-    namespace.setNamespaceName(testPrivateNamespace);
-    namespace.setId(1);
+        Namespace namespace = new Namespace();
+        namespace.setAppId(testApp);
+        namespace.setClusterName(testCluster);
+        namespace.setNamespaceName(testPrivateNamespace);
+        namespace.setId(1);
 
-    namespaceService.deleteNamespace(namespace, testUser);
+        namespaceService.deleteNamespace(namespace, testUser);
 
-    List<Item> items = itemService.findItemsWithoutOrdered(testApp, testCluster, testPrivateNamespace);
-    List<Commit> commits = commitService.find(testApp, testCluster, testPrivateNamespace, PageRequest.of(0, 10));
-    AppNamespace appNamespace = appNamespaceService.findOne(testApp, testPrivateNamespace);
-    List<Cluster> childClusters = clusterService.findChildClusters(testApp, testCluster);
-    InstanceConfig instanceConfig = instanceConfigRepository.findById(1L).orElse(null);
-    List<Release> parentNamespaceReleases = releaseService.findActiveReleases(testApp, testCluster,
-                                                                              testPrivateNamespace,
-                                                                              PageRequest.of(0, 10));
-    List<Release> childNamespaceReleases = releaseService.findActiveReleases(testApp, testChildCluster,
-                                                                             testPrivateNamespace,
-                                                                             PageRequest.of(0, 10));
-    Page<ReleaseHistory> releaseHistories =
-        releaseHistoryService
-            .findReleaseHistoriesByNamespace(testApp, testCluster, testPrivateNamespace, PageRequest.of(0, 10));
+        List<Item> items = itemService.findItemsWithoutOrdered(testApp, testCluster, testPrivateNamespace);
+        List<Commit> commits = commitService.find(testApp, testCluster, testPrivateNamespace, PageRequest.of(0, 10));
+        AppNamespace appNamespace = appNamespaceService.findOne(testApp, testPrivateNamespace);
+        List<Cluster> childClusters = clusterService.findChildClusters(testApp, testCluster);
+        InstanceConfig instanceConfig = instanceConfigRepository.findById(1L).orElse(null);
+        List<Release> parentNamespaceReleases = releaseService.findActiveReleases(testApp, testCluster,
+                testPrivateNamespace,
+                PageRequest.of(0, 10));
+        List<Release> childNamespaceReleases = releaseService.findActiveReleases(testApp, testChildCluster,
+                testPrivateNamespace,
+                PageRequest.of(0, 10));
+        Page<ReleaseHistory> releaseHistories =
+                releaseHistoryService
+                        .findReleaseHistoriesByNamespace(testApp, testCluster, testPrivateNamespace, PageRequest.of(0, 10));
 
-    assertEquals(0, items.size());
-    assertEquals(0, commits.size());
-    assertNotNull(appNamespace);
-    assertEquals(0, childClusters.size());
-    assertEquals(0, parentNamespaceReleases.size());
-    assertEquals(0, childNamespaceReleases.size());
-    assertTrue(!releaseHistories.hasContent());
-    assertNull(instanceConfig);
-  }
+        assertEquals(0, items.size());
+        assertEquals(0, commits.size());
+        assertNotNull(appNamespace);
+        assertEquals(0, childClusters.size());
+        assertEquals(0, parentNamespaceReleases.size());
+        assertEquals(0, childNamespaceReleases.size());
+        assertTrue(!releaseHistories.hasContent());
+        assertNull(instanceConfig);
+    }
 
 }

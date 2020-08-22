@@ -10,39 +10,39 @@ import java.lang.reflect.Method;
  */
 public class CtripUserInfoHolder implements UserInfoHolder {
 
-  private final Object assertionHolder;
+    private final Object assertionHolder;
 
-  private final Method getAssertion;
+    private final Method getAssertion;
 
 
-  public CtripUserInfoHolder() {
-    Class clazz = null;
-    try {
-      clazz = Class.forName("org.jasig.cas.client.util.AssertionHolder");
-      assertionHolder = clazz.newInstance();
-      getAssertion = assertionHolder.getClass().getMethod("getAssertion");
-    } catch (Exception e) {
-      throw new RuntimeException("init AssertionHolder fail", e);
+    public CtripUserInfoHolder() {
+        Class clazz = null;
+        try {
+            clazz = Class.forName("org.jasig.cas.client.util.AssertionHolder");
+            assertionHolder = clazz.newInstance();
+            getAssertion = assertionHolder.getClass().getMethod("getAssertion");
+        } catch (Exception e) {
+            throw new RuntimeException("init AssertionHolder fail", e);
+        }
     }
-  }
 
-  @Override
-  public UserInfo getUser() {
-    try {
+    @Override
+    public UserInfo getUser() {
+        try {
 
-      Object assertion = getAssertion.invoke(assertionHolder);
-      Method getPrincipal = assertion.getClass().getMethod("getPrincipal");
-      Object principal = getPrincipal.invoke(assertion);
-      Method getName = principal.getClass().getMethod("getName");
-      String name = (String) getName.invoke(principal);
+            Object assertion = getAssertion.invoke(assertionHolder);
+            Method getPrincipal = assertion.getClass().getMethod("getPrincipal");
+            Object principal = getPrincipal.invoke(assertion);
+            Method getName = principal.getClass().getMethod("getName");
+            String name = (String) getName.invoke(principal);
 
-      UserInfo userInfo = new UserInfo();
-      userInfo.setUserId(name);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(name);
 
-      return userInfo;
-    } catch (Exception e) {
-      throw new RuntimeException("get user info from assertion holder error", e);
+            return userInfo;
+        } catch (Exception e) {
+            throw new RuntimeException("get user info from assertion holder error", e);
+        }
     }
-  }
 
 }

@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  * &#064;ApolloJsonValue("${someJsonPropertyKey:someDefaultValue}")
  * private SomeObject someObject;
  * </pre>
- *
+ * <p>
  * Create by zhangzheng on 2018/3/6
  *
  * @see org.springframework.beans.factory.annotation.Value
@@ -27,8 +27,8 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ApolloJsonValue {
 
-  /**
-   * The actual value expression: e.g. "${someJsonPropertyKey:someDefaultValue}".
-   */
-  String value();
+    /**
+     * The actual value expression: e.g. "${someJsonPropertyKey:someDefaultValue}".
+     */
+    String value();
 }

@@ -15,131 +15,131 @@ import org.mockito.ArgumentCaptor;
 
 public class NamespaceOpenApiServiceTest extends AbstractOpenApiServiceTest {
 
-  private NamespaceOpenApiService namespaceOpenApiService;
+    private NamespaceOpenApiService namespaceOpenApiService;
 
-  private String someAppId;
-  private String someEnv;
-  private String someCluster;
-  private String someNamespace;
+    private String someAppId;
+    private String someEnv;
+    private String someCluster;
+    private String someNamespace;
 
-  @Override
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
 
-    someAppId = "someAppId";
-    someEnv = "someEnv";
-    someCluster = "someCluster";
-    someNamespace = "someNamespace";
+        someAppId = "someAppId";
+        someEnv = "someEnv";
+        someCluster = "someCluster";
+        someNamespace = "someNamespace";
 
-    StringEntity responseEntity = new StringEntity("{}");
-    when(someHttpResponse.getEntity()).thenReturn(responseEntity);
+        StringEntity responseEntity = new StringEntity("{}");
+        when(someHttpResponse.getEntity()).thenReturn(responseEntity);
 
-    namespaceOpenApiService = new NamespaceOpenApiService(httpClient, someBaseUrl, gson);
-  }
+        namespaceOpenApiService = new NamespaceOpenApiService(httpClient, someBaseUrl, gson);
+    }
 
-  @Test
-  public void testGetNamespace() throws Exception {
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+    @Test
+    public void testGetNamespace() throws Exception {
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    namespaceOpenApiService.getNamespace(someAppId, someEnv, someCluster, someNamespace);
+        namespaceOpenApiService.getNamespace(someAppId, someEnv, someCluster, someNamespace);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet get = request.getValue();
+        HttpGet get = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s", someBaseUrl, someEnv, someAppId, someCluster,
-            someNamespace), get.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s", someBaseUrl, someEnv, someAppId, someCluster,
+                        someNamespace), get.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetNamespaceWithError() throws Exception {
-    when(statusLine.getStatusCode()).thenReturn(404);
+    @Test(expected = RuntimeException.class)
+    public void testGetNamespaceWithError() throws Exception {
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    namespaceOpenApiService.getNamespace(someAppId, someEnv, someCluster, someNamespace);
-  }
+        namespaceOpenApiService.getNamespace(someAppId, someEnv, someCluster, someNamespace);
+    }
 
-  @Test
-  public void testGetNamespaces() throws Exception {
-    StringEntity responseEntity = new StringEntity("[]");
-    when(someHttpResponse.getEntity()).thenReturn(responseEntity);
+    @Test
+    public void testGetNamespaces() throws Exception {
+        StringEntity responseEntity = new StringEntity("[]");
+        when(someHttpResponse.getEntity()).thenReturn(responseEntity);
 
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    namespaceOpenApiService.getNamespaces(someAppId, someEnv, someCluster);
+        namespaceOpenApiService.getNamespaces(someAppId, someEnv, someCluster);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet get = request.getValue();
+        HttpGet get = request.getValue();
 
-    assertEquals(String
-            .format("%s/envs/%s/apps/%s/clusters/%s/namespaces", someBaseUrl, someEnv, someAppId, someCluster),
-        get.getURI().toString());
-  }
+        assertEquals(String
+                        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces", someBaseUrl, someEnv, someAppId, someCluster),
+                get.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetNamespacesWithError() throws Exception {
-    when(statusLine.getStatusCode()).thenReturn(404);
+    @Test(expected = RuntimeException.class)
+    public void testGetNamespacesWithError() throws Exception {
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    namespaceOpenApiService.getNamespaces(someAppId, someEnv, someCluster);
-  }
+        namespaceOpenApiService.getNamespaces(someAppId, someEnv, someCluster);
+    }
 
-  @Test
-  public void testCreateAppNamespace() throws Exception {
-    String someName = "someName";
-    String someCreatedBy = "someCreatedBy";
+    @Test
+    public void testCreateAppNamespace() throws Exception {
+        String someName = "someName";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenAppNamespaceDTO appNamespaceDTO = new OpenAppNamespaceDTO();
-    appNamespaceDTO.setAppId(someAppId);
-    appNamespaceDTO.setName(someName);
-    appNamespaceDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenAppNamespaceDTO appNamespaceDTO = new OpenAppNamespaceDTO();
+        appNamespaceDTO.setAppId(someAppId);
+        appNamespaceDTO.setName(someName);
+        appNamespaceDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
+        final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
 
-    namespaceOpenApiService.createAppNamespace(appNamespaceDTO);
+        namespaceOpenApiService.createAppNamespace(appNamespaceDTO);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpPost post = request.getValue();
+        HttpPost post = request.getValue();
 
-    assertEquals(String.format("%s/apps/%s/appnamespaces", someBaseUrl, someAppId), post.getURI().toString());
-  }
+        assertEquals(String.format("%s/apps/%s/appnamespaces", someBaseUrl, someAppId), post.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testCreateAppNamespaceWithError() throws Exception {
-    String someName = "someName";
-    String someCreatedBy = "someCreatedBy";
+    @Test(expected = RuntimeException.class)
+    public void testCreateAppNamespaceWithError() throws Exception {
+        String someName = "someName";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenAppNamespaceDTO appNamespaceDTO = new OpenAppNamespaceDTO();
-    appNamespaceDTO.setAppId(someAppId);
-    appNamespaceDTO.setName(someName);
-    appNamespaceDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenAppNamespaceDTO appNamespaceDTO = new OpenAppNamespaceDTO();
+        appNamespaceDTO.setAppId(someAppId);
+        appNamespaceDTO.setName(someName);
+        appNamespaceDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    when(statusLine.getStatusCode()).thenReturn(400);
+        when(statusLine.getStatusCode()).thenReturn(400);
 
-    namespaceOpenApiService.createAppNamespace(appNamespaceDTO);
-  }
+        namespaceOpenApiService.createAppNamespace(appNamespaceDTO);
+    }
 
-  @Test
-  public void testGetNamespaceLock() throws Exception {
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+    @Test
+    public void testGetNamespaceLock() throws Exception {
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    namespaceOpenApiService.getNamespaceLock(someAppId, someEnv, someCluster, someNamespace);
+        namespaceOpenApiService.getNamespaceLock(someAppId, someEnv, someCluster, someNamespace);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet post = request.getValue();
+        HttpGet post = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/lock", someBaseUrl, someEnv, someAppId, someCluster,
-            someNamespace), post.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/lock", someBaseUrl, someEnv, someAppId, someCluster,
+                        someNamespace), post.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetNamespaceLockWithError() throws Exception {
-    when(statusLine.getStatusCode()).thenReturn(404);
+    @Test(expected = RuntimeException.class)
+    public void testGetNamespaceLockWithError() throws Exception {
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    namespaceOpenApiService.getNamespaceLock(someAppId, someEnv, someCluster, someNamespace);
-  }
+        namespaceOpenApiService.getNamespaceLock(someAppId, someEnv, someCluster, someNamespace);
+    }
 }

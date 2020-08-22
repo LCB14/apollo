@@ -20,204 +20,204 @@ import org.mockito.ArgumentCaptor;
 
 public class ItemOpenApiServiceTest extends AbstractOpenApiServiceTest {
 
-  private ItemOpenApiService itemOpenApiService;
+    private ItemOpenApiService itemOpenApiService;
 
-  private String someAppId;
-  private String someEnv;
-  private String someCluster;
-  private String someNamespace;
+    private String someAppId;
+    private String someEnv;
+    private String someCluster;
+    private String someNamespace;
 
-  @Override
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
-    someAppId = "someAppId";
-    someEnv = "someEnv";
-    someCluster = "someCluster";
-    someNamespace = "someNamespace";
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        someAppId = "someAppId";
+        someEnv = "someEnv";
+        someCluster = "someCluster";
+        someNamespace = "someNamespace";
 
-    StringEntity responseEntity = new StringEntity("{}");
-    when(someHttpResponse.getEntity()).thenReturn(responseEntity);
+        StringEntity responseEntity = new StringEntity("{}");
+        when(someHttpResponse.getEntity()).thenReturn(responseEntity);
 
-    itemOpenApiService = new ItemOpenApiService(httpClient, someBaseUrl, gson);
-  }
+        itemOpenApiService = new ItemOpenApiService(httpClient, someBaseUrl, gson);
+    }
 
-  @Test
-  public void testGetItem() throws Exception {
-    String someKey = "someKey";
+    @Test
+    public void testGetItem() throws Exception {
+        String someKey = "someKey";
 
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    itemOpenApiService.getItem(someAppId, someEnv, someCluster, someNamespace, someKey);
+        itemOpenApiService.getItem(someAppId, someEnv, someCluster, someNamespace, someKey);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet get = request.getValue();
+        HttpGet get = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s", someBaseUrl, someEnv,
-            someAppId, someCluster, someNamespace, someKey), get.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s", someBaseUrl, someEnv,
+                        someAppId, someCluster, someNamespace, someKey), get.getURI().toString());
+    }
 
-  @Test
-  public void testGetNotExistedItem() throws Exception {
-    String someKey = "someKey";
+    @Test
+    public void testGetNotExistedItem() throws Exception {
+        String someKey = "someKey";
 
-    when(statusLine.getStatusCode()).thenReturn(404);
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    assertNull(itemOpenApiService.getItem(someAppId, someEnv, someCluster, someNamespace, someKey));
-  }
+        assertNull(itemOpenApiService.getItem(someAppId, someEnv, someCluster, someNamespace, someKey));
+    }
 
-  @Test
-  public void testCreateItem() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someCreatedBy = "someCreatedBy";
+    @Test
+    public void testCreateItem() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
+        final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
 
-    itemOpenApiService.createItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+        itemOpenApiService.createItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpPost post = request.getValue();
+        HttpPost post = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items", someBaseUrl, someEnv, someAppId, someCluster,
-            someNamespace), post.getURI().toString());
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items", someBaseUrl, someEnv, someAppId, someCluster,
+                        someNamespace), post.getURI().toString());
 
-    StringEntity entity = (StringEntity) post.getEntity();
+        StringEntity entity = (StringEntity) post.getEntity();
 
-    assertEquals(ContentType.APPLICATION_JSON.toString(), entity.getContentType().getValue());
-    assertEquals(gson.toJson(itemDTO), EntityUtils.toString(entity));
-  }
+        assertEquals(ContentType.APPLICATION_JSON.toString(), entity.getContentType().getValue());
+        assertEquals(gson.toJson(itemDTO), EntityUtils.toString(entity));
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testCreateItemWithError() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someCreatedBy = "someCreatedBy";
+    @Test(expected = RuntimeException.class)
+    public void testCreateItemWithError() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    when(statusLine.getStatusCode()).thenReturn(400);
+        when(statusLine.getStatusCode()).thenReturn(400);
 
-    itemOpenApiService.createItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
-  }
+        itemOpenApiService.createItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+    }
 
-  @Test
-  public void testUpdateItem() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someModifiedBy = "someModifiedBy";
+    @Test
+    public void testUpdateItem() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someModifiedBy = "someModifiedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeLastModifiedBy(someModifiedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeLastModifiedBy(someModifiedBy);
 
-    final ArgumentCaptor<HttpPut> request = ArgumentCaptor.forClass(HttpPut.class);
+        final ArgumentCaptor<HttpPut> request = ArgumentCaptor.forClass(HttpPut.class);
 
-    itemOpenApiService.updateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+        itemOpenApiService.updateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpPut put = request.getValue();
+        HttpPut put = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s", someBaseUrl, someEnv, someAppId, someCluster,
-            someNamespace, someKey), put.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s", someBaseUrl, someEnv, someAppId, someCluster,
+                        someNamespace, someKey), put.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testUpdateItemWithError() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someModifiedBy = "someModifiedBy";
+    @Test(expected = RuntimeException.class)
+    public void testUpdateItemWithError() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someModifiedBy = "someModifiedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeLastModifiedBy(someModifiedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeLastModifiedBy(someModifiedBy);
 
-    when(statusLine.getStatusCode()).thenReturn(400);
+        when(statusLine.getStatusCode()).thenReturn(400);
 
-    itemOpenApiService.updateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
-  }
+        itemOpenApiService.updateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+    }
 
-  @Test
-  public void testCreateOrUpdateItem() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someCreatedBy = "someCreatedBy";
+    @Test
+    public void testCreateOrUpdateItem() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    final ArgumentCaptor<HttpPut> request = ArgumentCaptor.forClass(HttpPut.class);
+        final ArgumentCaptor<HttpPut> request = ArgumentCaptor.forClass(HttpPut.class);
 
-    itemOpenApiService.createOrUpdateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+        itemOpenApiService.createOrUpdateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpPut put = request.getValue();
+        HttpPut put = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?createIfNotExists=true", someBaseUrl, someEnv,
-            someAppId, someCluster, someNamespace, someKey), put.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?createIfNotExists=true", someBaseUrl, someEnv,
+                        someAppId, someCluster, someNamespace, someKey), put.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testCreateOrUpdateItemWithError() throws Exception {
-    String someKey = "someKey";
-    String someValue = "someValue";
-    String someCreatedBy = "someCreatedBy";
+    @Test(expected = RuntimeException.class)
+    public void testCreateOrUpdateItemWithError() throws Exception {
+        String someKey = "someKey";
+        String someValue = "someValue";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenItemDTO itemDTO = new OpenItemDTO();
-    itemDTO.setKey(someKey);
-    itemDTO.setValue(someValue);
-    itemDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenItemDTO itemDTO = new OpenItemDTO();
+        itemDTO.setKey(someKey);
+        itemDTO.setValue(someValue);
+        itemDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    when(statusLine.getStatusCode()).thenReturn(400);
+        when(statusLine.getStatusCode()).thenReturn(400);
 
-    itemOpenApiService.createOrUpdateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
-  }
+        itemOpenApiService.createOrUpdateItem(someAppId, someEnv, someCluster, someNamespace, itemDTO);
+    }
 
-  @Test
-  public void testRemoveItem() throws Exception {
-    String someKey = "someKey";
-    String someOperator = "someOperator";
+    @Test
+    public void testRemoveItem() throws Exception {
+        String someKey = "someKey";
+        String someOperator = "someOperator";
 
-    final ArgumentCaptor<HttpDelete> request = ArgumentCaptor.forClass(HttpDelete.class);
+        final ArgumentCaptor<HttpDelete> request = ArgumentCaptor.forClass(HttpDelete.class);
 
-    itemOpenApiService.removeItem(someAppId, someEnv, someCluster, someNamespace, someKey, someOperator);
+        itemOpenApiService.removeItem(someAppId, someEnv, someCluster, someNamespace, someKey, someOperator);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpDelete delete = request.getValue();
+        HttpDelete delete = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?operator=%s", someBaseUrl, someEnv,
-            someAppId, someCluster, someNamespace, someKey, someOperator), delete.getURI().toString());
-  }
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters/%s/namespaces/%s/items/%s?operator=%s", someBaseUrl, someEnv,
+                        someAppId, someCluster, someNamespace, someKey, someOperator), delete.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testRemoveItemWithError() throws Exception {
-    String someKey = "someKey";
-    String someOperator = "someOperator";
+    @Test(expected = RuntimeException.class)
+    public void testRemoveItemWithError() throws Exception {
+        String someKey = "someKey";
+        String someOperator = "someOperator";
 
-    when(statusLine.getStatusCode()).thenReturn(404);
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    itemOpenApiService.removeItem(someAppId, someEnv, someCluster, someNamespace, someKey, someOperator);
-  }
+        itemOpenApiService.removeItem(someAppId, someEnv, someCluster, someNamespace, someKey, someOperator);
+    }
 }

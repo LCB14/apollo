@@ -11,18 +11,18 @@ import java.util.List;
 
 public interface NamespaceRepository extends PagingAndSortingRepository<Namespace, Long> {
 
-  List<Namespace> findByAppIdAndClusterNameOrderByIdAsc(String appId, String clusterName);
+    List<Namespace> findByAppIdAndClusterNameOrderByIdAsc(String appId, String clusterName);
 
-  Namespace findByAppIdAndClusterNameAndNamespaceName(String appId, String clusterName, String namespaceName);
+    Namespace findByAppIdAndClusterNameAndNamespaceName(String appId, String clusterName, String namespaceName);
 
-  @Modifying
-  @Query("update Namespace set isdeleted=1,DataChange_LastModifiedBy = ?3 where appId=?1 and clusterName=?2")
-  int batchDelete(String appId, String clusterName, String operator);
+    @Modifying
+    @Query("update Namespace set isdeleted=1,DataChange_LastModifiedBy = ?3 where appId=?1 and clusterName=?2")
+    int batchDelete(String appId, String clusterName, String operator);
 
-  List<Namespace> findByAppIdAndNamespaceNameOrderByIdAsc(String appId, String namespaceName);
+    List<Namespace> findByAppIdAndNamespaceNameOrderByIdAsc(String appId, String namespaceName);
 
-  List<Namespace> findByNamespaceName(String namespaceName, Pageable page);
+    List<Namespace> findByNamespaceName(String namespaceName, Pageable page);
 
-  int countByNamespaceNameAndAppIdNot(String namespaceName, String appId);
+    int countByNamespaceNameAndAppIdNot(String namespaceName, String appId);
 
 }

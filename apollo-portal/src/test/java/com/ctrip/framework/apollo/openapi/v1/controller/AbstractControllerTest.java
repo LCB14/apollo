@@ -1,6 +1,7 @@
 package com.ctrip.framework.apollo.openapi.v1.controller;
 
 import javax.annotation.PostConstruct;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,21 +20,21 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractControllerTest {
-  @Autowired
-  private HttpMessageConverters httpMessageConverters;
+    @Autowired
+    private HttpMessageConverters httpMessageConverters;
 
-  protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
 
-  @PostConstruct
-  protected void postConstruct() {
-    restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
-    restTemplate.setMessageConverters(httpMessageConverters.getConverters());
-  }
+    @PostConstruct
+    protected void postConstruct() {
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+        restTemplate.setMessageConverters(httpMessageConverters.getConverters());
+    }
 
-  @Value("${local.server.port}")
-  protected int port;
+    @Value("${local.server.port}")
+    protected int port;
 
-  protected String url(String path) {
-    return "http://localhost:" + port + path;
-  }
+    protected String url(String path) {
+        return "http://localhost:" + port + path;
+    }
 }

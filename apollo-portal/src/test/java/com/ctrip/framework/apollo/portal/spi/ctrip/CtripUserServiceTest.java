@@ -31,205 +31,205 @@ import static org.mockito.Mockito.when;
 /**
  * @author Jason Song(song_s@ctrip.com)
  */
-public class CtripUserServiceTest extends AbstractUnitTest{
-  private CtripUserService ctripUserService;
-  private String someUserServiceUrl;
-  private String someUserServiceToken;
-  private ParameterizedTypeReference<Map<String, List<CtripUserService.UserServiceResponse>>>
-      someResponseType;
+public class CtripUserServiceTest extends AbstractUnitTest {
+    private CtripUserService ctripUserService;
+    private String someUserServiceUrl;
+    private String someUserServiceToken;
+    private ParameterizedTypeReference<Map<String, List<CtripUserService.UserServiceResponse>>>
+            someResponseType;
 
-  @Mock
-  private PortalConfig portalConfig;
+    @Mock
+    private PortalConfig portalConfig;
 
-  @Mock
-  private RestTemplate restTemplate;
+    @Mock
+    private RestTemplate restTemplate;
 
-  @Before
-  public void setUp() throws Exception {
-    when(portalConfig.connectTimeout()).thenReturn(3000);
-    when(portalConfig.readTimeout()).thenReturn(3000);
-    ctripUserService = new CtripUserService(portalConfig);
-    ReflectionTestUtils.setField(ctripUserService, "restTemplate", restTemplate);
-    someResponseType =
-        (ParameterizedTypeReference<Map<String, List<CtripUserService.UserServiceResponse>>>) ReflectionTestUtils
-            .getField(ctripUserService, "responseType");
+    @Before
+    public void setUp() throws Exception {
+        when(portalConfig.connectTimeout()).thenReturn(3000);
+        when(portalConfig.readTimeout()).thenReturn(3000);
+        ctripUserService = new CtripUserService(portalConfig);
+        ReflectionTestUtils.setField(ctripUserService, "restTemplate", restTemplate);
+        someResponseType =
+                (ParameterizedTypeReference<Map<String, List<CtripUserService.UserServiceResponse>>>) ReflectionTestUtils
+                        .getField(ctripUserService, "responseType");
 
-    someUserServiceUrl = "http://someurl";
-    someUserServiceToken = "someToken";
-    when(portalConfig.userServiceUrl()).thenReturn(someUserServiceUrl);
-    when(portalConfig.userServiceAccessToken()).thenReturn(someUserServiceToken);
+        someUserServiceUrl = "http://someurl";
+        someUserServiceToken = "someToken";
+        when(portalConfig.userServiceUrl()).thenReturn(someUserServiceUrl);
+        when(portalConfig.userServiceAccessToken()).thenReturn(someUserServiceToken);
 
-  }
+    }
 
-  @Test
-  public void testAssembleSearchUserRequest() throws Exception {
-    String someKeyword = "someKeyword";
-    int someOffset = 0;
-    int someLimit = 10;
+    @Test
+    public void testAssembleSearchUserRequest() throws Exception {
+        String someKeyword = "someKeyword";
+        int someOffset = 0;
+        int someLimit = 10;
 
-    CtripUserService.UserServiceRequest request =
-        ctripUserService.assembleSearchUserRequest(someKeyword, someOffset, someLimit);
+        CtripUserService.UserServiceRequest request =
+                ctripUserService.assembleSearchUserRequest(someKeyword, someOffset, someLimit);
 
-    assertEquals(someUserServiceToken, request.getAccess_token());
+        assertEquals(someUserServiceToken, request.getAccess_token());
 
-    CtripUserService.UserServiceRequestBody requestBody = request.getRequest_body();
+        CtripUserService.UserServiceRequestBody requestBody = request.getRequest_body();
 
-    assertEquals("itdb_emloyee", requestBody.getIndexAlias());
+        assertEquals("itdb_emloyee", requestBody.getIndexAlias());
 
-    Map<String, Object> queryJson = requestBody.getQueryJson();
-    assertEquals(someOffset, queryJson.get("from"));
-    assertEquals(someLimit, queryJson.get("size"));
+        Map<String, Object> queryJson = requestBody.getQueryJson();
+        assertEquals(someOffset, queryJson.get("from"));
+        assertEquals(someLimit, queryJson.get("size"));
 
-    Map<String, Object> query = (Map<String, Object>) queryJson.get("query");
-    Map<String, Object> multiMatchMap = (Map<String, Object>) query.get("multi_match");
-    assertEquals(someKeyword, multiMatchMap.get("query"));
-  }
+        Map<String, Object> query = (Map<String, Object>) queryJson.get("query");
+        Map<String, Object> multiMatchMap = (Map<String, Object>) query.get("multi_match");
+        assertEquals(someKeyword, multiMatchMap.get("query"));
+    }
 
-  @Test
-  public void testAssembleFindUserRequest() throws Exception {
-    String someUserId = "someUser";
-    String anotherUserId = "anotherUser";
-    List<String> userIds = Lists.newArrayList(someUserId, anotherUserId);
+    @Test
+    public void testAssembleFindUserRequest() throws Exception {
+        String someUserId = "someUser";
+        String anotherUserId = "anotherUser";
+        List<String> userIds = Lists.newArrayList(someUserId, anotherUserId);
 
-    CtripUserService.UserServiceRequest request = ctripUserService.assembleFindUserRequest(userIds);
+        CtripUserService.UserServiceRequest request = ctripUserService.assembleFindUserRequest(userIds);
 
-    assertEquals(someUserServiceToken, request.getAccess_token());
+        assertEquals(someUserServiceToken, request.getAccess_token());
 
-    CtripUserService.UserServiceRequestBody requestBody = request.getRequest_body();
+        CtripUserService.UserServiceRequestBody requestBody = request.getRequest_body();
 
-    assertEquals("itdb_emloyee", requestBody.getIndexAlias());
+        assertEquals("itdb_emloyee", requestBody.getIndexAlias());
 
-    Map<String, Object> queryJson = requestBody.getQueryJson();
-    assertEquals(0, queryJson.get("from"));
-    assertEquals(2, queryJson.get("size"));
+        Map<String, Object> queryJson = requestBody.getQueryJson();
+        assertEquals(0, queryJson.get("from"));
+        assertEquals(2, queryJson.get("size"));
 
-    Map<String, Object> query = (Map<String, Object>) queryJson.get("query");
-    Map<String, Object> terms =
-        getMapFromMap(getMapFromMap(getMapFromMap(query, "filtered"), "filter"), "terms");
+        Map<String, Object> query = (Map<String, Object>) queryJson.get("query");
+        Map<String, Object> terms =
+                getMapFromMap(getMapFromMap(getMapFromMap(query, "filtered"), "filter"), "terms");
 
-    List<String> userIdTerms = (List<String>) terms.get("empaccount");
+        List<String> userIdTerms = (List<String>) terms.get("empaccount");
 
-    assertTrue(userIdTerms.containsAll(userIds));
+        assertTrue(userIdTerms.containsAll(userIds));
 
-  }
+    }
 
-  private Map<String, Object> getMapFromMap(Map<String, Object> map, String key) {
-    return (Map<String, Object>) map.get(key);
-  }
+    private Map<String, Object> getMapFromMap(Map<String, Object> map, String key) {
+        return (Map<String, Object>) map.get(key);
+    }
 
-  @Test
-  public void testSearchUsers() throws Exception {
-    String someUserId = "someUserId";
-    String someName = "someName";
-    String someEmail = "someEmail";
-    String anotherUserId = "anotherUserId";
-    String anotherName = "anotherName";
-    String anotherEmail = "anotherEmail";
-    String someKeyword = "someKeyword";
-    int someOffset = 0;
-    int someLimit = 10;
+    @Test
+    public void testSearchUsers() throws Exception {
+        String someUserId = "someUserId";
+        String someName = "someName";
+        String someEmail = "someEmail";
+        String anotherUserId = "anotherUserId";
+        String anotherName = "anotherName";
+        String anotherEmail = "anotherEmail";
+        String someKeyword = "someKeyword";
+        int someOffset = 0;
+        int someLimit = 10;
 
-    CtripUserService.UserServiceResponse someUserResponse =
-        assembleUserServiceResponse(someUserId, someName, someEmail);
+        CtripUserService.UserServiceResponse someUserResponse =
+                assembleUserServiceResponse(someUserId, someName, someEmail);
 
-    CtripUserService.UserServiceResponse anotherUserResponse =
-        assembleUserServiceResponse(anotherUserId, anotherName, anotherEmail);
+        CtripUserService.UserServiceResponse anotherUserResponse =
+                assembleUserServiceResponse(anotherUserId, anotherName, anotherEmail);
 
-    Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
-        ImmutableMap.of("result", Lists.newArrayList(someUserResponse, anotherUserResponse));
-    ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
-        = new ResponseEntity<>(resultMap, HttpStatus.OK);
+        Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
+                ImmutableMap.of("result", Lists.newArrayList(someUserResponse, anotherUserResponse));
+        ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
+                = new ResponseEntity<>(resultMap, HttpStatus.OK);
 
-    when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
-        eq(someResponseType))).thenReturn(someResponse);
+        when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
+                eq(someResponseType))).thenReturn(someResponse);
 
-    List<UserInfo> users = ctripUserService.searchUsers(someKeyword, someOffset, someLimit);
+        List<UserInfo> users = ctripUserService.searchUsers(someKeyword, someOffset, someLimit);
 
-    assertEquals(2, users.size());
-    compareUserInfoAndUserServiceResponse(someUserResponse, users.get(0));
-    compareUserInfoAndUserServiceResponse(anotherUserResponse, users.get(1));
-  }
+        assertEquals(2, users.size());
+        compareUserInfoAndUserServiceResponse(someUserResponse, users.get(0));
+        compareUserInfoAndUserServiceResponse(anotherUserResponse, users.get(1));
+    }
 
-  @Test(expected = HttpClientErrorException.class)
-  public void testSearchUsersWithError() throws Exception {
-    when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
-        eq(someResponseType)))
-        .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+    @Test(expected = HttpClientErrorException.class)
+    public void testSearchUsersWithError() throws Exception {
+        when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
+                eq(someResponseType)))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
-    String someKeyword = "someKeyword";
-    int someOffset = 0;
-    int someLimit = 10;
+        String someKeyword = "someKeyword";
+        int someOffset = 0;
+        int someLimit = 10;
 
-    ctripUserService.searchUsers(someKeyword, someOffset, someLimit);
-  }
+        ctripUserService.searchUsers(someKeyword, someOffset, someLimit);
+    }
 
-  @Test
-  public void testFindByUserId() throws Exception {
-    String someUserId = "someUserId";
-    String someName = "someName";
-    String someEmail = "someEmail";
+    @Test
+    public void testFindByUserId() throws Exception {
+        String someUserId = "someUserId";
+        String someName = "someName";
+        String someEmail = "someEmail";
 
-    CtripUserService.UserServiceResponse someUserResponse =
-        assembleUserServiceResponse(someUserId, someName, someEmail);
+        CtripUserService.UserServiceResponse someUserResponse =
+                assembleUserServiceResponse(someUserId, someName, someEmail);
 
-    Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
-        ImmutableMap.of("result", Lists.newArrayList(someUserResponse));
-    ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
-        = new ResponseEntity<>(resultMap, HttpStatus.OK);
+        Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
+                ImmutableMap.of("result", Lists.newArrayList(someUserResponse));
+        ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
+                = new ResponseEntity<>(resultMap, HttpStatus.OK);
 
-    when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
-        eq(someResponseType))).thenReturn(someResponse);
+        when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
+                eq(someResponseType))).thenReturn(someResponse);
 
-    UserInfo user = ctripUserService.findByUserId(someUserId);
-    compareUserInfoAndUserServiceResponse(someUserResponse, user);
-  }
+        UserInfo user = ctripUserService.findByUserId(someUserId);
+        compareUserInfoAndUserServiceResponse(someUserResponse, user);
+    }
 
-  @Test
-  public void testFindByUserIds() throws Exception {
-    String someUserId = "someUserId";
-    String someName = "someName";
-    String someEmail = "someEmail";
-    String anotherUserId = "anotherUserId";
-    String anotherName = "anotherName";
-    String anotherEmail = "anotherEmail";
-    String someKeyword = "someKeyword";
+    @Test
+    public void testFindByUserIds() throws Exception {
+        String someUserId = "someUserId";
+        String someName = "someName";
+        String someEmail = "someEmail";
+        String anotherUserId = "anotherUserId";
+        String anotherName = "anotherName";
+        String anotherEmail = "anotherEmail";
+        String someKeyword = "someKeyword";
 
-    CtripUserService.UserServiceResponse someUserResponse =
-        assembleUserServiceResponse(someUserId, someName, someEmail);
+        CtripUserService.UserServiceResponse someUserResponse =
+                assembleUserServiceResponse(someUserId, someName, someEmail);
 
-    CtripUserService.UserServiceResponse anotherUserResponse =
-        assembleUserServiceResponse(anotherUserId, anotherName, anotherEmail);
+        CtripUserService.UserServiceResponse anotherUserResponse =
+                assembleUserServiceResponse(anotherUserId, anotherName, anotherEmail);
 
-    Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
-        ImmutableMap.of("result", Lists.newArrayList(someUserResponse, anotherUserResponse));
-    ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
-        = new ResponseEntity<>(resultMap, HttpStatus.OK);
+        Map<String, List<CtripUserService.UserServiceResponse>> resultMap =
+                ImmutableMap.of("result", Lists.newArrayList(someUserResponse, anotherUserResponse));
+        ResponseEntity<Map<String, List<CtripUserService.UserServiceResponse>>> someResponse
+                = new ResponseEntity<>(resultMap, HttpStatus.OK);
 
-    when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
-        eq(someResponseType))).thenReturn(someResponse);
+        when(restTemplate.exchange(eq(someUserServiceUrl), eq(HttpMethod.POST), any(HttpEntity.class),
+                eq(someResponseType))).thenReturn(someResponse);
 
-    List<UserInfo> users =
-        ctripUserService.findByUserIds(Lists.newArrayList(someUserId, anotherUserId));
+        List<UserInfo> users =
+                ctripUserService.findByUserIds(Lists.newArrayList(someUserId, anotherUserId));
 
-    assertEquals(2, users.size());
-    compareUserInfoAndUserServiceResponse(someUserResponse, users.get(0));
-    compareUserInfoAndUserServiceResponse(anotherUserResponse, users.get(1));
-  }
+        assertEquals(2, users.size());
+        compareUserInfoAndUserServiceResponse(someUserResponse, users.get(0));
+        compareUserInfoAndUserServiceResponse(anotherUserResponse, users.get(1));
+    }
 
-  private void compareUserInfoAndUserServiceResponse(
-      CtripUserService.UserServiceResponse userServiceReponse, UserInfo userInfo) {
-    assertEquals(userServiceReponse.getEmpaccount(), userInfo.getUserId());
-    assertEquals(userServiceReponse.getDisplayname(), userInfo.getName());
-    assertEquals(userServiceReponse.getEmail(), userInfo.getEmail());
-  }
+    private void compareUserInfoAndUserServiceResponse(
+            CtripUserService.UserServiceResponse userServiceReponse, UserInfo userInfo) {
+        assertEquals(userServiceReponse.getEmpaccount(), userInfo.getUserId());
+        assertEquals(userServiceReponse.getDisplayname(), userInfo.getName());
+        assertEquals(userServiceReponse.getEmail(), userInfo.getEmail());
+    }
 
-  private CtripUserService.UserServiceResponse assembleUserServiceResponse(String userId,
-                                                                           String name,
-                                                                           String email) {
-    CtripUserService.UserServiceResponse response = new CtripUserService.UserServiceResponse();
-    response.setEmpaccount(userId);
-    response.setDisplayname(name);
-    response.setEmail(email);
-    return response;
-  }
+    private CtripUserService.UserServiceResponse assembleUserServiceResponse(String userId,
+                                                                             String name,
+                                                                             String email) {
+        CtripUserService.UserServiceResponse response = new CtripUserService.UserServiceResponse();
+        response.setEmpaccount(userId);
+        response.setDisplayname(name);
+        response.setEmail(email);
+        return response;
+    }
 }

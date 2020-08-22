@@ -11,25 +11,25 @@ import java.util.List;
 @Service
 public class CommitService {
 
-  private final CommitRepository commitRepository;
+    private final CommitRepository commitRepository;
 
-  public CommitService(final CommitRepository commitRepository) {
-    this.commitRepository = commitRepository;
-  }
+    public CommitService(final CommitRepository commitRepository) {
+        this.commitRepository = commitRepository;
+    }
 
-  @Transactional
-  public Commit save(Commit commit){
-    commit.setId(0);//protection
-    return commitRepository.save(commit);
-  }
+    @Transactional
+    public Commit save(Commit commit) {
+        commit.setId(0);//protection
+        return commitRepository.save(commit);
+    }
 
-  public List<Commit> find(String appId, String clusterName, String namespaceName, Pageable page){
-    return commitRepository.findByAppIdAndClusterNameAndNamespaceNameOrderByIdDesc(appId, clusterName, namespaceName, page);
-  }
+    public List<Commit> find(String appId, String clusterName, String namespaceName, Pageable page) {
+        return commitRepository.findByAppIdAndClusterNameAndNamespaceNameOrderByIdDesc(appId, clusterName, namespaceName, page);
+    }
 
-  @Transactional
-  public int batchDelete(String appId, String clusterName, String namespaceName, String operator){
-    return commitRepository.batchDelete(appId, clusterName, namespaceName, operator);
-  }
+    @Transactional
+    public int batchDelete(String appId, String clusterName, String namespaceName, String operator) {
+        return commitRepository.batchDelete(appId, clusterName, namespaceName, operator);
+    }
 
 }

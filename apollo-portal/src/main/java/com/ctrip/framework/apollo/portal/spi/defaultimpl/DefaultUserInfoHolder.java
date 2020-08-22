@@ -9,14 +9,14 @@ import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
 public class DefaultUserInfoHolder implements UserInfoHolder {
 
 
-  public DefaultUserInfoHolder() {
+    public DefaultUserInfoHolder() {
 
-  }
+    }
 
-  @Override
-  public UserInfo getUser() {
-    UserInfo userInfo = new UserInfo();
-    userInfo.setUserId("apollo");
-    return userInfo;
-  }
+    @Override
+    public UserInfo getUser() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId("apollo");
+        return userInfo;
+    }
 }
