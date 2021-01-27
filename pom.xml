@@ -93,6 +93,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <!-- for travis usage -->
         <github.global.server>github</github.global.server>
+        <!--suppress UnresolvedMavenProperty -->
         <github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
     </properties>
 
