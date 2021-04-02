@@ -1,0 +1,1 @@
+Apollo Config Service：提供配置的读取、推送等功能，服务对象是 Apollo 客户端。
